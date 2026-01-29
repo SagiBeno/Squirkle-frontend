@@ -6,10 +6,11 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import HomePage from './Pages/HomePage';
 import LoginPage from './Pages/LoginPage';
 import RegisterPage from './Pages/RegisterPage';
+import Navbar from './Components/Navbar';
 
 function App() {
   // TODO - Login
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
 
   var navigate = useNavigate();
 
@@ -20,6 +21,7 @@ function App() {
   return (
     <>
       <Theme>
+        <Navbar />
         <Routes>
           <Route path='/' element={<HomePage />} />
           {
