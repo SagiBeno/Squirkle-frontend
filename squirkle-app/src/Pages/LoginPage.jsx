@@ -1,8 +1,8 @@
 import { Card, Flex, Box, Text, TextField, Button } from "@radix-ui/themes";
 import { useState } from "react";
-import PasswordInput from "../Components/PasswordInput";
-import { DisabledLoadingButton, EnterButton, DisabledButton, OrButton, GoogleLoginButton } from "../Components/Buttons";
-import Separator from '../Components/Separator';
+import PasswordInput from "../components/PasswordInput";
+import { DisabledLoadingButton, EnterButton, DisabledButton, OrButton, GoogleLoginButton } from "../components/Buttons";
+import Separator from '../components/Separator';
 import { useNavigate } from "react-router-dom";
 
 export default function LoginPage( { handleLoginWithEmailAndPW, handleLoginWithGoogle, loading } ) {

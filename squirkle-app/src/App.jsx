@@ -5,11 +5,11 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import HomePage from './Pages/HomePage';
 import LoginPage from './Pages/LoginPage';
 import RegisterPage from './Pages/RegisterPage';
-import Navbar from './Components/Navbar';
+import Navbar from './components/Navbar';
 import { Box } from '@radix-ui/themes';
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import AppToast from './Components/AppToast';
+import AppToast from './components/AppToast';
 
 function App() {
   const firebaseApp = initializeApp({
