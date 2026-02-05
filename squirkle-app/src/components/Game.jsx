@@ -2,15 +2,10 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Unity, useUnityContext } from "react-unity-webgl";
 import { Button, Box, Flex } from "@radix-ui/themes"
 
-export default function Game() {
+export default function Game({ filePaths }) {
 
-    const { unityProvider, sendMessage, addEventListener, removeEventListenerProvider } = useUnityContext({
-        loaderUrl: "https://squirkle.netlify.app//Build/Squirkle.loader.js",
-        dataUrl: "https://squirkle.netlify.app/Build/Squirkle.data",
-        frameworkUrl: "https://squirkle.netlify.app//Build/Squirkle.framework.js",
-        codeUrl: "https://squirkle.netlify.app//Build/Squirkle.wasm",
-    });
-
+    const { unityProvider, sendMessage, addEventListener, removeEventListenerProvider } = useUnityContext(filePaths);
+    
     const [time, setTime] = useState(0)
     const handleGameTime = useCallback((time) => {
         setTime(time)
@@ -27,6 +22,8 @@ export default function Game() {
     function sendTestMessage() {
         sendMessage("Test", "ShowText", "<size=64>test text texttt")
     }
+
+    console.log("starting game...")
 
     return (
         <Flex

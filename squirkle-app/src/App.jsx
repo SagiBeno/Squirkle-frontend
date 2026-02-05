@@ -11,6 +11,7 @@ import { Box } from '@radix-ui/themes';
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import AppToast from './Components/AppToast';
+import GameWindow from './components/GameWindow'
 
 function App() {
   const firebaseApp = initializeApp({
@@ -99,6 +100,7 @@ function App() {
         />
       </Theme>
 
+      <GameWindow />
     </>
   )
 }
