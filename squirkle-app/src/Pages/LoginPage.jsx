@@ -18,7 +18,7 @@ export default function LoginPage( { handleLoginWithEmailAndPW, handleLoginWithG
             style={{
                 margin: '0 auto',
                 width: '300px',
-                height: '90vh'
+                height: '100%'
             }}
 
             align='center'
