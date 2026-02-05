@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-import Game from './components/Game'
 import { Theme } from '@radix-ui/themes';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import HomePage from './Pages/HomePage';
@@ -11,7 +10,6 @@ import { Box } from '@radix-ui/themes';
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import AppToast from './Components/AppToast';
-import GameWindow from './components/GameWindow'
 
 function App() {
   const firebaseApp = initializeApp({
