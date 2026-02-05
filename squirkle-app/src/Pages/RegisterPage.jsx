@@ -16,13 +16,30 @@ export default function RegisterPage( { loading, handleRegistration, handleLogin
         fullName: "",
         type: "user"
     });
+    const [validEmailFormat, setValidEmailFormat] = useState(true);
+
+    function isValidEmailFormat (email) {
+        if (!email) return false;
+        if (email.includes(' ') || !email.includes('@')) return false;
+
+        const emailparts = email.split('@');
+
+        if (emailparts.length != 2 || emailparts[1].split('.')[1]?.length < 2) return false;
+
+        if (!emailparts[0] || !emailparts[1] || !emailparts[1].includes('.')) return false;
+
+        const dotIdx = emailparts[1].lastIndexOf('.');
+        if (dotIdx === 0 || dotIdx === (emailparts[1].length - 1)) return false;
+
+        return true;
+    }
 
     return (
         <Flex
             style={{
                 margin: '0 auto',
                 width: '300px',
-                height: '100%'
+                height: '100%',
             }}
 
             align='center'
@@ -74,9 +91,29 @@ export default function RegisterPage( { loading, handleRegistration, handleLogin
                         required
                         onChange={(e) => {
                             if (e.target.value.includes(' ')) return;
-                            else setFormData({ ...formData, email: e.target.value })
+                            else {
+                                setFormData({ ...formData, email: e.target.value })
+                                setValidEmailFormat(isValidEmailFormat(e.target.value));
+                            }
                         }}
                     />
+
+                    {
+                        !validEmailFormat &&
+                        <Text
+                            as="p"
+                            size='2'
+                            mx='1'
+                            style={{
+                                userSelect: 'none',
+                                cursor: 'default'
+                            }}
+                            align="center"
+                            color="tomato"
+                        >
+                            Invalid email format!
+                        </Text>
+                    }
 
                     <Text as='label' htmlFor="password">Password</Text>
                     <PasswordInput
@@ -97,10 +134,35 @@ export default function RegisterPage( { loading, handleRegistration, handleLogin
                             else setFormData({ ...formData, confirmPassword: e.target.value })
                         }}
                     />
+
+                    {
+                        formData.password.length < 8 &&
+                        <Text
+                            as="p"
+                            size='2'
+                            mx='1'
+                            align="center"
+                        >
+                            The password must be at least eight characherts long!
+                        </Text>
+                    }
+
+                    {
+                        formData.password !== formData.confirmPassword &&
+                        <Text
+                            as="p"
+                            size='2'
+                            mx='1'
+                            align="center"
+                        >
+                            Password do not match
+                        </Text>
+                    }
+
                 </Flex>
 
                 {
-                    formData.email.length > 0 && formData.password.length >= 8
+                      validEmailFormat && formData.email && formData.password.length >= 8 && formData.password === formData.confirmPassword
                         ?
                         loading
                             ?

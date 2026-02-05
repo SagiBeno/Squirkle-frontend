@@ -27,7 +27,10 @@ function App() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    onAuthStateChanged(auth, (currentUser) => setUser(currentUser));
+    onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) setUser(currentUser);
+      else navigate('/login');
+    });
   }, []);
 
   async function handleLoginWithEmailAndPW(data) {
@@ -42,7 +45,7 @@ function App() {
         console.log('hahandleLoginWithEmailAndPW result: ', result)
       } catch (error) {
         console.warn(error);
-        setToastData({ open: true, title: 'Failed login', description: 'Ivalid email or password', isError: true })
+        setToastData({ open: true, title: 'Failed login', description: 'Invalid email or password', isError: true })
       }
 
     }
@@ -57,9 +60,15 @@ function App() {
     setLoading(true);
     const email = data?.email;
     const password = data?.password;
+    const username = data?.username;
 
-    if (!email || !password) return;
+    if (!email || !password || !username) return;
     else {
+      /*
+        TODO - Felhasználónév ellenőrzése: lézetik, nem létezik
+        Ha létezik: setToastData({ open: true, title: 'Failed registration', description: 'The username already exist!', isError: true })
+        Ha nem létezik: const result = await createUserWithEmailAndPassword(auth, email, password);
+      */
       try {
         const result = await createUserWithEmailAndPassword(auth, email, password);
         console.log('handleRegistration result: ', result)
@@ -80,11 +89,17 @@ function App() {
       <Theme>
         
         <Box className='container'>
-          <Navbar />
+          {
+            Object.keys(user).length > 0 && <Navbar />
+          }
+          
           <Routes>
-            <Route path='/' element={<HomePage />} />
             {
-
+              Object.keys(user).length > 0 && <Route path='/' element={<HomePage />} />
+            }
+            
+            {
+              Object.keys(user).length === 0 &&
               <>
                 <Route path='/login' element={<LoginPage handleLoginWithEmailAndPW={handleLoginWithEmailAndPW} handleLoginWithGoogle={handleLoginWithGoogle} loading={loading} />} />
                 <Route path='/register' element={<RegisterPage loading={loading} handleRegistration={handleRegistration} handleLoginWithGoogle={handleLoginWithGoogle} />} />
