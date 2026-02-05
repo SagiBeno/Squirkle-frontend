@@ -1,0 +1,15 @@
+import { Flex } from "@radix-ui/themes";
+
+export default function Navbar () {
+    return (
+        <Flex
+            style={{
+                minHeight: '50px',
+                width: '100%',
+                backgroundColor: 'gray',
+            }}
+        >
+
+        </Flex>
+    )
+}
