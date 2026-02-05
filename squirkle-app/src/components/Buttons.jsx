@@ -41,3 +41,59 @@ export function EnterButton( { text, onClick } ) {
     )
 }
 
+export function DisabledButton( { text } ) {
+    return (
+        <Button
+            variant="outline"
+            mt="4"
+            mb="3"
+            size="3"
+            radius="full"
+            disabled
+            style={{
+                width: '100%'
+            }}
+        >
+            <EnterIcon width='20px' height='20px' /> {text}
+        </Button>
+    )
+}
+
+export function OrButton( { text, onClick } ) {
+    return (
+        <Button
+            variant="outline"
+            mt="4"
+            mb="3"
+            size="3"
+            radius="full"
+            style={{
+                width: '100%',
+                cursor: 'pointer'
+            }}
+            onClick={onClick}
+        >
+            {text}
+        </Button>
+    )
+}
+
+export function GoogleLoginButton( { text, onClick } ) {
+    return (
+        <Button
+            variant="outline"
+            mt="4"
+            mb="3"
+            size="3"
+            radius="full"
+            className="loginButton"
+            style={{
+                width: '100%',
+                cursor: 'pointer'
+            }}
+            onClick={onClick}
+        >
+            <FaGoogle/> {text}
+        </Button>
+    )
+}
