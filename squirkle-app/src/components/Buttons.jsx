@@ -22,3 +22,22 @@ export function DisabledLoadingButton( { text } ) {
     )
 }
 
+export function EnterButton( { text, onClick } ) {
+    return (
+        <Button
+            variant="outline"
+            mt="4"
+            mb="3"
+            size="3"
+            radius="full"
+            style={{
+                cursor: 'pointer',
+                width: '100%'
+            }}
+            onClick={onClick}
+        >
+            <EnterIcon width='20px' height='20px' /> {text}
+        </Button>
+    )
+}
+
