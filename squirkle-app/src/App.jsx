@@ -99,8 +99,6 @@ function App() {
           setToastData={setToastData}
         />
       </Theme>
-
-      <GameWindow />
     </>
   )
 }
