@@ -7,9 +7,9 @@ import HomePage from './Pages/HomePage';
 import LoginPage from './Pages/LoginPage';
 import RegisterPage from './Pages/RegisterPage';
 import Navbar from './Components/Navbar';
-import { Container } from '@radix-ui/themes';
+import { Box } from '@radix-ui/themes';
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import AppToast from './Components/AppToast';
 
 function App() {
@@ -38,7 +38,6 @@ function App() {
 
     if (!email || !password) return;
     else {
-
       try {
         const result = await signInWithEmailAndPassword(auth, email, password);
         console.log('hahandleLoginWithEmailAndPW result: ', result)
@@ -52,14 +51,36 @@ function App() {
   }
 
   async function handleLoginWithGoogle() {
-    await signInWithPopup(auth, new GoogleAuthProvider());
+    const result = await signInWithPopup(auth, new GoogleAuthProvider());
+  }
+
+  async function handleRegistration (data) {
+    setLoading(true);
+    const email = data?.email;
+    const password = data?.password;
+
+    if (!email || !password) return;
+    else {
+      try {
+        const result = await createUserWithEmailAndPassword(auth, email, password);
+        console.log('handleRegistration result: ', result)
+        console.log('handleRegister user: ', result.user )
+        console.log('handleRegister userId: ', result. user.uid)
+      } catch (error) {
+        console.warn(error);
+        setToastData({ open: true, title: 'Failed registration', description: 'You already have an account with this email address. Please log in!', isError: true })
+      }
+
+    }
+    setLoading(false);
   }
 
   return (
     <>
 
       <Theme>
-        <Container className='container'>
+        
+        <Box className='container'>
           <Navbar />
           <Routes>
             <Route path='/' element={<HomePage />} />
@@ -67,11 +88,11 @@ function App() {
 
               <>
                 <Route path='/login' element={<LoginPage handleLoginWithEmailAndPW={handleLoginWithEmailAndPW} handleLoginWithGoogle={handleLoginWithGoogle} loading={loading} />} />
-                <Route path='/register' element={<RegisterPage />} />
+                <Route path='/register' element={<RegisterPage loading={loading} handleRegistration={handleRegistration} handleLoginWithGoogle={handleLoginWithGoogle} />} />
               </>
             }
           </Routes>
-        </Container>
+        </Box>
         <AppToast
           toastData={toastData}
           setToastData={setToastData}
