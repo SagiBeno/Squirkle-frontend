@@ -56,7 +56,17 @@ function App() {
     const result = await signInWithPopup(auth, new GoogleAuthProvider());
   }
 
-  async function handleRegistration (data) {
+  async function existingUsername(username) {
+
+    const resultJSON = await fetch(`https://squirkle-backend.vercel.app/api/get-username-exists/${username}`, {
+      headers: { "Content-Type": "application/json" }
+    });
+    const result = await resultJSON.json();
+    const exists = result?.exists;
+    return exists;
+  }
+
+  async function handleRegistration(data) {
     setLoading(true);
     const email = data?.email;
     const password = data?.password;
@@ -64,38 +74,55 @@ function App() {
 
     if (!email || !password || !username) return;
     else {
-      /*
-        TODO - Felhasználónév ellenőrzése: lézetik, nem létezik
-        Ha létezik: setToastData({ open: true, title: 'Failed registration', description: 'The username already exist!', isError: true })
-        Ha nem létezik: const result = await createUserWithEmailAndPassword(auth, email, password);
-      */
-      try {
-        const result = await createUserWithEmailAndPassword(auth, email, password);
-        console.log('handleRegistration result: ', result)
-        console.log('handleRegister user: ', result.user )
-        console.log('handleRegister userId: ', result. user.uid)
-      } catch (error) {
-        console.warn(error);
-        setToastData({ open: true, title: 'Failed registration', description: 'You already have an account with this email address. Please log in!', isError: true })
-      }
+      const existsUsername = await existingUsername(username);
 
+      if (existsUsername) {
+        setToastData({ open: true, title: 'Failed registration', description: 'The username already exist!', isError: true });
+        setLoading(false)
+      }
+      else {
+        try {
+          const registerResult = await createUserWithEmailAndPassword(auth, email, password);
+          const userId = registerResult?.user?.uid;
+
+          if (userId) {
+            fetch('https://squirkle-backend.vercel.app/api/create-username', {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ userId: userId, username: username })
+            })
+              .then(async (res) => {
+                if (res.status === 201) {
+                  setToastData({ open: true, title: 'Successfully registartion!', description: '', isError: false });
+                  setUser( { user: registerResult, username: username } );
+                  navigate('/');
+                }
+              })
+              .catch(error => {
+                console.warn(error);
+              })
+              .finally(() => { setLoading(false) });
+          }
+        } catch (error) {
+          console.warn(error);
+          setLoading(false);
+          setToastData({ open: true, title: 'Failed registration', description: 'The email already exist!', isError: true });
+        }
+      }
     }
-    setLoading(false);
   }
 
   return (
     <>
-
       <Theme>
-        
+
         <Box className='mainContainer'>
 
-          
           <Routes>
             {
               Object.keys(user).length > 0 && <Route path='/' element={<HomePage />} />
             }
-            
+
             {
               Object.keys(user).length === 0 &&
               <>
