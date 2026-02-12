@@ -10,6 +10,7 @@ import { Box } from '@radix-ui/themes';
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import AppToast from './components/AppToast';
+import UsernameInputDialog from './components/Dialogs/UsernameInputDialog';
 
 function App() {
   const firebaseApp = initializeApp({
@@ -24,6 +25,7 @@ function App() {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(false);
   const [toastData, setToastData] = useState({ open: false, title: '', description: '', isError: false });
+  const [usernameDialog, setUsernameDialog] = useState( {} );
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -80,6 +82,12 @@ function App() {
 
   async function handleLoginWithGoogle() {
     const result = await signInWithPopup(auth, new GoogleAuthProvider());
+    const userId = result?.user?.uid;
+    const username = await getUsername(userId);
+    if (username) navigate("/");
+    else {
+      
+    }
   }
 
   async function existingUsername(username) {
