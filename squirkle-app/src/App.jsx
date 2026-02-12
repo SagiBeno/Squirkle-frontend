@@ -25,7 +25,8 @@ function App() {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(false);
   const [toastData, setToastData] = useState({ open: false, title: '', description: '', isError: false });
-  const [usernameDialog, setUsernameDialog] = useState( {} );
+  const [usernameDialogOpen, setUsernameDialogOpen] = useState(false);
+  const [loginWithGoogleUserData, setLoginWithGoogleUserData] = useState({});
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -86,15 +87,14 @@ function App() {
     const username = await getUsername(userId);
     if (username) navigate("/");
     else {
-      
+      setLoginWithGoogleUserData(result);
+      setUsernameDialogOpen(true);
     }
   }
 
   async function existingUsername(username) {
 
-    const resultJSON = await fetch(`https://squirkle-backend.vercel.app/api/get-username-exists/${username}`, {
-      headers: { "Content-Type": "application/json" }
-    });
+    const resultJSON = await fetch(`https://squirkle-backend.vercel.app/api/get-username-exists/${username}`);
     const result = await resultJSON.json();
     const exists = result?.exists;
     return exists;
@@ -170,6 +170,9 @@ function App() {
           toastData={toastData}
           setToastData={setToastData}
         />
+        {
+          usernameDialogOpen && <UsernameInputDialog open={usernameDialogOpen} setOpen={setUsernameDialogOpen} toastData={toastData} setToastData={setToastData} existingUsername={existingUsername} userData={loginWithGoogleUserData} setUser={setUser} />
+        }
       </Theme>
     </>
   )
