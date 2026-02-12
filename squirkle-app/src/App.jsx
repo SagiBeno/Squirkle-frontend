@@ -27,11 +27,29 @@ function App() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) setUser(currentUser);
-      else navigate('/login');
+    onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        const userId = currentUser?.uid;
+
+        if (userId) {
+          const username = await getUsername(userId);
+          if (!username) {
+            return;
+          }
+          else {
+            setUser( { user: currentUser, username: username } );
+            navigate('/');
+          }
+        } else navigate('/login');
+      } else navigate('/login');
     });
   }, []);
+
+  async function getUsername (userId) {
+    const resultJSON = await fetch(`https://squirkle-backend.vercel.app/api/get-username/${userId}`);
+    const result = await resultJSON.json();
+    return result?.username;
+  }
 
   async function handleLoginWithEmailAndPW(data) {
     setLoading(true);
@@ -42,12 +60,20 @@ function App() {
     else {
       try {
         const result = await signInWithEmailAndPassword(auth, email, password);
-        console.log('hahandleLoginWithEmailAndPW result: ', result)
+        const userId = result?.user?.uid;
+        
+        if (userId) {
+          const username = await getUsername(userId);
+          if (!username) return;
+          else {
+            setUser( { user: result, username: username } );
+            navigate('/');
+          }
+        } else return;
       } catch (error) {
         console.warn(error);
         setToastData({ open: true, title: 'Failed login', description: 'Invalid email or password', isError: true })
       }
-
     }
     setLoading(false);
   }
@@ -78,7 +104,7 @@ function App() {
 
       if (existsUsername) {
         setToastData({ open: true, title: 'Failed registration', description: 'The username already exist!', isError: true });
-        setLoading(false)
+        setLoading(false);
       }
       else {
         try {
