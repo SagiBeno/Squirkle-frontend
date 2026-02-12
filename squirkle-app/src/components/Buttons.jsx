@@ -1,5 +1,5 @@
 import { Spinner, Button } from "@radix-ui/themes";
-import { EnterIcon } from "@radix-ui/react-icons";
+import { EnterIcon, PersonIcon } from "@radix-ui/react-icons";
 import { FaGoogle } from 'react-icons/fa'
 
 export function DisabledLoadingButton( { text } ) {
@@ -11,7 +11,6 @@ export function DisabledLoadingButton( { text } ) {
             size="3"
             radius="full"
             disabled
-            color="pink"
             style={{
                 width: '100%'
             }}
@@ -94,6 +93,62 @@ export function GoogleLoginButton( { text, onClick } ) {
             onClick={onClick}
         >
             <FaGoogle/> {text}
+        </Button>
+    )
+}
+
+export function UsernameDisabledLoadingButton ( { text } ) {
+    return (
+        <Button
+            variant="outline"
+            mt="4"
+            mb="3"
+            size="3"
+            radius="full"
+            disabled
+            style={{
+                width: '100%'
+            }}
+        >
+            <Spinner loading />
+            <PersonIcon width='20px' height='20px' /> {text}
+        </Button>
+    )
+}
+
+export function UsernameDisabledButton ( { text } ) {
+    return (
+        <Button
+            variant="outline"
+            mt="4"
+            mb="3"
+            size="3"
+            radius="full"
+            disabled
+            style={{
+                width: '100%'
+            }}
+        >
+            <PersonIcon width='20px' height='20px' /> {text}
+        </Button>
+    )
+}
+
+export function UsernameConfirmButton ( { text, onClick } ) {
+    return (
+        <Button
+            variant="outline"
+            mt="4"
+            mb="3"
+            size="3"
+            radius="full"
+            style={{
+                width: '100%',
+                cursor: 'pointer'
+            }}
+            onClick={onClick}
+        >
+            <PersonIcon width='20px' height='20px' /> {text}
         </Button>
     )
 }
