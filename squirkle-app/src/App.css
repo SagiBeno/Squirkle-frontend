@@ -3,11 +3,6 @@
     height: 100vh;
 }
 
-#gameContainer {
-    align-items: center;
-    align-content: center;
-}
-
 .toastStyle[data-state="open"] {
     animation: toastSlideDown 180ms ease-out;
 }
