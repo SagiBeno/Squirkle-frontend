@@ -27,13 +27,14 @@ export default function Game({ filePaths }) {
 
     return (
         <Flex
-            id='gameContainer'
-            align='stretch'
             style={{
-                height: '90vh'
+                height: '90vh',
+                justifyContent: 'center',
+                alignContent: 'center',
+                alignItems: 'center'
             }}
         >
-            <Unity unityProvider={unityProvider} style={{ width: '100%', height: '100%', backgroundColor: 'pink' }} />
+            <Unity unityProvider={unityProvider} style={{ width: '100%', height: '100%', backgroundColor: 'black' }} />
         </Flex>
 
     )
