@@ -88,10 +88,8 @@ function App() {
 
       <Theme>
         
-        <Box className='container'>
-          {
-            Object.keys(user).length > 0 && <Navbar />
-          }
+        <Box className='mainContainer'>
+
           
           <Routes>
             {
