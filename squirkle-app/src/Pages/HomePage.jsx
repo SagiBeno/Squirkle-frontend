@@ -1,10 +1,32 @@
 import { Box, Flex } from '@radix-ui/themes';
 import GameWindow from '../components/GameWindow';
+import Navbar from '../components/Navbar';
 
 export default function HomePage() {
     return (
-
-        <GameWindow />
+        <Flex
+            style={{
+                width: '100%',
+                height: '100%',
+                flexDirection: 'column',
+            }}
+        >
+            <Navbar />
+            <Flex
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    alignContent: 'center',
+                    backgroundColor: '#21212c'
+                }}
+            >
+                <GameWindow />
+            </Flex>
+        </Flex>
+        
 
 
     )

@@ -6,7 +6,7 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 export default function AppToast( { toastData, setToastData } ) {
 
     return (
-        <Toast.Provider swipeDirection="up" duration={5000}>
+        <Toast.Provider swipeDirection="up" duration={5000} style={{zIndex: 9999}}>
             <Toast.Root open={toastData.open} onOpenChange={() => setToastData({ ...toastData, open: false })} asChild className="toastStyle">
                 <Card
                     style={{

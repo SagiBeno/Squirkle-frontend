@@ -17,15 +17,19 @@ export default function LoginPage( { handleLoginWithEmailAndPW, handleLoginWithG
         <Flex
             style={{
                 margin: '0 auto',
-                width: '300px',
-                height: '100%'
+                minWidth: '250px',
+                maxWidth: '700px',
+                height: '100%',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignContent: 'center',
+                alignItems: 'center'
             }}
-
-            align='center'
         >
             <Card
                 style={{
-                    margin: '0 auto'
+                    margin: '20px',
+                    width: '95%'
                 }}
             >
                 <Flex

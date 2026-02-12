@@ -4,7 +4,7 @@ export default function Navbar () {
     return (
         <Flex
             style={{
-                minHeight: '50px',
+                height: '60px',
                 width: '100%',
                 backgroundColor: 'gray',
             }}
