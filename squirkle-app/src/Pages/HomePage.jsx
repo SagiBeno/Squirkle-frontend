@@ -19,7 +19,8 @@ export default function HomePage() {
                     flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    alignContent: 'center'
+                    alignContent: 'center',
+                    backgroundColor: '#21212c'
                 }}
             >
                 <GameWindow />
