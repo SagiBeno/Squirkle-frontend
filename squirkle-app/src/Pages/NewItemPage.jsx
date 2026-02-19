@@ -47,6 +47,7 @@ export default function NewItemPage() {
 
     return (
         <Flex className='contentContainer'>
+            <Box className='navbarSpacer' />
             <Card
                 style={{
                     margin: '20px',
