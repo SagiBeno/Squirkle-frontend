@@ -150,8 +150,7 @@ function App() {
   return (
     <>
       <Theme>
-
-        <Box className='mainContainer'>
+          
 
           <Routes>
             {
@@ -168,7 +167,7 @@ function App() {
               </>
             }
           </Routes>
-        </Box>
+
         <AppToast
           toastData={toastData}
           setToastData={setToastData}

@@ -1,19 +1,28 @@
 .mainContainer {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    min-height: 100vh;
+
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+
     background-color: #21212c;
+
+    overflow-x: hidden;
     overflow-y: auto;
 }
 
 .contentContainer {
-    margin-top: 60px;
     width: 100%;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     align-content: center;
-    overflow-y: auto;
-    overflow-x: hidden;
+    justify-content: center;
+}
+
+.navbarSpacer {
+    height: 60px;
 }
 
 .toastStyle[data-state="open"] {

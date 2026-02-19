@@ -5,7 +5,7 @@ import { DisabledLoadingButton, EnterButton, DisabledButton, OrButton, GoogleLog
 import Separator from '../components/Separator';
 import { useNavigate } from "react-router-dom";
 
-export default function RegisterPage( { loading, handleRegistration, handleLoginWithGoogle } ) {
+export default function RegisterPage({ loading, handleRegistration, handleLoginWithGoogle }) {
 
     let navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -18,7 +18,7 @@ export default function RegisterPage( { loading, handleRegistration, handleLogin
     });
     const [validEmailFormat, setValidEmailFormat] = useState(true);
 
-    function isValidEmailFormat (email) {
+    function isValidEmailFormat(email) {
         if (!email) return false;
         if (email.includes(' ') || !email.includes('@')) return false;
 
@@ -35,158 +35,148 @@ export default function RegisterPage( { loading, handleRegistration, handleLogin
     }
 
     return (
-        <Flex
-            style={{
-                margin: '0 auto',
-                minWidth: '250px',
-                maxWidth: '700px',
-                height: '100%',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignContent: 'center',
-                alignItems: 'center'
-            }}
-        >
-            <Card
-                style={{
-                    margin: '20px',
-                    width: '95%'
-                }}
-            >
-                <Flex
-                    justify='center'
+        <Flex className="mainContainer">
+            <Flex className="contentContainer">
+                <Card
                     style={{
-                        textAlign: 'center'
+                        margin: '20px',
+                        width: '80%'
                     }}
                 >
-                    <Text size='5'>
-                        Registration
-                    </Text>
-                </Flex>
-
-                <Flex direction='column'>
-                    <Text as='label' htmlFor="username">Username</Text>
-                    <TextField.Root
-                        radius="full"
-                        placeholder="Username"
-                        size="3"
-                        name="username"
-                        id="username"
-                        mt="2"
-                        mb="3"
-                        value={formData.username}
-                        required
-                        onChange={(e) => {
-                            if (e.target.value.includes(' ')) return;
-                            else setFormData({ ...formData, username: e.target.value })
+                    <Flex
+                        justify='center'
+                        style={{
+                            textAlign: 'center'
                         }}
-                    />
+                    >
+                        <Text size='5'>
+                            Registration
+                        </Text>
+                    </Flex>
 
-                    <Text as='label' htmlFor="email">Email</Text>
-                    <TextField.Root
-                        radius="full"
-                        placeholder="example@gmail.com"
-                        size="3"
-                        name="email"
-                        id="email"
-                        mt="2"
-                        mb="3"
-                        value={formData.email}
-                        required
-                        onChange={(e) => {
-                            if (e.target.value.includes(' ')) return;
-                            else {
-                                setFormData({ ...formData, email: e.target.value })
-                                setValidEmailFormat(isValidEmailFormat(e.target.value));
-                            }
-                        }}
-                    />
-
-                    {
-                        !validEmailFormat &&
-                        <Text
-                            as="p"
-                            size='2'
-                            mx='1'
-                            style={{
-                                userSelect: 'none',
-                                cursor: 'default'
+                    <Flex direction='column'>
+                        <Text as='label' htmlFor="username">Username</Text>
+                        <TextField.Root
+                            radius="full"
+                            placeholder="Username"
+                            size="3"
+                            name="username"
+                            id="username"
+                            mt="2"
+                            mb="3"
+                            value={formData.username}
+                            required
+                            onChange={(e) => {
+                                if (e.target.value.includes(' ')) return;
+                                else setFormData({ ...formData, username: e.target.value })
                             }}
-                            align="center"
-                            color="tomato"
-                        >
-                            Invalid email format!
-                        </Text>
-                    }
+                        />
 
-                    <Text as='label' htmlFor="password">Password</Text>
-                    <PasswordInput
-                        inputName="password"
-                        value={formData.password}
-                        onChange={(e) => {
-                            if (e.target.value.includes(' ')) return;
-                            else setFormData({ ...formData, password: e.target.value })
-                        }}
-                    />
+                        <Text as='label' htmlFor="email">Email</Text>
+                        <TextField.Root
+                            radius="full"
+                            placeholder="example@gmail.com"
+                            size="3"
+                            name="email"
+                            id="email"
+                            mt="2"
+                            mb="3"
+                            value={formData.email}
+                            required
+                            onChange={(e) => {
+                                if (e.target.value.includes(' ')) return;
+                                else {
+                                    setFormData({ ...formData, email: e.target.value })
+                                    setValidEmailFormat(isValidEmailFormat(e.target.value));
+                                }
+                            }}
+                        />
 
-                    <Text as='label' htmlFor="confirmPassword">Confirm password</Text>
-                    <PasswordInput
-                        inputName="confirmPassword"
-                        value={formData.confirmPassword}
-                        onChange={(e) => {
-                            if (e.target.value.includes(' ')) return;
-                            else setFormData({ ...formData, confirmPassword: e.target.value })
-                        }}
-                    />
+                        {
+                            !validEmailFormat &&
+                            <Text
+                                as="p"
+                                size='2'
+                                mx='1'
+                                style={{
+                                    userSelect: 'none',
+                                    cursor: 'default'
+                                }}
+                                align="center"
+                                color="tomato"
+                            >
+                                Invalid email format!
+                            </Text>
+                        }
+
+                        <Text as='label' htmlFor="password">Password</Text>
+                        <PasswordInput
+                            inputName="password"
+                            value={formData.password}
+                            onChange={(e) => {
+                                if (e.target.value.includes(' ')) return;
+                                else setFormData({ ...formData, password: e.target.value })
+                            }}
+                        />
+
+                        <Text as='label' htmlFor="confirmPassword">Confirm password</Text>
+                        <PasswordInput
+                            inputName="confirmPassword"
+                            value={formData.confirmPassword}
+                            onChange={(e) => {
+                                if (e.target.value.includes(' ')) return;
+                                else setFormData({ ...formData, confirmPassword: e.target.value })
+                            }}
+                        />
+
+                        {
+                            formData.password.length < 8 &&
+                            <Text
+                                as="p"
+                                size='2'
+                                mx='1'
+                                align="center"
+                            >
+                                The password must be at least eight characherts long!
+                            </Text>
+                        }
+
+                        {
+                            formData.password !== formData.confirmPassword &&
+                            <Text
+                                as="p"
+                                size='2'
+                                mx='1'
+                                align="center"
+                            >
+                                Password do not match
+                            </Text>
+                        }
+
+                    </Flex>
 
                     {
-                        formData.password.length < 8 &&
-                        <Text
-                            as="p"
-                            size='2'
-                            mx='1'
-                            align="center"
-                        >
-                            The password must be at least eight characherts long!
-                        </Text>
-                    }
-
-                    {
-                        formData.password !== formData.confirmPassword &&
-                        <Text
-                            as="p"
-                            size='2'
-                            mx='1'
-                            align="center"
-                        >
-                            Password do not match
-                        </Text>
-                    }
-
-                </Flex>
-
-                {
-                      validEmailFormat && formData.email && formData.password.length >= 8 && formData.password === formData.confirmPassword
-                        ?
-                        loading
+                        validEmailFormat && formData.email && formData.password.length >= 8 && formData.password === formData.confirmPassword
                             ?
-                            <DisabledLoadingButton text={'Registration'}/>
+                            loading
+                                ?
+                                <DisabledLoadingButton text={'Registration'} />
+                                :
+                                <EnterButton text={'Registration'} onClick={() => handleRegistration(formData)} />
                             :
-                            <EnterButton text={'Registration'} onClick={() => handleRegistration(formData)} />
-                        :
-                        <DisabledButton text={'Registration'} />
-                }
-                
-                <GoogleLoginButton text={'Login with Google account'} onClick={handleLoginWithGoogle}/>
-                <Separator text={'or'} />
-                <Box style={{textAlign: 'center'}}>
-                    <Text>Do you have an account?</Text>
-                </Box>
-                
-                <OrButton text={'Login'} onClick={() => navigate('/login')} />
-                    
-            </Card>
-        </Flex>
+                            <DisabledButton text={'Registration'} />
+                    }
 
+                    <GoogleLoginButton text={'Login with Google account'} onClick={handleLoginWithGoogle} />
+                    <Separator text={'or'} />
+                    <Box style={{ textAlign: 'center' }}>
+                        <Text>Do you have an account?</Text>
+                    </Box>
+
+                    <OrButton text={'Login'} onClick={() => navigate('/login')} />
+
+                </Card>
+            </Flex>
+        </Flex>
     )
 }
