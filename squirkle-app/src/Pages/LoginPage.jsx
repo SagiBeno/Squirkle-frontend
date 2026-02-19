@@ -14,78 +14,76 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
     });
 
     return (
-        <Flex className="mainContainer">
-            <Flex className="contentContainer">
-                <Card
+        <Flex className="contentContainer">
+            <Card
+                style={{
+                    margin: '0 auto',
+                    width: '80%'
+                }}
+            >
+                <Flex
+                    justify='center'
                     style={{
-                        margin: '20px',
-                        width: '80%'
+                        textAlign: 'center'
                     }}
                 >
-                    <Flex
-                        justify='center'
-                        style={{
-                            textAlign: 'center'
+                    <Text size='5'>
+                        Login
+                    </Text>
+                </Flex>
+
+                <Flex direction='column'>
+                    <Text as='label' htmlFor="email">Email</Text>
+                    <TextField.Root
+                        radius="full"
+                        placeholder="example@gmail.com"
+                        size="3"
+                        name="email"
+                        id="email"
+                        mt="2"
+                        mb="3"
+                        value={formData.email}
+                        required
+                        onChange={(e) => {
+                            if (e.target.value.includes(' ')) return;
+                            else setFormData({ ...formData, email: e.target.value })
                         }}
-                    >
-                        <Text size='5'>
-                            Login
-                        </Text>
-                    </Flex>
+                    />
 
-                    <Flex direction='column'>
-                        <Text as='label' htmlFor="email">Email</Text>
-                        <TextField.Root
-                            radius="full"
-                            placeholder="example@gmail.com"
-                            size="3"
-                            name="email"
-                            id="email"
-                            mt="2"
-                            mb="3"
-                            value={formData.email}
-                            required
-                            onChange={(e) => {
-                                if (e.target.value.includes(' ')) return;
-                                else setFormData({ ...formData, email: e.target.value })
-                            }}
-                        />
+                    <Text as='label' htmlFor="password">Password</Text>
+                    <PasswordInput
+                        inputName="password"
+                        value={formData.password}
+                        onChange={(e) => {
+                            if (e.target.value.includes(' ')) return;
+                            else setFormData({ ...formData, password: e.target.value })
+                        }}
+                    />
+                </Flex>
 
-                        <Text as='label' htmlFor="password">Password</Text>
-                        <PasswordInput
-                            inputName="password"
-                            value={formData.password}
-                            onChange={(e) => {
-                                if (e.target.value.includes(' ')) return;
-                                else setFormData({ ...formData, password: e.target.value })
-                            }}
-                        />
-                    </Flex>
-
-                    {
-                        formData.email.length > 0 && formData.password.length >= 8
+                {
+                    formData.email.length > 0 && formData.password.length >= 8
+                        ?
+                        loading
                             ?
-                            loading
-                                ?
-                                <DisabledLoadingButton text={'Login'} />
-                                :
-                                <EnterButton text={'Login'} onClick={() => handleLoginWithEmailAndPW(formData)} />
+                            <DisabledLoadingButton text={'Login'} />
                             :
-                            <DisabledButton text={'Login'} />
-                    }
+                            <EnterButton text={'Login'} onClick={() => handleLoginWithEmailAndPW(formData)} />
+                        :
+                        <DisabledButton text={'Login'} />
+                }
 
-                    <GoogleLoginButton text={'Login with Google account'} onClick={handleLoginWithGoogle} />
-                    <Separator text={'or'} />
-                    <Box style={{ textAlign: 'center' }}>
-                        <Text>Do not have an account?</Text>
-                    </Box>
+                <GoogleLoginButton text={'Login with Google account'} onClick={handleLoginWithGoogle} />
+                <Separator text={'or'} />
+                <Box style={{ textAlign: 'center' }}>
+                    <Text>Do not have an account?</Text>
+                </Box>
 
-                    <OrButton text={'Registration'} onClick={() => navigate('/register')} />
+                <OrButton text={'Registration'} onClick={() => navigate('/register')} />
 
-                </Card>
-            </Flex>
-
+            </Card>
         </Flex>
+
 
     )
 }

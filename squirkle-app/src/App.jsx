@@ -41,7 +41,7 @@ function App() {
             return;
           }
           else {
-            setUser( { user: currentUser, username: username } );
+            setUser({ user: currentUser, username: username });
             navigate('/');
           }
         } //else navigate('/login');
@@ -49,7 +49,7 @@ function App() {
     });
   }, []);
 
-  async function getUsername (userId) {
+  async function getUsername(userId) {
     const resultJSON = await fetch(`https://squirkle-backend.vercel.app/api/get-username/${userId}`);
     const result = await resultJSON.json();
     return result?.username;
@@ -65,12 +65,12 @@ function App() {
       try {
         const result = await signInWithEmailAndPassword(auth, email, password);
         const userId = result?.user?.uid;
-        
+
         if (userId) {
           const username = await getUsername(userId);
           if (!username) return;
           else {
-            setUser( { user: result, username: username } );
+            setUser({ user: result, username: username });
             navigate('/');
           }
         } else return;
@@ -129,7 +129,7 @@ function App() {
               .then(async (res) => {
                 if (res.status === 201) {
                   setToastData({ open: true, title: 'Successfully registartion!', description: '', isError: false });
-                  setUser( { user: registerResult, username: username } );
+                  setUser({ user: registerResult, username: username });
                   navigate('/');
                 }
               })
@@ -150,8 +150,8 @@ function App() {
   return (
     <>
       <Theme>
-          
-
+        <Navbar />
+        <Flex className='mainContainer'>
           <Routes>
             {
               <>
@@ -167,6 +167,7 @@ function App() {
               </>
             }
           </Routes>
+        </Flex>
 
         <AppToast
           toastData={toastData}
