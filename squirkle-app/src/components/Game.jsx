@@ -1,27 +1,29 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Unity, useUnityContext } from "react-unity-webgl";
 import { Button, Box, Flex } from "@radix-ui/themes"
+import { InitializeGameHandler } from "../GameHandler.js"
+import * as GameEvents from "../GameEvents.js"
 
 export default function Game({ filePaths }) {
 
-    const { unityProvider, sendMessage, addEventListener, removeEventListenerProvider } = useUnityContext(filePaths);
+    const { unityProvider, sendMessage, addEventListener } = useUnityContext(filePaths);
     
-    const [time, setTime] = useState(0)
-    const handleGameTime = useCallback((time) => {
-        setTime(time)
-    })
-
     useEffect(() => {
-        addEventListener("GameTime", handleGameTime);
+        InitializeGameHandler(sendMessage)
+
+        const eventNames = Object.keys(GameEvents);
+
+        eventNames.forEach(name => {
+            addEventListener(name, GameEvents[name]);
+        });
+
         return () => {
-            removeEventListener("GameTime", handleGameTime);
+            eventNames.forEach(name => {
+                removeEventListener(name, GameEvents[name]);
+            });
         };
 
-    }, [addEventListener, removeEventListener, handleGameTime])
-
-    function sendTestMessage() {
-        sendMessage("Test", "ShowText", "<size=64>test text texttt")
-    }
+    }, [addEventListener, removeEventListener])
 
     console.log("starting game...")
 
