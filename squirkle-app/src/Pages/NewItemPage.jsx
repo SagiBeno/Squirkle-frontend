@@ -46,12 +46,8 @@ export default function NewItemPage() {
     });
 
     return (
-        <>
-            <Navbar />
-
-            <Flex
-                className='contentContainer'
-            >
+        <Flex className='mainContainer'>
+            <Flex className='contentContainer'>
                 <Card
                     style={{
                         margin: '20px',
@@ -74,7 +70,6 @@ export default function NewItemPage() {
                             textAlign: 'center',
                             flexDirection: 'row',
                             flexWrap: 'wrap',
-                            overflowY: 'auto',
                         }}
                     >
                         <Box
@@ -344,6 +339,6 @@ export default function NewItemPage() {
                     </Flex>
                 </Card>
             </Flex>
-        </>
+        </Flex>
     )
 }
