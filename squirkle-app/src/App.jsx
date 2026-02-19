@@ -6,11 +6,12 @@ import HomePage from './Pages/HomePage';
 import LoginPage from './Pages/LoginPage';
 import RegisterPage from './Pages/RegisterPage';
 import Navbar from './components/Navbar';
-import { Box } from '@radix-ui/themes';
+import { Box, Flex } from '@radix-ui/themes';
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import AppToast from './components/AppToast';
 import UsernameInputDialog from './components/Dialogs/UsernameInputDialog';
+import NewItemPage from './Pages/NewItemPage';
 
 function App() {
   const firebaseApp = initializeApp({
@@ -40,15 +41,15 @@ function App() {
             return;
           }
           else {
-            setUser( { user: currentUser, username: username } );
+            setUser({ user: currentUser, username: username });
             navigate('/');
           }
-        } else navigate('/login');
-      } else navigate('/login');
+        } //else navigate('/login');
+      } //else navigate('/login');
     });
   }, []);
 
-  async function getUsername (userId) {
+  async function getUsername(userId) {
     const resultJSON = await fetch(`https://squirkle-backend.vercel.app/api/get-username/${userId}`);
     const result = await resultJSON.json();
     return result?.username;
@@ -64,12 +65,12 @@ function App() {
       try {
         const result = await signInWithEmailAndPassword(auth, email, password);
         const userId = result?.user?.uid;
-        
+
         if (userId) {
           const username = await getUsername(userId);
           if (!username) return;
           else {
-            setUser( { user: result, username: username } );
+            setUser({ user: result, username: username });
             navigate('/');
           }
         } else return;
@@ -128,7 +129,7 @@ function App() {
               .then(async (res) => {
                 if (res.status === 201) {
                   setToastData({ open: true, title: 'Successfully registartion!', description: '', isError: false });
-                  setUser( { user: registerResult, username: username } );
+                  setUser({ user: registerResult, username: username });
                   navigate('/');
                 }
               })
@@ -149,23 +150,25 @@ function App() {
   return (
     <>
       <Theme>
-
-        <Box className='mainContainer'>
-
+        <Navbar />
+        <Flex className='mainContainer'>
           <Routes>
             {
-              Object.keys(user).length > 0 && <Route path='/' element={<HomePage />} />
+              <>
+                <Route path='/' element={<HomePage />} />
+                <Route path='/admin/new-item' element={<NewItemPage />} />
+              </>
             }
 
             {
-              Object.keys(user).length === 0 &&
               <>
                 <Route path='/login' element={<LoginPage handleLoginWithEmailAndPW={handleLoginWithEmailAndPW} handleLoginWithGoogle={handleLoginWithGoogle} loading={loading} />} />
                 <Route path='/register' element={<RegisterPage loading={loading} handleRegistration={handleRegistration} handleLoginWithGoogle={handleLoginWithGoogle} />} />
               </>
             }
           </Routes>
-        </Box>
+        </Flex>
+
         <AppToast
           toastData={toastData}
           setToastData={setToastData}

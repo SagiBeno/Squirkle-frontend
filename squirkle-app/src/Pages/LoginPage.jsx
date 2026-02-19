@@ -5,7 +5,7 @@ import { DisabledLoadingButton, EnterButton, DisabledButton, OrButton, GoogleLog
 import Separator from '../components/Separator';
 import { useNavigate } from "react-router-dom";
 
-export default function LoginPage( { handleLoginWithEmailAndPW, handleLoginWithGoogle, loading } ) {
+export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGoogle, loading }) {
 
     let navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -14,22 +14,11 @@ export default function LoginPage( { handleLoginWithEmailAndPW, handleLoginWithG
     });
 
     return (
-        <Flex
-            style={{
-                margin: '0 auto',
-                minWidth: '250px',
-                maxWidth: '700px',
-                height: '100%',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignContent: 'center',
-                alignItems: 'center'
-            }}
-        >
+        <Flex className="contentContainer">
             <Card
                 style={{
-                    margin: '20px',
-                    width: '95%'
+                    margin: '0 auto',
+                    width: '80%'
                 }}
             >
                 <Flex
@@ -77,23 +66,24 @@ export default function LoginPage( { handleLoginWithEmailAndPW, handleLoginWithG
                         ?
                         loading
                             ?
-                            <DisabledLoadingButton text={'Login'}/>
+                            <DisabledLoadingButton text={'Login'} />
                             :
                             <EnterButton text={'Login'} onClick={() => handleLoginWithEmailAndPW(formData)} />
                         :
                         <DisabledButton text={'Login'} />
                 }
-                
-                <GoogleLoginButton text={'Login with Google account'} onClick={handleLoginWithGoogle}/>
+
+                <GoogleLoginButton text={'Login with Google account'} onClick={handleLoginWithGoogle} />
                 <Separator text={'or'} />
-                <Box style={{textAlign: 'center'}}>
+                <Box style={{ textAlign: 'center' }}>
                     <Text>Do not have an account?</Text>
                 </Box>
-                
+
                 <OrButton text={'Registration'} onClick={() => navigate('/register')} />
-                    
+
             </Card>
         </Flex>
+
 
     )
 }

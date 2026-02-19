@@ -5,7 +5,7 @@ import { DisabledLoadingButton, EnterButton, DisabledButton, OrButton, GoogleLog
 import Separator from '../components/Separator';
 import { useNavigate } from "react-router-dom";
 
-export default function RegisterPage( { loading, handleRegistration, handleLoginWithGoogle } ) {
+export default function RegisterPage({ loading, handleRegistration, handleLoginWithGoogle }) {
 
     let navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -18,7 +18,7 @@ export default function RegisterPage( { loading, handleRegistration, handleLogin
     });
     const [validEmailFormat, setValidEmailFormat] = useState(true);
 
-    function isValidEmailFormat (email) {
+    function isValidEmailFormat(email) {
         if (!email) return false;
         if (email.includes(' ') || !email.includes('@')) return false;
 
@@ -35,22 +35,11 @@ export default function RegisterPage( { loading, handleRegistration, handleLogin
     }
 
     return (
-        <Flex
-            style={{
-                margin: '0 auto',
-                minWidth: '250px',
-                maxWidth: '700px',
-                height: '100%',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignContent: 'center',
-                alignItems: 'center'
-            }}
-        >
+        <Flex className="contentContainer">
             <Card
                 style={{
                     margin: '20px',
-                    width: '95%'
+                    width: '80%'
                 }}
             >
                 <Flex
@@ -166,27 +155,26 @@ export default function RegisterPage( { loading, handleRegistration, handleLogin
                 </Flex>
 
                 {
-                      validEmailFormat && formData.email && formData.password.length >= 8 && formData.password === formData.confirmPassword
+                    validEmailFormat && formData.email && formData.password.length >= 8 && formData.password === formData.confirmPassword
                         ?
                         loading
                             ?
-                            <DisabledLoadingButton text={'Registration'}/>
+                            <DisabledLoadingButton text={'Registration'} />
                             :
                             <EnterButton text={'Registration'} onClick={() => handleRegistration(formData)} />
                         :
                         <DisabledButton text={'Registration'} />
                 }
-                
-                <GoogleLoginButton text={'Login with Google account'} onClick={handleLoginWithGoogle}/>
+
+                <GoogleLoginButton text={'Login with Google account'} onClick={handleLoginWithGoogle} />
                 <Separator text={'or'} />
-                <Box style={{textAlign: 'center'}}>
+                <Box style={{ textAlign: 'center' }}>
                     <Text>Do you have an account?</Text>
                 </Box>
-                
+
                 <OrButton text={'Login'} onClick={() => navigate('/login')} />
-                    
+
             </Card>
         </Flex>
-
     )
 }
