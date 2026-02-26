@@ -149,30 +149,21 @@ export default function GameLoader() {
     }, [])
 
     return (
-        <Flex
-            style={{
-                width: '100%',
-                height: '100%',
-                justifyContent: 'center',
-                alignItems: 'center'
-            }}
-        >
+        <>
             {
-                isGameLoaded 
-                    ? 
-                        <Game filePaths={filePaths}/> 
-                    : 
-                        <Flex
-                            style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}
-                        >
-                            <Spinner size="3" style={{marginRight: '5px'}}/>
-                            <Text>Loading game...</Text>
-                        </Flex>
+                isGameLoaded ? <Game filePaths={filePaths}/> : 
+                <Flex
+                    style={{
+                        flexDirection: 'row',
+                        alignContent: 'center',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
+                >
+                    <Spinner size="3" style={{marginRight: '5px'}}/>
+                    <Text>Loading game...</Text>
+                </Flex>
             }
-        </Flex>
+        </>
     )
 }

@@ -9,16 +9,7 @@ export default function HomePage() {
             <Box className='navbarSpacer' />
             
             <Flex className='contentContainer'>
-
-                <Flex style={{
-                    flex: 1,
-                    width: '100%',
-                    overflow: 'hidden',
-                    height: 'calc(100vh - 60px)',
-                }}>
-                    <GameWindow />
-                </Flex>
-
+                <GameWindow />
             </Flex>
         </Flex>
     )
