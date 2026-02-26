@@ -150,7 +150,7 @@ function App() {
   return (
     <>
       <Theme>
-        <Navbar />
+        
         
           <Routes>
             {

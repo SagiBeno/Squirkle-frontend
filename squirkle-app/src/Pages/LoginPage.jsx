@@ -25,11 +25,17 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
                         backgroundColor: 'rgba(255, 255, 255, 0.5)',
                         padding: '10px',
                         borderRadius: '20px',
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        fontFamily: `"Fredoka", sans-serif`,
                     }}
                 >
                     
-                    <Text size='5'>
+                    <Text
+                        size='8'
+                        style={{
+                            fontWeight: 'bold'
+                        }}
+                    >
                         Login
                     </Text>
 
@@ -39,30 +45,34 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
                             textAlign: 'left'
                         }}
                     >
-                        <Text as='label' htmlFor="email">Email</Text>
+                        <Text as='label' size='4' htmlFor="email" style={{ cursor: 'pointer' }}>Email</Text>
                         <TextField.Root
                             radius="full"
                             placeholder="example@gmail.com"
                             size="3"
                             name="email"
                             id="email"
-                            mt="2"
-                            mb="3"
                             value={formData.email}
                             required
                             onChange={(e) => {
                                 if (e.target.value.includes(' ')) return;
                                 else setFormData({ ...formData, email: e.target.value })
                             }}
+                            style={{ 
+                                fontFamily: `"Fredoka", sans-serif`,
+                            }}
                         />
 
-                        <Text as='label' htmlFor="password">Password</Text>
+                        <Text as='label' size='4' htmlFor="password" style={{ cursor: 'pointer', marginTop: '10px' }}>Password</Text>
                         <PasswordInput
                             inputName="password"
                             value={formData.password}
                             onChange={(e) => {
                                 if (e.target.value.includes(' ')) return;
                                 else setFormData({ ...formData, password: e.target.value })
+                            }}
+                            style={{ 
+                                fontFamily: `"Fredoka", sans-serif`,
                             }}
                         />
                     </Flex>
@@ -82,7 +92,7 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
                     <GoogleLoginButton text={'Login with Google account'} onClick={handleLoginWithGoogle} />
                     <Separator text={'or'} />
                     <Box style={{ textAlign: 'center' }}>
-                        <Text>Do not have an account?</Text>
+                        <Text size="3">Do not have an account?</Text>
                     </Box>
 
                     <OrButton text={'Registration'} onClick={() => navigate('/register')} />

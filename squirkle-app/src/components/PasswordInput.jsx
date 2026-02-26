@@ -21,6 +21,7 @@ export default function PasswordInput( { inputName, value, onChange } ) {
             value={value}
             onChange={onChange}
             required
+            style={{ fontFamily: `"Fredoka", sans-serif`}}
         >
             <TextField.Slot side="right">
                 <IconButton
