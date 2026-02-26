@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Unity, useUnityContext } from "react-unity-webgl";
-import { Button, Box, Flex } from "@radix-ui/themes"
+import { Button, Box, Flex, Text } from "@radix-ui/themes"
 import { InitializeGameHandler } from "../GameHandler.js"
 import * as GameEvents from "../GameEvents.js"
 
@@ -28,16 +28,6 @@ export default function Game({ filePaths }) {
     console.log("starting game...")
 
     return (
-        <Flex
-            style={{
-                height: '90vh',
-                justifyContent: 'center',
-                alignContent: 'center',
-                alignItems: 'center'
-            }}
-        >
-            <Unity unityProvider={unityProvider} style={{ width: '100%', height: '100%', backgroundColor: 'black' }} />
-        </Flex>
-
+        <Unity unityProvider={unityProvider} style={{width: '100%', height: '100%', backgroundColor: 'black' }} />
     )
 }
