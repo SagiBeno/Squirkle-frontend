@@ -35,6 +35,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
     }
 
     return (
+        <Flex className="mainContainer">
         <Flex className="contentContainer">
             <Card
                 style={{
@@ -175,6 +176,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                 <OrButton text={'Login'} onClick={() => navigate('/login')} />
 
             </Card>
+        </Flex>
         </Flex>
     )
 }

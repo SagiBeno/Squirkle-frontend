@@ -4,18 +4,22 @@ import Navbar from '../components/Navbar';
 
 export default function HomePage() {
     return (
-        <Flex className='contentContainer'>
-            <Box className='navbarSpacer' />
+        <Flex className='mainContainer'>
 
-            <Flex style={{
-                flex: 1,
-                width: '100%',
-                overflow: 'hidden',
-                height: 'calc(100vh - 60px)',
-            }}>
-                <GameWindow />
-            </Flex>
+            <Box className='navbarSpacer' />
             
+            <Flex className='contentContainer'>
+
+                <Flex style={{
+                    flex: 1,
+                    width: '100%',
+                    overflow: 'hidden',
+                    height: 'calc(100vh - 60px)',
+                }}>
+                    <GameWindow />
+                </Flex>
+
+            </Flex>
         </Flex>
     )
 }

@@ -151,7 +151,7 @@ function App() {
     <>
       <Theme>
         <Navbar />
-        <Flex className='mainContainer'>
+        
           <Routes>
             {
               <>
@@ -167,7 +167,6 @@ function App() {
               </>
             }
           </Routes>
-        </Flex>
 
         <AppToast
           toastData={toastData}
