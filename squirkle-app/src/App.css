@@ -5,6 +5,8 @@
     flex-direction: column;
     justify-content: center;
     background-color: #21212c;
+    background-image: url("/background.png");
+    background-size: 50vh;
 
     overflow-x: hidden;
     overflow-y: auto;
