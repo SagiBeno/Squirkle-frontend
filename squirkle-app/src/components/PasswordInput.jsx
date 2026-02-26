@@ -16,7 +16,6 @@ export default function PasswordInput( { inputName, value, onChange } ) {
             size="3"
             name={inputName}
             id={inputName}
-            mb="3"
             type={showPassword ? "text" : "password"}
             value={value}
             onChange={onChange}
