@@ -22,7 +22,6 @@
 
 .navbarSpacer {
     min-height: 60px;
-    margin-bottom: 5px;
 }
 
 .toastStyle[data-state="open"] {

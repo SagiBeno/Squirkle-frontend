@@ -36,148 +36,151 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
 
     return (
         <Flex className="mainContainer">
-        <Flex className="contentContainer">
-            <Card
-                style={{
-                    margin: '20px',
-                    width: '80%',
-                    maxWidth: '720px'
-                }}
-            >
+            <Flex className="contentContainer">
                 <Flex
-                    justify='center'
                     style={{
+                        margin: 'auto',
+                        width: '80%',
+                        maxWidth: '720px',
+                        flexDirection: 'column',
+                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                        padding: '10px',
+                        borderRadius: '20px',
                         textAlign: 'center'
                     }}
                 >
                     <Text size='5'>
                         Registration
                     </Text>
-                </Flex>
 
-                <Flex direction='column'>
-                    <Text as='label' htmlFor="username">Username</Text>
-                    <TextField.Root
-                        radius="full"
-                        placeholder="Username"
-                        size="3"
-                        name="username"
-                        id="username"
-                        mt="2"
-                        mb="3"
-                        value={formData.username}
-                        required
-                        onChange={(e) => {
-                            if (e.target.value.includes(' ')) return;
-                            else setFormData({ ...formData, username: e.target.value })
+                    <Flex 
+                        style={{
+                            flexDirection: 'column',
+                            textAlign: 'left'
                         }}
-                    />
-
-                    <Text as='label' htmlFor="email">Email</Text>
-                    <TextField.Root
-                        radius="full"
-                        placeholder="example@gmail.com"
-                        size="3"
-                        name="email"
-                        id="email"
-                        mt="2"
-                        mb="3"
-                        value={formData.email}
-                        required
-                        onChange={(e) => {
-                            if (e.target.value.includes(' ')) return;
-                            else {
-                                setFormData({ ...formData, email: e.target.value })
-                                setValidEmailFormat(isValidEmailFormat(e.target.value));
-                            }
-                        }}
-                    />
-
-                    {
-                        !validEmailFormat &&
-                        <Text
-                            as="p"
-                            size='2'
-                            mx='1'
-                            style={{
-                                userSelect: 'none',
-                                cursor: 'default'
+                    >
+                        <Text as='label' htmlFor="username">Username</Text>
+                        <TextField.Root
+                            radius="full"
+                            placeholder="Username"
+                            size="3"
+                            name="username"
+                            id="username"
+                            mt="2"
+                            mb="3"
+                            value={formData.username}
+                            required
+                            onChange={(e) => {
+                                if (e.target.value.includes(' ')) return;
+                                else setFormData({ ...formData, username: e.target.value })
                             }}
-                            align="center"
-                            color="tomato"
-                        >
-                            Invalid email format!
-                        </Text>
-                    }
+                        />
 
-                    <Text as='label' htmlFor="password">Password</Text>
-                    <PasswordInput
-                        inputName="password"
-                        value={formData.password}
-                        onChange={(e) => {
-                            if (e.target.value.includes(' ')) return;
-                            else setFormData({ ...formData, password: e.target.value })
-                        }}
-                    />
+                        <Text as='label' htmlFor="email">Email</Text>
+                        <TextField.Root
+                            radius="full"
+                            placeholder="example@gmail.com"
+                            size="3"
+                            name="email"
+                            id="email"
+                            mt="2"
+                            mb="3"
+                            value={formData.email}
+                            required
+                            onChange={(e) => {
+                                if (e.target.value.includes(' ')) return;
+                                else {
+                                    setFormData({ ...formData, email: e.target.value })
+                                    setValidEmailFormat(isValidEmailFormat(e.target.value));
+                                }
+                            }}
+                        />
 
-                    <Text as='label' htmlFor="confirmPassword">Confirm password</Text>
-                    <PasswordInput
-                        inputName="confirmPassword"
-                        value={formData.confirmPassword}
-                        onChange={(e) => {
-                            if (e.target.value.includes(' ')) return;
-                            else setFormData({ ...formData, confirmPassword: e.target.value })
-                        }}
-                    />
+                        {
+                            !validEmailFormat &&
+                            <Text
+                                as="p"
+                                size='2'
+                                mx='1'
+                                style={{
+                                    userSelect: 'none',
+                                    cursor: 'default'
+                                }}
+                                align="center"
+                                color="tomato"
+                            >
+                                Invalid email format!
+                            </Text>
+                        }
+
+                        <Text as='label' htmlFor="password">Password</Text>
+                        <PasswordInput
+                            inputName="password"
+                            value={formData.password}
+                            onChange={(e) => {
+                                if (e.target.value.includes(' ')) return;
+                                else setFormData({ ...formData, password: e.target.value })
+                            }}
+                        />
+
+                        <Text as='label' htmlFor="confirmPassword">Confirm password</Text>
+                        <PasswordInput
+                            inputName="confirmPassword"
+                            value={formData.confirmPassword}
+                            onChange={(e) => {
+                                if (e.target.value.includes(' ')) return;
+                                else setFormData({ ...formData, confirmPassword: e.target.value })
+                            }}
+                        />
+
+                        {
+                            formData.password.length < 8 &&
+                            <Text
+                                as="p"
+                                size='2'
+                                mx='1'
+                                align="center"
+                            >
+                                The password must be at least eight characherts long!
+                            </Text>
+                        }
+
+                        {
+                            formData.password !== formData.confirmPassword &&
+                            <Text
+                                as="p"
+                                size='2'
+                                mx='1'
+                                align="center"
+                            >
+                                Password do not match
+                            </Text>
+                        }
+
+                    </Flex>
 
                     {
-                        formData.password.length < 8 &&
-                        <Text
-                            as="p"
-                            size='2'
-                            mx='1'
-                            align="center"
-                        >
-                            The password must be at least eight characherts long!
-                        </Text>
+                        validEmailFormat && formData.email && formData.password.length >= 8 && formData.password === formData.confirmPassword
+                            ?
+                            loading
+                                ?
+                                <DisabledLoadingButton text={'Registration'} />
+                                :
+                                <EnterButton text={'Registration'} onClick={() => handleRegistration(formData)} />
+                            :
+                            <DisabledButton text={'Registration'} />
                     }
 
-                    {
-                        formData.password !== formData.confirmPassword &&
-                        <Text
-                            as="p"
-                            size='2'
-                            mx='1'
-                            align="center"
-                        >
-                            Password do not match
-                        </Text>
-                    }
+                    <GoogleLoginButton text={'Login with Google account'} onClick={handleLoginWithGoogle} />
+                    <Separator text={'or'} />
+                    <Box style={{ textAlign: 'center' }}>
+                        <Text>Do you have an account?</Text>
+                    </Box>
+
+                    <OrButton text={'Login'} onClick={() => navigate('/login')} />
 
                 </Flex>
-
-                {
-                    validEmailFormat && formData.email && formData.password.length >= 8 && formData.password === formData.confirmPassword
-                        ?
-                        loading
-                            ?
-                            <DisabledLoadingButton text={'Registration'} />
-                            :
-                            <EnterButton text={'Registration'} onClick={() => handleRegistration(formData)} />
-                        :
-                        <DisabledButton text={'Registration'} />
-                }
-
-                <GoogleLoginButton text={'Login with Google account'} onClick={handleLoginWithGoogle} />
-                <Separator text={'or'} />
-                <Box style={{ textAlign: 'center' }}>
-                    <Text>Do you have an account?</Text>
-                </Box>
-
-                <OrButton text={'Login'} onClick={() => navigate('/login')} />
-
-            </Card>
-        </Flex>
+            </Flex>
         </Flex>
     )
 }

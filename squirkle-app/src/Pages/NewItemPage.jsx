@@ -49,13 +49,20 @@ export default function NewItemPage() {
 
     return (
         <Flex className='mainContainer'>
+
             <Flex className='contentContainer'>
+
                 <Box className='navbarSpacer' />
-                <Card
+
+                <Flex
                     style={{
                         margin: '20px',
                         width: '95%',
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        flexDirection: 'column',
+                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                        padding: '10px',
+                        borderRadius: '20px',
                     }}
                 >
                     <Text
@@ -120,13 +127,12 @@ export default function NewItemPage() {
                                     value = value.charAt(0).toUpperCase() + value.slice(1);
                                     setItemData({ ...itemData, description: value })
                                 }}
+                                style={{
+                                    maxHeight: '500px'
+                                }}
                             />
 
-                            <Flex
-                                style={{
-                                    flexDirection: 'column'
-                                }}
-                            >
+                            <Box>
                                 <Flex
                                     style={{
                                         flexDirection: 'row',
@@ -139,6 +145,7 @@ export default function NewItemPage() {
                                         Item's metadata
                                     </Text>
                                     <IconButton
+                                        style={{cursor: 'pointer'}}
                                         onClick={() => {
                                             setItemData({ ...itemData, stats: { ...itemData.stats, metadata: [...itemData.stats.metadata, ''] } });
                                         }}
@@ -176,6 +183,7 @@ export default function NewItemPage() {
                                             />
 
                                             <IconButton
+                                                style={{cursor: 'pointer'}}
                                                 onClick={() => {
                                                     let array = itemData.stats.metadata
                                                     array.splice(idx, 1);
@@ -187,7 +195,7 @@ export default function NewItemPage() {
                                         </Flex>
                                     ))
                                 }
-                            </Flex>
+                            </Box>
 
                             <Text
                                 as='label'
@@ -204,7 +212,8 @@ export default function NewItemPage() {
                                     borderRadius: '10px',
                                     padding: '10px',
                                     textAlign: 'center',
-                                    cursor: 'pointer'
+                                    cursor: 'pointer',
+                                    marginBottom: '10px'
                                 }}
                             >
                                 <input {...getInputProps()} name='itemImage' id='itemImage' />
@@ -337,18 +346,21 @@ export default function NewItemPage() {
                                 }}
                             />
                         </Box>
+
                     </Flex>
-                    <Button
+                    
+                        <Button
                         radius='full'
                         size='3'
                         style={{
                             width: '95%',
-                            margin: '10px'
+                            margin: ' 10px auto 0 auto',
+                            cursor: 'pointer'
                         }}
                     >
                         Submit
                     </Button>
-                </Card>
+                </Flex>
             </Flex>
         </Flex>
     )

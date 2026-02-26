@@ -16,25 +16,29 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
     return (
         <Flex className="mainContainer">
             <Flex className="contentContainer">
-                <Card
+                <Flex
                     style={{
-                        margin: '0 auto',
+                        margin: 'auto',
                         width: '80%',
-                        maxWidth: '720px'
+                        maxWidth: '720px',
+                        flexDirection: 'column',
+                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                        padding: '10px',
+                        borderRadius: '20px',
+                        textAlign: 'center'
                     }}
                 >
+                    
+                    <Text size='5'>
+                        Login
+                    </Text>
+
                     <Flex
-                        justify='center'
                         style={{
-                            textAlign: 'center'
+                            flexDirection: 'column',
+                            textAlign: 'left'
                         }}
                     >
-                        <Text size='5'>
-                            Login
-                        </Text>
-                    </Flex>
-
-                    <Flex direction='column'>
                         <Text as='label' htmlFor="email">Email</Text>
                         <TextField.Root
                             radius="full"
@@ -83,7 +87,7 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
 
                     <OrButton text={'Registration'} onClick={() => navigate('/register')} />
 
-                </Card>
+                </Flex>
             </Flex>
 
         </Flex>
