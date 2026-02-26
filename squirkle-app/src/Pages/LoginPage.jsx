@@ -29,7 +29,6 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
                         fontFamily: `"Fredoka", sans-serif`,
                     }}
                 >
-                    
                     <Text
                         size='8'
                         style={{
@@ -58,7 +57,7 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
                                 if (e.target.value.includes(' ')) return;
                                 else setFormData({ ...formData, email: e.target.value })
                             }}
-                            style={{ 
+                            style={{
                                 fontFamily: `"Fredoka", sans-serif`,
                             }}
                         />
@@ -71,23 +70,26 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
                                 if (e.target.value.includes(' ')) return;
                                 else setFormData({ ...formData, password: e.target.value })
                             }}
-                            style={{ 
+                            style={{
                                 fontFamily: `"Fredoka", sans-serif`,
                             }}
                         />
                     </Flex>
 
-                    {
-                        formData.email.length > 0 && formData.password.length >= 8
-                            ?
-                            loading
+                    <Box mt='2'>
+                        {
+                            formData.email.length > 0 && formData.password.length >= 8
                                 ?
-                                <DisabledLoadingButton text={'Login'} />
+                                loading
+                                    ?
+                                    <DisabledLoadingButton text={'Login'} />
+                                    :
+                                    <EnterButton text={'Login'} onClick={() => handleLoginWithEmailAndPW(formData)} />
                                 :
-                                <EnterButton text={'Login'} onClick={() => handleLoginWithEmailAndPW(formData)} />
-                            :
-                            <DisabledButton text={'Login'} />
-                    }
+                                <DisabledButton text={'Login'} />
+                        }
+                    </Box>
+
 
                     <GoogleLoginButton text={'Login with Google account'} onClick={handleLoginWithGoogle} />
                     <Separator text={'or'} />
@@ -99,9 +101,6 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
 
                 </Flex>
             </Flex>
-
         </Flex>
-
-
     )
 }
