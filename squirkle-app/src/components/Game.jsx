@@ -32,7 +32,6 @@ export default function Game({ filePaths }) {
             style={{
                 height: '90vh',
                 justifyContent: 'center',
-                alignContent: 'center',
                 alignItems: 'center'
             }}
         >
