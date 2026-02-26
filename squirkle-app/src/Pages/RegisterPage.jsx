@@ -40,7 +40,8 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
             <Card
                 style={{
                     margin: '20px',
-                    width: '80%'
+                    width: '80%',
+                    maxWidth: '720px'
                 }}
             >
                 <Flex

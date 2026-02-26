@@ -19,7 +19,8 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
                 <Card
                     style={{
                         margin: '0 auto',
-                        width: '80%'
+                        width: '80%',
+                        maxWidth: '720px'
                     }}
                 >
                     <Flex
