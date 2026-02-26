@@ -35,11 +35,13 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
     }
 
     return (
+        <Flex className="mainContainer">
         <Flex className="contentContainer">
             <Card
                 style={{
                     margin: '20px',
-                    width: '80%'
+                    width: '80%',
+                    maxWidth: '720px'
                 }}
             >
                 <Flex
@@ -175,6 +177,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                 <OrButton text={'Login'} onClick={() => navigate('/login')} />
 
             </Card>
+        </Flex>
         </Flex>
     )
 }
