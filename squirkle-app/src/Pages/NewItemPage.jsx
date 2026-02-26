@@ -1,7 +1,9 @@
-import { Box, Flex, Card, Text, TextField, TextArea } from '@radix-ui/themes';
+import { Box, Flex, Card, Text, TextField, TextArea, Table, IconButton, Button } from '@radix-ui/themes';
 import Navbar from '../components/Navbar';
 import { useCallback, useState } from 'react';
 import Dropzone, { useDropzone } from "react-dropzone";
+import { PlusIcon, MinusIcon } from '@radix-ui/react-icons';
+import AdminTextField from '../components/AdminTextField';
 
 export default function NewItemPage() {
     const [itemData, setItemData] = useState({
@@ -81,24 +83,12 @@ export default function NewItemPage() {
                                 width: '45%',
                             }}
                         >
-                            <Text
-                                as='label'
-                                htmlFor='itemName'
-                                style={{ cursor: 'pointer' }}
-                            >
-                                Item's name
-                            </Text>
-
-                            <TextField.Root
-                                radius="full"
+                            <AdminTextField
+                                title="Item's name"
                                 placeholder="Item's name"
-                                size="3"
                                 name="itemName"
                                 id="itemName"
-                                mt="2"
-                                mb="3"
                                 value={itemData.name}
-                                required
                                 onChange={(e) => {
                                     let value = e.target.value;
                                     value = value.charAt(0).toUpperCase() + value.substring(1);
@@ -132,7 +122,90 @@ export default function NewItemPage() {
                                 }}
                             />
 
-                            <Box
+                            <Box>
+                                <Flex
+                                    style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center'
+                                    }}
+                                >
+                                    <Text>
+                                        Item's metadata
+                                    </Text>
+                                    <IconButton
+                                        onClick={() => {
+                                            setItemData({ ...itemData, stats: { ...itemData.stats, metadata: [...itemData.stats.metadata, ''] } });
+                                        }}
+                                    >
+                                        <PlusIcon />
+                                    </IconButton>
+                                </Flex>
+
+                                <Flex
+                                    style={{
+                                        flexDirection: 'column',
+                                    }}
+                                >
+                                    {
+                                        itemData.stats.metadata.map((data, idx) => (
+                                            <Flex
+                                                style={{
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'space-between'
+                                                }}
+                                                key={idx}
+                                            >
+                                                <TextField.Root
+                                                    radius="full"
+                                                    size="3"
+                                                    mb="1"
+                                                    value={itemData.stats.metadata[idx]}
+                                                    required
+                                                    onChange={(e) => {
+                                                        let array = itemData.stats.metadata;
+                                                        array[idx] = e.target.value.trim();
+                                                        setItemData({ ...itemData, stats: { ...itemData.stats, metadata: array } });
+                                                    }}
+                                                    placeholder='Matedata'
+                                                    style={{
+                                                        width: '100%',
+                                                        marginRight: '5px'
+                                                    }}
+                                                />
+
+                                                <IconButton
+                                                    onClick={() => {
+                                                        let array = itemData.stats.metadata
+                                                        array.splice(idx, 1);
+                                                        setItemData({ ...itemData, stats: { ...itemData.stats, metadata: [...array] } });
+                                                    }}
+                                                >
+                                                    <MinusIcon />
+                                                </IconButton>
+                                            </Flex>
+                                        ))
+
+                                    }
+                                </Flex>
+                            </Box>
+
+                            <Flex
+                                style={{
+                                    flexDirection: 'column',
+                                    marginTop: '10px'
+                                }}
+                            >
+                                <Text
+                                    as='label'
+                                    htmlFor='itemImage'
+                                    style={{cursor: 'pointer', marginBottom: '10px'}}
+                                >
+                                    Item's image
+                                </Text>
+
+                                <Box
                                 {...getRootProps({ className: 'dropzone' })}
                                 style={{
                                     backgroundColor: 'white',
@@ -142,10 +215,11 @@ export default function NewItemPage() {
                                     cursor: 'pointer'
                                 }}
                             >
-                                <input {...getInputProps()} />
+                                <input {...getInputProps()} name='itemImage' id='itemImage' />
                                 <Text>Drag and drop image file here, or click to select file</Text>
                             </Box>
-
+                            </Flex>
+                            
                         </Box>
 
                         <Box
@@ -156,23 +230,12 @@ export default function NewItemPage() {
                                 maxWidth: '600px'
                             }}
                         >
-                            <Text
-                                as='label'
-                                htmlFor='knockback'
-                                style={{ cursor: 'pointer' }}
-                            >
-                                Knockback
-                            </Text>
-
-                            <TextField.Root
-                                radius="full"
-                                size="3"
+                            <AdminTextField
+                                title="Knockback"
+                                placeholder="Knockback"
                                 name="knockback"
                                 id="knockback"
-                                mt="2"
-                                mb="3"
                                 value={itemData.knockback}
-                                required
                                 onChange={(e) => {
                                     let value = Number(e.target.value);
                                     if (isNaN(value)) return;
@@ -183,23 +246,12 @@ export default function NewItemPage() {
                                 }}
                             />
 
-                            <Text
-                                as='label'
-                                htmlFor='circleDamage'
-                                style={{ cursor: 'pointer' }}
-                            >
-                                Circle damage
-                            </Text>
-
-                            <TextField.Root
-                                radius="full"
-                                size="3"
+                            <AdminTextField
+                                title="Circle damage"
+                                placeholder="Circle damage"
                                 name="circleDamage"
                                 id="circleDamage"
-                                mt="2"
-                                mb="3"
                                 value={itemData.stats.circleDamage}
-                                required
                                 onChange={(e) => {
                                     let value = Number(e.target.value);
                                     if (isNaN(value)) return;
@@ -210,23 +262,12 @@ export default function NewItemPage() {
                                 }}
                             />
 
-                            <Text
-                                as='label'
-                                htmlFor='squareDamage'
-                                style={{ cursor: 'pointer' }}
-                            >
-                                Square damage
-                            </Text>
-
-                            <TextField.Root
-                                radius="full"
-                                size="3"
+                            <AdminTextField
+                                title="Square damage"
+                                placeholder="Square damage"
                                 name="squareDamage"
                                 id="squareDamage"
-                                mt="2"
-                                mb="3"
-                                value={itemData.stats.squareDamage}
-                                required
+                                value={itemData.stats.circleDamage}
                                 onChange={(e) => {
                                     let value = Number(e.target.value);
                                     if (isNaN(value)) return;
@@ -237,23 +278,12 @@ export default function NewItemPage() {
                                 }}
                             />
 
-                            <Text
-                                as='label'
-                                htmlFor='triangleDamage'
-                                style={{ cursor: 'pointer' }}
-                            >
-                                Triangle damage
-                            </Text>
-
-                            <TextField.Root
-                                radius="full"
-                                size="3"
+                            <AdminTextField
+                                title="Triangle damage"
+                                placeholder="Triangle damage"
                                 name="triangleDamage"
                                 id="triangleDamage"
-                                mt="2"
-                                mb="3"
                                 value={itemData.stats.triangleDamage}
-                                required
                                 onChange={(e) => {
                                     let value = Number(e.target.value);
                                     if (isNaN(value)) return;
@@ -264,23 +294,12 @@ export default function NewItemPage() {
                                 }}
                             />
 
-                            <Text
-                                as='label'
-                                htmlFor='critChance'
-                                style={{ cursor: 'pointer' }}
-                            >
-                                Crit chance
-                            </Text>
-
-                            <TextField.Root
-                                radius="full"
-                                size="3"
+                            <AdminTextField
+                                title="Crit chance"
+                                placeholder="Crit chance"
                                 name="critChance"
                                 id="critChance"
-                                mt="2"
-                                mb="3"
                                 value={itemData.stats.critChance}
-                                required
                                 onChange={(e) => {
                                     let value = Number(e.target.value);
                                     if (isNaN(value)) return;
@@ -291,22 +310,12 @@ export default function NewItemPage() {
                                 }}
                             />
 
-                            <Text
-                                as='label'
-                                htmlFor='critDamage'
-                                style={{ cursor: 'pointer' }}
-                            >
-                                Crit damage
-                            </Text>
-                            <TextField.Root
-                                radius="full"
-                                size="3"
+                            <AdminTextField
+                                title="Crit damage"
+                                placeholder="Crit damage"
                                 name="critDamage"
                                 id="critDamage"
-                                mt="2"
-                                mb="3"
                                 value={itemData.stats.critDamage}
-                                required
                                 onChange={(e) => {
                                     let value = e.target.value;
 
@@ -316,7 +325,7 @@ export default function NewItemPage() {
                                     if (value.includes(".")) {
                                         const valuesParts = value.split(".");
 
-                                        if (valuesParts.length > 2) return;
+                                        if (valuesParts.length !== 2) return;
                                         else {
                                             const firstPart = valuesParts[0];
                                             const secondPart = valuesParts[1];
@@ -324,8 +333,9 @@ export default function NewItemPage() {
                                             if (!isNaN(firstPart) || firstPart <= 10) value = firstPart;
                                             else return;
 
-                                            if (!isNaN(secondPart)) value += "." + secondPart;
+                                            if (!isNaN(secondPart) && secondPart.length < 3) value += "." + secondPart;
                                             else return;
+
 
                                             if (value > 10) return;
                                             else setItemData({ ...itemData, stats: { ...itemData.stats, critDamage: value } });
@@ -338,6 +348,12 @@ export default function NewItemPage() {
                             />
                         </Box>
                     </Flex>
+                    <Button
+                        radius='full'
+                        size='3'
+                    >
+                        Submit
+                    </Button>
                 </Card>
             </Flex>
         </Flex>
