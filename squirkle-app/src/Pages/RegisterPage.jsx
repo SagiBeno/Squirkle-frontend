@@ -4,6 +4,7 @@ import PasswordInput from "../components/PasswordInput";
 import { DisabledLoadingButton, EnterButton, DisabledButton, OrButton, GoogleLoginButton } from "../components/Buttons";
 import Separator from '../components/Separator';
 import { useNavigate } from "react-router-dom";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
 
 export default function RegisterPage({ loading, handleRegistration, handleLoginWithGoogle }) {
 
@@ -46,45 +47,50 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                         backgroundColor: 'rgba(255, 255, 255, 0.5)',
                         padding: '10px',
                         borderRadius: '20px',
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        fontFamily: `"Fredoka", sans-serif`,
                     }}
                 >
-                    <Text size='5'>
+                    <Text
+                        size='8'
+                        style={{
+                            fontWeight: 'bold'
+                        }}
+                    >
                         Registration
                     </Text>
 
-                    <Flex 
+                    <Flex
                         style={{
                             flexDirection: 'column',
                             textAlign: 'left'
                         }}
                     >
-                        <Text as='label' htmlFor="username">Username</Text>
+                        <Text as='label' htmlFor="username" size='4'>Username</Text>
                         <TextField.Root
                             radius="full"
                             placeholder="Username"
                             size="3"
                             name="username"
                             id="username"
-                            mt="2"
-                            mb="3"
                             value={formData.username}
                             required
                             onChange={(e) => {
                                 if (e.target.value.includes(' ')) return;
                                 else setFormData({ ...formData, username: e.target.value })
                             }}
+                            style={{
+                                fontFamily: `"Fredoka", sans-serif`,
+                            }}
                         />
 
-                        <Text as='label' htmlFor="email">Email</Text>
+                        <Text as='label' htmlFor="email" style={{ marginTop: '10px' }} size='4'>Email</Text>
                         <TextField.Root
                             radius="full"
                             placeholder="example@gmail.com"
                             size="3"
                             name="email"
                             id="email"
-                            mt="2"
-                            mb="3"
                             value={formData.email}
                             required
                             onChange={(e) => {
@@ -94,14 +100,16 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                                     setValidEmailFormat(isValidEmailFormat(e.target.value));
                                 }
                             }}
+                            style={{
+                                fontFamily: `"Fredoka", sans-serif`,
+                            }}
                         />
 
                         {
                             !validEmailFormat &&
                             <Text
                                 as="p"
-                                size='2'
-                                mx='1'
+                                size='3'
                                 style={{
                                     userSelect: 'none',
                                     cursor: 'default'
@@ -113,7 +121,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                             </Text>
                         }
 
-                        <Text as='label' htmlFor="password">Password</Text>
+                        <Text as='label' htmlFor="password" style={{ marginTop: '10px' }} size='4'>Password</Text>
                         <PasswordInput
                             inputName="password"
                             value={formData.password}
@@ -121,9 +129,12 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                                 if (e.target.value.includes(' ')) return;
                                 else setFormData({ ...formData, password: e.target.value })
                             }}
+                            style={{
+                                fontFamily: `"Fredoka", sans-serif`,
+                            }}
                         />
 
-                        <Text as='label' htmlFor="confirmPassword">Confirm password</Text>
+                        <Text as='label' htmlFor="confirmPassword" style={{ marginTop: '10px' }} size='4'>Confirm password</Text>
                         <PasswordInput
                             inputName="confirmPassword"
                             value={formData.confirmPassword}
@@ -131,35 +142,80 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                                 if (e.target.value.includes(' ')) return;
                                 else setFormData({ ...formData, confirmPassword: e.target.value })
                             }}
+                            style={{
+                                fontFamily: `"Fredoka", sans-serif`,
+                            }}
                         />
 
                         {
-                            formData.password.length < 8 &&
-                            <Text
-                                as="p"
-                                size='2'
-                                mx='1'
-                                align="center"
+                            (formData.password.length < 8 || formData.password !== formData.confirmPassword) &&
+                            <Flex
+                                style={{
+                                    flexDirection: 'column',
+                                    border: '1px solid black',
+                                    borderRadius: '20px',
+                                    marginTop: '10px',
+                                    marginBottom: '10px',
+                                    padding: '10px'
+                                }}
                             >
-                                The password must be at least eight characherts long!
-                            </Text>
-                        }
+                                {
+                                    formData.password.length < 8 &&
+                                    <Flex
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
+                                        }}
+                                    >
+                                        <InfoCircledIcon
+                                            style={{
+                                                width: '20px',
+                                                height: '20px',
+                                                marginRight: '5px'
+                                            }}
+                                        />
+                                        <Text
+                                            as="p"
+                                            size='3'
+                                            align="center"
+                                        >
+                                            The password must be at least eight characherts long!
+                                        </Text>
+                                    </Flex>
+                                }
+                                {
+                                    formData.password !== formData.confirmPassword &&
+                                    <Flex
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
+                                        }}
+                                    >
+                                        <InfoCircledIcon
+                                            style={{
+                                                width: '20px',
+                                                height: '20px',
+                                                marginRight: '5px'
+                                            }}
+                                        />
+                                        <Text
+                                            as="p"
+                                            size='3'
+                                            align="center"
+                                        >
+                                            Password do not match!
+                                        </Text>
+                                    </Flex>
+                                }
 
-                        {
-                            formData.password !== formData.confirmPassword &&
-                            <Text
-                                as="p"
-                                size='2'
-                                mx='1'
-                                align="center"
-                            >
-                                Password do not match
-                            </Text>
+                            </Flex>
                         }
-
                     </Flex>
-
-                    {
+                    
+                    <Box>
+                        {
                         validEmailFormat && formData.email && formData.password.length >= 8 && formData.password === formData.confirmPassword
                             ?
                             loading
@@ -174,11 +230,13 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                     <GoogleLoginButton text={'Login with Google account'} onClick={handleLoginWithGoogle} />
                     <Separator text={'or'} />
                     <Box style={{ textAlign: 'center' }}>
-                        <Text>Do you have an account?</Text>
+                        <Text size="3">Do you have an account?</Text>
                     </Box>
 
                     <OrButton text={'Login'} onClick={() => navigate('/login')} />
 
+                    </Box>
+                    
                 </Flex>
             </Flex>
         </Flex>
