@@ -122,12 +122,17 @@ export default function NewItemPage() {
                                 }}
                             />
 
-                            <Box>
+                            <Flex
+                                style={{
+                                    flexDirection: 'column'
+                                }}
+                            >
                                 <Flex
                                     style={{
                                         flexDirection: 'row',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center'
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between'
+
                                     }}
                                 >
                                     <Text>
@@ -142,70 +147,57 @@ export default function NewItemPage() {
                                     </IconButton>
                                 </Flex>
 
-                                <Flex
-                                    style={{
-                                        flexDirection: 'column',
-                                    }}
-                                >
-                                    {
-                                        itemData.stats.metadata.map((data, idx) => (
-                                            <Flex
-                                                style={{
-                                                    flexDirection: 'row',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'space-between'
+                                {
+                                    itemData.stats.metadata.map((data, idx) => (
+                                        <Flex
+                                            style={{
+                                                flexDirection: 'row',
+                                                alignItems: 'center',
+                                                justifyContent: 'space-between'
+                                            }}
+                                            key={idx}
+                                        >
+                                            <TextField.Root
+                                                radius="full"
+                                                size="3"
+                                                mb="1"
+                                                value={itemData.stats.metadata[idx]}
+                                                required
+                                                onChange={(e) => {
+                                                    let array = itemData.stats.metadata;
+                                                    array[idx] = e.target.value.trim();
+                                                    setItemData({ ...itemData, stats: { ...itemData.stats, metadata: array } });
                                                 }}
-                                                key={idx}
+                                                placeholder='Matedata'
+                                                style={{
+                                                    width: '100%',
+                                                    marginRight: '5px'
+                                                }}
+                                            />
+
+                                            <IconButton
+                                                onClick={() => {
+                                                    let array = itemData.stats.metadata
+                                                    array.splice(idx, 1);
+                                                    setItemData({ ...itemData, stats: { ...itemData.stats, metadata: [...array] } });
+                                                }}
                                             >
-                                                <TextField.Root
-                                                    radius="full"
-                                                    size="3"
-                                                    mb="1"
-                                                    value={itemData.stats.metadata[idx]}
-                                                    required
-                                                    onChange={(e) => {
-                                                        let array = itemData.stats.metadata;
-                                                        array[idx] = e.target.value.trim();
-                                                        setItemData({ ...itemData, stats: { ...itemData.stats, metadata: array } });
-                                                    }}
-                                                    placeholder='Matedata'
-                                                    style={{
-                                                        width: '100%',
-                                                        marginRight: '5px'
-                                                    }}
-                                                />
+                                                <MinusIcon />
+                                            </IconButton>
+                                        </Flex>
+                                    ))
+                                }
+                            </Flex>
 
-                                                <IconButton
-                                                    onClick={() => {
-                                                        let array = itemData.stats.metadata
-                                                        array.splice(idx, 1);
-                                                        setItemData({ ...itemData, stats: { ...itemData.stats, metadata: [...array] } });
-                                                    }}
-                                                >
-                                                    <MinusIcon />
-                                                </IconButton>
-                                            </Flex>
-                                        ))
-
-                                    }
-                                </Flex>
-                            </Box>
-
-                            <Flex
-                                style={{
-                                    flexDirection: 'column',
-                                    marginTop: '10px'
-                                }}
+                            <Text
+                                as='label'
+                                htmlFor='itemImage'
+                                style={{ cursor: 'pointer', marginBottom: '10px' }}
                             >
-                                <Text
-                                    as='label'
-                                    htmlFor='itemImage'
-                                    style={{cursor: 'pointer', marginBottom: '10px'}}
-                                >
-                                    Item's image
-                                </Text>
+                                Item's image
+                            </Text>
 
-                                <Box
+                            <Box
                                 {...getRootProps({ className: 'dropzone' })}
                                 style={{
                                     backgroundColor: 'white',
@@ -218,8 +210,6 @@ export default function NewItemPage() {
                                 <input {...getInputProps()} name='itemImage' id='itemImage' />
                                 <Text>Drag and drop image file here, or click to select file</Text>
                             </Box>
-                            </Flex>
-                            
                         </Box>
 
                         <Box
@@ -351,6 +341,10 @@ export default function NewItemPage() {
                     <Button
                         radius='full'
                         size='3'
+                        style={{
+                            width: '95%',
+                            margin: '10px'
+                        }}
                     >
                         Submit
                     </Button>
