@@ -154,7 +154,6 @@ export default function GameLoader() {
                 width: '100%',
                 height: '100%',
                 justifyContent: 'center',
-                alignContent: 'center',
                 alignItems: 'center'
             }}
         >
@@ -166,7 +165,6 @@ export default function GameLoader() {
                         <Flex
                             style={{
                                 flexDirection: 'row',
-                                alignContent: 'center',
                                 alignItems: 'center',
                                 justifyContent: 'center'
                             }}
