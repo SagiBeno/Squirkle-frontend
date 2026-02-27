@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
+
 .mainContainer {
     width: 100%;
     height: 100vh;
@@ -18,11 +20,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    font-family: "Fredoka", sans-serif;
 }
 
 .navbarSpacer {
     min-height: 60px;
-    margin-bottom: 5px;
 }
 
 .toastStyle[data-state="open"] {
@@ -54,5 +56,11 @@
     to {
         opacity: 0;
         transform: translateX(-50%) translateY(-10px);
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .googleLoginButton {
+        font-size: 0.9rem !important;
     }
 }

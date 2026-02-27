@@ -16,43 +16,52 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
     return (
         <Flex className="mainContainer">
             <Flex className="contentContainer">
-                <Card
+                <Flex
                     style={{
-                        margin: '0 auto',
+                        margin: 'auto',
                         width: '80%',
-                        maxWidth: '720px'
+                        maxWidth: '720px',
+                        flexDirection: 'column',
+                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                        padding: '10px',
+                        borderRadius: '20px',
+                        textAlign: 'center',
                     }}
                 >
-                    <Flex
-                        justify='center'
+                    <Text
+                        size='8'
                         style={{
-                            textAlign: 'center'
+                            fontWeight: 'bold'
                         }}
                     >
-                        <Text size='5'>
-                            Login
-                        </Text>
-                    </Flex>
+                        Login
+                    </Text>
 
-                    <Flex direction='column'>
-                        <Text as='label' htmlFor="email">Email</Text>
+                    <Flex
+                        style={{
+                            flexDirection: 'column',
+                            textAlign: 'left'
+                        }}
+                    >
+                        <Text as='label' size='4' htmlFor="email" style={{ cursor: 'pointer' }}>Email</Text>
                         <TextField.Root
                             radius="full"
                             placeholder="example@gmail.com"
                             size="3"
                             name="email"
                             id="email"
-                            mt="2"
-                            mb="3"
                             value={formData.email}
                             required
                             onChange={(e) => {
                                 if (e.target.value.includes(' ')) return;
                                 else setFormData({ ...formData, email: e.target.value })
                             }}
+                            style={{
+                                fontFamily: `"Fredoka", sans-serif`,
+                            }}
                         />
 
-                        <Text as='label' htmlFor="password">Password</Text>
+                        <Text as='label' size='4' htmlFor="password" style={{ cursor: 'pointer', marginTop: '10px' }}>Password</Text>
                         <PasswordInput
                             inputName="password"
                             value={formData.password}
@@ -60,34 +69,37 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
                                 if (e.target.value.includes(' ')) return;
                                 else setFormData({ ...formData, password: e.target.value })
                             }}
+                            style={{
+                                fontFamily: `"Fredoka", sans-serif`,
+                            }}
                         />
                     </Flex>
 
-                    {
-                        formData.email.length > 0 && formData.password.length >= 8
-                            ?
-                            loading
+                    <Box mt='2'>
+                        {
+                            formData.email.length > 0 && formData.password.length >= 8
                                 ?
-                                <DisabledLoadingButton text={'Login'} />
+                                loading
+                                    ?
+                                    <DisabledLoadingButton text={'Login'} />
+                                    :
+                                    <EnterButton text={'Login'} onClick={() => handleLoginWithEmailAndPW(formData)} />
                                 :
-                                <EnterButton text={'Login'} onClick={() => handleLoginWithEmailAndPW(formData)} />
-                            :
-                            <DisabledButton text={'Login'} />
-                    }
+                                <DisabledButton text={'Login'} />
+                        }
+                    </Box>
+
 
                     <GoogleLoginButton text={'Login with Google account'} onClick={handleLoginWithGoogle} />
                     <Separator text={'or'} />
                     <Box style={{ textAlign: 'center' }}>
-                        <Text>Do not have an account?</Text>
+                        <Text size="3">Do not have an account?</Text>
                     </Box>
 
                     <OrButton text={'Registration'} onClick={() => navigate('/register')} />
 
-                </Card>
+                </Flex>
             </Flex>
-
         </Flex>
-
-
     )
 }

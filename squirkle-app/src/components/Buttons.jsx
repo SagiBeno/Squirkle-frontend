@@ -6,13 +6,14 @@ export function DisabledLoadingButton( { text } ) {
     return (
         <Button
             variant="outline"
-            mt="4"
             mb="3"
             size="3"
             radius="full"
             disabled
             style={{
-                width: '100%'
+                width: '100%',
+                fontFamily: `"Fredoka", sans-serif`,
+                fontSize: '1.1rem'
             }}
         >
             <Spinner loading />
@@ -25,13 +26,14 @@ export function EnterButton( { text, onClick } ) {
     return (
         <Button
             variant="outline"
-            mt="4"
             mb="3"
             size="3"
             radius="full"
             style={{
                 cursor: 'pointer',
-                width: '100%'
+                width: '100%',
+                fontFamily: `"Fredoka", sans-serif`,
+                fontSize: '1.1rem'
             }}
             onClick={onClick}
         >
@@ -44,13 +46,14 @@ export function DisabledButton( { text } ) {
     return (
         <Button
             variant="outline"
-            mt="4"
             mb="3"
             size="3"
             radius="full"
             disabled
             style={{
-                width: '100%'
+                width: '100%',
+                fontFamily: `"Fredoka", sans-serif`,
+                fontSize: '1.1rem'
             }}
         >
             <EnterIcon width='20px' height='20px' /> {text}
@@ -62,13 +65,15 @@ export function OrButton( { text, onClick } ) {
     return (
         <Button
             variant="outline"
-            mt="4"
             mb="3"
+            mt="2"
             size="3"
             radius="full"
             style={{
                 width: '100%',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                fontFamily: `"Fredoka", sans-serif`,
+                fontSize: '1.1rem'
             }}
             onClick={onClick}
         >
@@ -80,15 +85,16 @@ export function OrButton( { text, onClick } ) {
 export function GoogleLoginButton( { text, onClick } ) {
     return (
         <Button
+            className="googleLoginButton"
             variant="outline"
-            mt="4"
             mb="3"
             size="3"
             radius="full"
-            className="loginButton"
             style={{
                 width: '100%',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                fontFamily: `"Fredoka", sans-serif`,
+                fontSize: '1.1rem',
             }}
             onClick={onClick}
         >
@@ -101,13 +107,14 @@ export function UsernameDisabledLoadingButton ( { text } ) {
     return (
         <Button
             variant="outline"
-            mt="4"
             mb="3"
             size="3"
             radius="full"
             disabled
             style={{
-                width: '100%'
+                width: '100%',
+                fontFamily: `"Fredoka", sans-serif`,
+                fontSize: '1.1rem'
             }}
         >
             <Spinner loading />
@@ -120,13 +127,14 @@ export function UsernameDisabledButton ( { text } ) {
     return (
         <Button
             variant="outline"
-            mt="4"
             mb="3"
             size="3"
             radius="full"
             disabled
             style={{
-                width: '100%'
+                width: '100%',
+                fontFamily: `"Fredoka", sans-serif`,
+                fontSize: '1.1rem'
             }}
         >
             <PersonIcon width='20px' height='20px' /> {text}
@@ -138,13 +146,14 @@ export function UsernameConfirmButton ( { text, onClick } ) {
     return (
         <Button
             variant="outline"
-            mt="4"
             mb="3"
             size="3"
             radius="full"
             style={{
                 width: '100%',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                fontFamily: `"Fredoka", sans-serif`,
+                fontSize: '1.1rem'
             }}
             onClick={onClick}
         >

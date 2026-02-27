@@ -7,7 +7,6 @@ export default function Navbar () {
                 height: '60px',
                 width: '100%',
                 backgroundColor: 'gray',
-                zIndex: 1,
                 top: 0,
                 position: 'fixed'
             }}
