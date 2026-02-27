@@ -6,6 +6,7 @@ import JSZip from 'jszip'
 import { useContext } from 'react'
 import { GameContext } from './GameContext'
 import { Flex, Spinner, Text } from '@radix-ui/themes'
+import GameSpinner from './GameSpinner'
 
 export default function GameLoader() {
 
@@ -151,17 +152,19 @@ export default function GameLoader() {
     return (
         <>
             {
-                isGameLoaded ? <Game filePaths={filePaths}/> : 
+                isGameLoaded ? <Game filePaths={filePaths}/> :
                 <Flex
                     style={{
                         flexDirection: 'row',
                         alignContent: 'center',
                         alignItems: 'center',
-                        justifyContent: 'center'
+                        justifyContent: 'center',
+                        margin: 'auto',
+                        color: 'white'
                     }}
                 >
-                    <Spinner size="3" style={{marginRight: '5px'}}/>
-                    <Text>Loading game...</Text>
+                    <Text size="6">Loading game...</Text>
+                    <GameSpinner />
                 </Flex>
             }
         </>
