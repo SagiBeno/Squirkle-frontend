@@ -33,7 +33,8 @@ export default function HomePage() {
                             size="4"
                             radius='full'
                             style={{
-                                marginRight: '5px'
+                                marginRight: '5px',
+                                cursor: 'pointer'
                             }}
                             onClick={() => navigate("/login")}
                         >
@@ -44,6 +45,9 @@ export default function HomePage() {
                             size="4"
                             radius='full'
                             onClick={() => navigate("/register")}
+                            style={{
+                                cursor: 'pointer'
+                            }}
                         >
                             Sign up
                         </Button>
