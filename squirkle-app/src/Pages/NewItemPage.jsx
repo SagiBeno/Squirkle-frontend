@@ -50,10 +50,9 @@ export default function NewItemPage() {
     return (
         <Flex className='mainContainer'>
 
+            <Box className='navbarSpacer' />
+
             <Flex className='contentContainer'>
-
-                <Box className='navbarSpacer' />
-
                 <Flex
                     style={{
                         margin: '20px',
