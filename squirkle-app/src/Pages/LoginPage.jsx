@@ -26,7 +26,6 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
                         padding: '10px',
                         borderRadius: '20px',
                         textAlign: 'center',
-                        fontFamily: `"Fredoka", sans-serif`,
                     }}
                 >
                     <Text
