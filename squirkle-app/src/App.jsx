@@ -12,6 +12,7 @@ import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStat
 import AppToast from './components/AppToast';
 import UsernameInputDialog from './components/Dialogs/UsernameInputDialog';
 import NewItemPage from './Pages/NewItemPage';
+import GamePage from './Pages/GamePage';
 
 function App() {
   const firebaseApp = initializeApp({
@@ -156,6 +157,7 @@ function App() {
             {
               <>
                 <Route path='/' element={<HomePage />} />
+                <Route path='/game' element={<GamePage />} />
                 <Route path='/admin/new-item' element={<NewItemPage />} />
               </>
             }
