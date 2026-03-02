@@ -12,3 +12,16 @@ export function EquipWeapon(weapon)
 {
     sendMessage(JSBridge, "SetPlayerWeapon", JSON.stringify(weapon))
 }
+
+export function LoadArea(areaID)
+{
+    sendMessage(JSBridge, "LoadArea", areaID)
+}
+
+export async function SetGameTime()
+{
+    let time = await (await fetch("https://squirkle-backend.vercel.app/api/server-time")).json()
+    console.log(time.serverTime)
+
+    sendMessage(JSBridge, "SetGameTime", time.serverTime)
+}
