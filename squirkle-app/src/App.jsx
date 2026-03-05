@@ -44,9 +44,8 @@ function App() {
           }
           else {
             setUser({ user: currentUser, username: username });
-            navigate('/');
           }
-        } //else navigate('/login');
+        } //else navigate('/');
       } //else navigate('/login');
     });
     return unsubscribe
