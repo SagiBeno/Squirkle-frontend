@@ -29,10 +29,11 @@ function App() {
   const [toastData, setToastData] = useState({ open: false, title: '', description: '', isError: false });
   const [usernameDialogOpen, setUsernameDialogOpen] = useState(false);
   const [loginWithGoogleUserData, setLoginWithGoogleUserData] = useState({});
+  const loggedIn = user?.accessToken != null
   let navigate = useNavigate();
 
   useEffect(() => {
-    onAuthStateChanged(auth, async (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         const userId = currentUser?.uid;
 
@@ -48,7 +49,8 @@ function App() {
         } //else navigate('/login');
       } //else navigate('/login');
     });
-  }, []);
+    return unsubscribe
+  }, [auth, loggedIn]);
 
   async function getUsername(userId) {
     const resultJSON = await fetch(`https://squirkle-backend.vercel.app/api/get-username/${userId}`);
