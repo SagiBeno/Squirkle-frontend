@@ -4,8 +4,12 @@ import { FaMap } from "react-icons/fa";
 import { MdBackpack } from "react-icons/md";
 import { IoGameController } from "react-icons/io5";
 import { RiAuctionFill } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar ({user}) {
+
+    const navigate = useNavigate()
+
     return (
         <Flex
             align="center"
@@ -21,16 +25,16 @@ export default function Navbar ({user}) {
             }}
         >
             {/* game */}
-            <NavbarButton icon={<IoGameController size={32}/>}/>
+            <NavbarButton icon={<IoGameController size={32}/>} onClick={() => navigate("/game")}/>
             
             {/* area chooser */}
-            <NavbarButton icon={<FaMap size={32}/>}/>
+            <NavbarButton icon={<FaMap size={32}/>} onClick={() => null}/>
             
             {/* inventory */}
-            <NavbarButton icon={<MdBackpack size={32}/>}/>
+            <NavbarButton icon={<MdBackpack size={32}/>} onClick={() => navigate("/inventory")}/>
             
             {/* auction house */}
-            <NavbarButton icon={<RiAuctionFill size={32}/>}/>
+            <NavbarButton icon={<RiAuctionFill size={32}/>} onClick={() => navigate("/ah")}/>
 
             <div style={{flex: 1}}/>
             

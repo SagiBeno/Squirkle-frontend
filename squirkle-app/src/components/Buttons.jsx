@@ -175,7 +175,7 @@ export function NavbarButton( { icon, onClick } ) {
                 aspectRatio: 1.5,
                 backgroundColor: "darkgray",
                 margin: 0,
-                borderBottom: "8px gray solid"
+                borderBottom: "8px rgba(0, 0, 0, 0.1) solid"
             }}
             onClick={onClick}
         >

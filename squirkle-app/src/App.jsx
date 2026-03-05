@@ -152,13 +152,11 @@ function App() {
   return (
     <>
       <Theme>
-        <Navbar user={user}/>
-        
           <Routes>
             {
               <>
-                <Route path='/' element={<HomePage />} />
-                <Route path='/game' element={<GamePage />} />
+                <Route path='/' element={<HomePage user={user}/>} />
+                <Route path='/game' element={<GamePage user={user}/>} />
                 <Route path='/admin/new-item' element={<NewItemPage />} />
               </>
             }

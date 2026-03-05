@@ -2,14 +2,20 @@ import { Box, Flex, Text, Button } from '@radix-ui/themes';
 import GameWindow from '../components/GameWindow';
 import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
-export default function HomePage() {
+export default function HomePage({user}) {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (user != null)
+        {
+            navigate("/game")
+        }
+    }, [user])
 
     return (
         <Flex className='mainContainer'>
-
-            <Box className='navbarSpacer' />
             
             <Flex className='contentContainer'>
                 
