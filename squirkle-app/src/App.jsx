@@ -151,7 +151,7 @@ function App() {
   return (
     <>
       <Theme>
-        <Navbar />
+        <Navbar user={user}/>
         
           <Routes>
             {
