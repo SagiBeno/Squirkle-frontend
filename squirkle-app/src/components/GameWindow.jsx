@@ -3,7 +3,7 @@ import { GameContext } from './GameContext'
 import GameLoader from './GameLoader'
 import { useState } from 'react'
 
-export default function GameWindow() {
+export default function GameWindow({user}) {
     const [ isGameLoaded, setIsGameLoaded ] = useState(false)
     const [ isLoading, setIsLoading ] = useState(false)
     const [ filePaths, setFilePaths ] = useState({})
@@ -16,7 +16,7 @@ export default function GameWindow() {
 
     return (
         <GameContext.Provider value={gameContext}>
-            <GameLoader />
+            <GameLoader user={user}/>
         </GameContext.Provider>
     )
 }

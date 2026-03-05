@@ -22,7 +22,7 @@ export default function GamePage({ user, signOut }) {
                 <Box className='navbarSpacer' />
 
                 <Flex className='contentContainer'>
-                    <GameWindow />
+                    <GameWindow user={user}/>
                 </Flex>
             </Flex>
         </>

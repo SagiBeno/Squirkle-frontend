@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Unity, useUnityContext } from "react-unity-webgl";
 import { Button, Box, Flex, Text } from "@radix-ui/themes"
-import { InitializeGameHandler, SetGameTime } from "../GameHandler.js"
+import { InitializeGame, InitializeGameHandler, SetGameTime } from "../GameHandler.js"
 import * as GameEvents from "../GameEvents.js"
 
-export default function Game({ filePaths }) {
+export default function Game({ filePaths, user }) {
 
     const { unityProvider, sendMessage, addEventListener, isLoaded } = useUnityContext(filePaths);
     
@@ -23,13 +23,13 @@ export default function Game({ filePaths }) {
             });
         };
 
-    }, [addEventListener, removeEventListener])
+    }, [addEventListener, removeEventListener, isLoaded, sendMessage])
 
     useEffect(() => {
         if (!isLoaded) return
         
         console.log("Game initialized!")
-        SetGameTime()
+        InitializeGame(user)
 
     }, [isLoaded])
 

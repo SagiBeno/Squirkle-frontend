@@ -8,7 +8,7 @@ import { GameContext } from './GameContext'
 import { Flex, Spinner, Text } from '@radix-ui/themes'
 import GameSpinner from './GameSpinner'
 
-export default function GameLoader() {
+export default function GameLoader({user}) {
 
     const { isGameLoaded, setIsGameLoaded, isLoading, setIsLoading, filePaths, setFilePaths } = useContext(GameContext)
     
@@ -152,7 +152,7 @@ export default function GameLoader() {
     return (
         <>
             {
-                isGameLoaded ? <Game filePaths={filePaths}/> :
+                isGameLoaded ? <Game filePaths={filePaths} user={user}/> :
                 <Flex
                     style={{
                         flexDirection: 'row',
