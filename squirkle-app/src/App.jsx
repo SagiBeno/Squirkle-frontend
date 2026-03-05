@@ -24,7 +24,7 @@ function App() {
     appId: import.meta.env.VITE_FIREBASE_appId
   });
   const auth = getAuth(firebaseApp);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [toastData, setToastData] = useState({ open: false, title: '', description: '', isError: false });
   const [usernameDialogOpen, setUsernameDialogOpen] = useState(false);
@@ -95,6 +95,11 @@ function App() {
     }
   }
 
+  function signOut() {
+    auth.signOut()
+    setUser(null)
+  }
+
   async function existingUsername(username) {
 
     const resultJSON = await fetch(`https://squirkle-backend.vercel.app/api/get-username-exists/${username}`);
@@ -156,7 +161,7 @@ function App() {
             {
               <>
                 <Route path='/' element={<HomePage user={user}/>} />
-                <Route path='/game' element={<GamePage user={user}/>} />
+                <Route path='/game' element={<GamePage user={user} signOut={signOut}/>} />
                 <Route path='/admin/new-item' element={<NewItemPage />} />
               </>
             }

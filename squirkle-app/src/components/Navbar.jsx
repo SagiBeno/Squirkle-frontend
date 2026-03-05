@@ -1,12 +1,12 @@
 import { Flex, Text } from "@radix-ui/themes";
-import { NavbarButton } from "./Buttons";
+import { LogoutButton, NavbarButton } from "./Buttons";
 import { FaMap } from "react-icons/fa";
 import { MdBackpack } from "react-icons/md";
 import { IoGameController } from "react-icons/io5";
 import { RiAuctionFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 
-export default function Navbar ({user}) {
+export default function Navbar ({user, signOut}) {
 
     const navigate = useNavigate()
 
@@ -38,6 +38,8 @@ export default function Navbar ({user}) {
 
             <div style={{flex: 1}}/>
             
+            {user == null ? null : <LogoutButton text="Logout" onClick={signOut}/>}
+
             <Text size="6" style={{color: 'white', fontWeight: '500'}}>{user?.username}</Text>
         </Flex>
     )

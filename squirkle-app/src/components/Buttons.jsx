@@ -183,3 +183,27 @@ export function NavbarButton( { icon, onClick } ) {
         </Button>
     )
 }
+
+export function LogoutButton( { text, onClick } ) {
+    return (
+        <Button
+            variant="solid"
+            mb="3"
+            size="3"
+            radius="none"
+            style={{
+                cursor: 'pointer',
+                height: "50%",
+                aspectRatio: 1.5,
+                backgroundColor: "darkgray",
+                margin: 0,
+                borderBottom: "8px rgba(0, 0, 0, 0.1) solid",
+                textAlign: "center",
+                margin: 10
+            }}
+            onClick={onClick}
+        >
+            {text}
+        </Button>
+    )
+}
