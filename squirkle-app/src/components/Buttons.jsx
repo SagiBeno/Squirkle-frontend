@@ -196,7 +196,6 @@ export function LogoutButton( { text, onClick } ) {
                 height: "50%",
                 aspectRatio: 1.5,
                 backgroundColor: "darkgray",
-
                 borderBottom: "8px rgba(0, 0, 0, 0.1) solid",
                 textAlign: "center",
                 margin: 10
