@@ -1,4 +1,4 @@
-import { Flex, Text } from "@radix-ui/themes";
+import { Dialog, Flex, Text } from "@radix-ui/themes";
 import { LogoutButton, NavbarButton } from "./Buttons";
 import { FaMap } from "react-icons/fa";
 import { MdBackpack } from "react-icons/md";
@@ -24,11 +24,13 @@ export default function Navbar ({user, signOut}) {
                 fontFamily: "'Fredoka', sans-serif",
             }}
         >
-            {/* game */}
+            {/* game */}            
             <NavbarButton icon={<IoGameController size={32}/>} onClick={() => navigate("/game")}/>
             
             {/* area chooser */}
-            <NavbarButton icon={<FaMap size={32}/>} onClick={() => null}/>
+            <Dialog.Trigger>
+                <NavbarButton icon={<FaMap size={32}/>} onClick={() => null}/>
+            </Dialog.Trigger>
             
             {/* inventory */}
             <NavbarButton icon={<MdBackpack size={32}/>} onClick={() => navigate("/inventory")}/>

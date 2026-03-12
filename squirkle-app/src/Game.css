@@ -1,0 +1,19 @@
+.gameAreaPanel
+{
+    min-height: 150px;
+    background-size: cover;
+    background-position: center;
+    padding: 5px;
+
+    filter: grayscale(1);
+    transition: all 0.1s;
+
+    scroll-snap-align: start;
+}
+
+.gameAreaPanel:hover
+{
+    z-index: 1;
+    filter: grayscale(0);
+    padding-left: 15px;
+}
