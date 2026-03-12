@@ -8,7 +8,7 @@ import { MdDelete } from "react-icons/md";
 import { RiContactsBookLine } from 'react-icons/ri';
 
 export default function NewItemPage({ user }) {
-
+//ITEM id: NAME_NAME
     const [itemData, setItemData] = useState({
         name: "",
         typeOfItem: "",
@@ -27,6 +27,21 @@ export default function NewItemPage({ user }) {
 
     const [file, setFile] = useState();
 
+    const [validData, setValidData] = useState(false);
+
+    function isValidData(data) {
+
+        if (data.name.length === 0) return setValidData(false);
+        if (data.typeOfItem.length === 0) return setValidData(false);
+        if (data.description.length === 0) return setValidData(false);
+        if (data.imageUrl.length === 0) return setValidData(false);
+
+        if (data.stats.metadata.length === 0) return setValidData(true);
+        else if (data.stats.metadata.filter(element => element.length === 0).length > 0) return setValidData(false);
+
+        return setValidData(true);
+    }
+
     function uploadImage(file) {
 
         if (user.user?.uid) {
@@ -41,23 +56,48 @@ export default function NewItemPage({ user }) {
             })
                 .then(async (resJSON) => {
                     const res = await resJSON.json();
-                    setItemData({ ...itemData, imageUrl: res.url });
+                    setItemData(prev => ({ ...prev, imageUrl: res.url }));
                 })
                 .catch(console.warn);
         }
     }
 
-    function deleteImage () {
-        
+    function deleteImage() {
+
         fetch('https://squirkle-backend.vercel.app/api/delete-image', {
             method: 'DELETE',
-            headers: {"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ userId: user.user.uid, filename: file.name })
         })
             .then(res => {
-                if (res.status === 200) setItemData( { ...itemData, imageUrl: "" } );
+                if (res.status === 200) setItemData(prev => ({ ...prev, imageUrl: "" }));
             })
             .catch(console.warn)
+    }
+
+    function handleNewItem() {
+        const itemId = itemData.name.toUpperCase().replace(' ', '_');
+        const reqBody = {
+            userId: user.user.uid,
+            id: itemId,
+            name: itemData.name,
+            description: itemData.description, 
+            type: itemData.typeOfItem, 
+            knockback: itemData.knockback,
+            imageUrl: itemData.imageUrl,
+            stats: itemData.stats
+        };
+        
+        fetch('https://squirkle-backend.vercel.app/api/create-item', {
+            method: 'POST',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(reqBody)
+        })
+            .then(async resJSON => {
+                const res = await resJSON.json();
+                console.log(res)
+            } )
+            .catch(console.warn);
     }
 
     const onDrop = useCallback((acceptedFiles) => {
@@ -134,7 +174,10 @@ export default function NewItemPage({ user }) {
                                 </Text>
 
                                 <Select.Root
-                                    onValueChange={(value) => setItemData({ ...itemData, typeOfItem: value })}
+                                    onValueChange={(value) => {
+                                        setItemData(prev => ({ ...prev, typeOfItem: value }));
+                                        isValidData({ ...itemData, typeOfItem: value });
+                                    }}
                                     value={itemData.typeOfItem}
                                 >
                                     <Select.Trigger />
@@ -157,7 +200,8 @@ export default function NewItemPage({ user }) {
                                 onChange={(e) => {
                                     let value = e.target.value;
                                     value = value.charAt(0).toUpperCase() + value.substring(1);
-                                    setItemData({ ...itemData, name: value })
+                                    setItemData(prev => ({ ...prev, name: value }));
+                                    isValidData({ ...itemData, name: value });
                                 }}
                             />
 
@@ -183,7 +227,8 @@ export default function NewItemPage({ user }) {
                                 onChange={(e) => {
                                     let value = e.target.value;
                                     value = value.charAt(0).toUpperCase() + value.slice(1);
-                                    setItemData({ ...itemData, description: value })
+                                    setItemData(prev => ({ ...prev, description: value }));
+                                    isValidData({ ...itemData, description: value });
                                 }}
                                 style={{
                                     maxHeight: '500px'
@@ -205,7 +250,8 @@ export default function NewItemPage({ user }) {
                                     <IconButton
                                         style={{ cursor: 'pointer' }}
                                         onClick={() => {
-                                            setItemData({ ...itemData, stats: { ...itemData.stats, metadata: [...itemData.stats.metadata, ''] } });
+                                            setItemData(prev => ({ ...prev, stats: { ...prev.stats, metadata: [...prev.stats.metadata, ''] } }));
+                                            isValidData({ ...itemData, stats: { ...itemData.stats, metadata: [...itemData.stats.metadata, ''] } });
                                         }}
                                     >
                                         <PlusIcon />
@@ -229,9 +275,12 @@ export default function NewItemPage({ user }) {
                                                 value={itemData.stats.metadata[idx]}
                                                 required
                                                 onChange={(e) => {
-                                                    let array = itemData.stats.metadata;
-                                                    array[idx] = e.target.value.trim();
-                                                    setItemData({ ...itemData, stats: { ...itemData.stats, metadata: array } });
+                                                    const newMetadata = [...itemData.stats.metadata];
+                                                    newMetadata[idx] = e.target.value.trim();
+
+                                                    setItemData(prev => ({ ...prev, stats: { ...prev.stats, metadata: newMetadata}}));
+
+                                                    isValidData({...itemData, stats: {...itemData.stats, metadata: newMetadata}});
                                                 }}
                                                 placeholder='Matedata'
                                                 style={{
@@ -243,9 +292,11 @@ export default function NewItemPage({ user }) {
                                             <IconButton
                                                 style={{ cursor: 'pointer' }}
                                                 onClick={() => {
-                                                    let array = itemData.stats.metadata
-                                                    array.splice(idx, 1);
-                                                    setItemData({ ...itemData, stats: { ...itemData.stats, metadata: [...array] } });
+                                                    const newMetadata = itemData.stats.metadata.filter((_, i) => i !== idx);
+
+                                                    setItemData(prev => ({...prev, stats: { ...prev.stats, metadata: newMetadata}}));
+
+                                                    isValidData({...itemData, stats: {...itemData.stats, metadata: newMetadata}});
                                                 }}
                                             >
                                                 <MinusIcon />
@@ -327,7 +378,7 @@ export default function NewItemPage({ user }) {
                                     if (isNaN(value)) return;
                                     else {
                                         if (value < 0 || value > 1000) return;
-                                        else setItemData({ ...itemData, knockback: value });
+                                        else setItemData(prev => ({ ...prev, knockback: value }));
                                     }
                                 }}
                             />
@@ -343,7 +394,7 @@ export default function NewItemPage({ user }) {
                                     if (isNaN(value)) return;
                                     else {
                                         if (value < 0 || value > 1000) return;
-                                        else setItemData({ ...itemData, stats: { ...itemData.stats, circleDamage: value } });
+                                        else setItemData(prev => ({ ...prev, stats: { ...prev.stats, circleDamage: value } }));
                                     }
                                 }}
                             />
@@ -353,13 +404,13 @@ export default function NewItemPage({ user }) {
                                 placeholder="Square damage"
                                 name="squareDamage"
                                 id="squareDamage"
-                                value={itemData.stats.circleDamage}
+                                value={itemData.stats.squareDamage}
                                 onChange={(e) => {
                                     let value = Number(e.target.value);
                                     if (isNaN(value)) return;
                                     else {
                                         if (value < 0 || value > 1000) return;
-                                        else setItemData({ ...itemData, stats: { ...itemData.stats, squareDamage: value } });
+                                        else setItemData(prev => ({ ...prev, stats: { ...prev.stats, squareDamage: value } }));
                                     }
                                 }}
                             />
@@ -375,7 +426,7 @@ export default function NewItemPage({ user }) {
                                     if (isNaN(value)) return;
                                     else {
                                         if (value < 0 || value > 1000) return;
-                                        else setItemData({ ...itemData, stats: { ...itemData.stats, triangleDamage: value } });
+                                        else setItemData(prev => ({ ...prev, stats: { ...prev.stats, triangleDamage: value } }));
                                     }
                                 }}
                             />
@@ -391,7 +442,7 @@ export default function NewItemPage({ user }) {
                                     if (isNaN(value)) return;
                                     else {
                                         if (value < 0 || value > 100) return;
-                                        else setItemData({ ...itemData, stats: { ...itemData.stats, critChance: value } });
+                                        else setItemData(prev => ({ ...prev, stats: { ...prev.stats, critChance: value } }));
                                     }
                                 }}
                             />
@@ -423,11 +474,11 @@ export default function NewItemPage({ user }) {
                                             else return;
 
 
-                                            if (value > 10) return;
-                                            else setItemData({ ...itemData, stats: { ...itemData.stats, critDamage: value } });
+                                            if (value > 10 || value < 1) return;
+                                            else setItemData(prev => ({ ...prev, stats: { ...prev.stats, critDamage: Number(value) } }));
                                         }
                                     } else {
-                                        if (!isNaN(value) && (value <= 10 && value >= 1) || value === '') setItemData({ ...itemData, stats: { ...itemData.stats, critDamage: value } });
+                                        if (!isNaN(value) && (value <= 10 && value >= 1) || value === '') setItemData(prev => ({ ...prev, stats: { ...prev.stats, critDamage: Number(value) } }));
                                         else return;
                                     }
                                 }}
@@ -435,6 +486,10 @@ export default function NewItemPage({ user }) {
                         </Box>
 
                     </Flex>
+
+                    {
+                        JSON.stringify(validData)
+                    }
 
                     <Button
                         radius='none'
@@ -446,6 +501,7 @@ export default function NewItemPage({ user }) {
                             margin: "0 auto",
                             borderBottom: "8px rgba(0, 0, 0, 0.1) solid"
                         }}
+                        onClick={handleNewItem}
                     >
                         Submit
                     </Button>
