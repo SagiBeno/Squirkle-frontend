@@ -33,8 +33,6 @@ export default function Game({ filePaths, user }) {
 
     }, [isLoaded])
 
-    console.log("starting game...")
-
     return (
         <Unity unityProvider={unityProvider} style={{width: '100%', height: '100%', backgroundColor: 'black' }} />
     )

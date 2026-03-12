@@ -1,12 +1,22 @@
 import { Box, Dialog, Flex } from '@radix-ui/themes';
 import GameWindow from '../components/GameWindow';
 import Navbar from '../components/Navbar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { areas } from '../AreaData';
 import GameAreaPanel from '../components/GameAreaPanel';
+import AreaSelectorDialog from '../components/Dialogs/AreaSelectorDialog';
+import InventoryDialog from '../components/Dialogs/InventoryDialog';
+import AuctionHouseDialog from '../components/Dialogs/AuctionHouseDialog';
+
+export const GAME_STATE = 0
+export const AREA_SELECTOR_STATE = 1
+export const INVENTORY_STATE = 2
+export const AUCTION_HOUSE_STATE = 3
 
 export default function GamePage({ user, signOut }) {
+
+    const [dialogState, setDialogState] = useState(GAME_STATE)
 
     const navigate = useNavigate()
 
@@ -16,9 +26,23 @@ export default function GamePage({ user, signOut }) {
         }
     }, [user])
 
+    function RenderCurrentDialog()
+    {
+        switch(dialogState) {
+            case AREA_SELECTOR_STATE:
+                return <AreaSelectorDialog/>
+            case INVENTORY_STATE:
+                return <InventoryDialog/>
+            case AUCTION_HOUSE_STATE:
+                return <AuctionHouseDialog/>
+        }
+
+        return null
+    }
+
     return (
         <Dialog.Root>
-            <Navbar user={user} signOut={signOut} />
+            <Navbar user={user} signOut={signOut} setDialogState={setDialogState}/>
             <Flex className='mainContainer'>
 
                 <Box className='navbarSpacer' />
@@ -28,15 +52,7 @@ export default function GamePage({ user, signOut }) {
                 </Flex>
             </Flex>
 
-            <Dialog.Content maxWidth="450px" style={{padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: "auto"}}>
-                <Dialog.Title style={{textAlign: "center", marginTop: 15, color: "white"}}>SELECT A NEW AREA</Dialog.Title>
-                
-                <Flex direction="column" style={{maxHeight: 300, overflowY: "scroll", scrollSnapType: "y mandatory"}}>
-                {
-                    areas.map(x => <GameAreaPanel key={x.id} areaData={x}/>)
-                }
-                </Flex>
-            </Dialog.Content>
+            {RenderCurrentDialog()}
         </Dialog.Root>
     )
 }
