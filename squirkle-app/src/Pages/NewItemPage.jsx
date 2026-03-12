@@ -1,13 +1,17 @@
-import { Box, Flex, Card, Text, TextField, TextArea, Table, IconButton, Button } from '@radix-ui/themes';
+import { Box, Flex, Card, Text, TextField, TextArea, Table, IconButton, Button, Select } from '@radix-ui/themes';
 import Navbar from '../components/Navbar';
 import { useCallback, useState } from 'react';
 import Dropzone, { useDropzone } from "react-dropzone";
 import { PlusIcon, MinusIcon } from '@radix-ui/react-icons';
 import AdminTextField from '../components/AdminTextField';
+import { MdDelete } from "react-icons/md";
+import { RiContactsBookLine } from 'react-icons/ri';
 
-export default function NewItemPage() {
+export default function NewItemPage({ user }) {
+
     const [itemData, setItemData] = useState({
         name: "",
+        typeOfItem: "",
         description: "",
         imageUrl: "",
         knockback: 0,
@@ -21,20 +25,46 @@ export default function NewItemPage() {
         }
     });
 
+    const [file, setFile] = useState();
+
     function uploadImage(file) {
 
-        /*fetch('https://squirkle-backend.vercel.app/api/upload-image', {
-            method: 'POST'
+        if (user.user?.uid) {
+
+            let formData = new FormData();
+            formData.append("file", file);
+            formData.append("userId", user.user.uid)
+
+            fetch('https://squirkle-backend.vercel.app/api/upload-image', {
+                method: 'POST',
+                body: formData
+            })
+                .then(async (resJSON) => {
+                    const res = await resJSON.json();
+                    setItemData({ ...itemData, imageUrl: res.url });
+                })
+                .catch(console.warn);
+        }
+    }
+
+    function deleteImage () {
+        
+        fetch('https://squirkle-backend.vercel.app/api/delete-image', {
+            method: 'DELETE',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ userId: user.user.uid, filename: file.name })
         })
-            .then()
-            .catch();*/
-        console.log(file)
+            .then(res => {
+                if (res.status === 200) setItemData( { ...itemData, imageUrl: "" } );
+            })
+            .catch(console.warn)
     }
 
     const onDrop = useCallback((acceptedFiles) => {
         const file = acceptedFiles?.[0];
         if (!file) return;
         else {
+            setFile(file);
             uploadImage(file);
         }
     }, []);
@@ -89,6 +119,35 @@ export default function NewItemPage() {
                                 width: '45%',
                             }}
                         >
+                            <Flex
+                                style={{
+                                    justifyContent: "row",
+                                    alignItems: "center"
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        marginRight: "5px"
+                                    }}
+                                >
+                                    Type of item
+                                </Text>
+
+                                <Select.Root
+                                    onValueChange={(value) => setItemData({ ...itemData, typeOfItem: value })}
+                                    value={itemData.typeOfItem}
+                                >
+                                    <Select.Trigger />
+                                    <Select.Content>
+                                        <Select.Group>
+                                            <Select.Label>Type of item</Select.Label>
+                                            <Select.Item value="Weapon">Weapon</Select.Item>
+                                            <Select.Item value="Armor">Armor</Select.Item>
+                                        </Select.Group>
+                                    </Select.Content>
+                                </Select.Root>
+                            </Flex>
+
                             <AdminTextField
                                 title="Item's name"
                                 placeholder="Item's name"
@@ -111,7 +170,7 @@ export default function NewItemPage() {
                             </Text>
 
                             <TextArea
-                                radius="full"
+                                radius="none"
                                 placeholder="Item's description"
                                 size="3"
                                 name="itemDescription"
@@ -144,7 +203,7 @@ export default function NewItemPage() {
                                         Item's metadata
                                     </Text>
                                     <IconButton
-                                        style={{cursor: 'pointer'}}
+                                        style={{ cursor: 'pointer' }}
                                         onClick={() => {
                                             setItemData({ ...itemData, stats: { ...itemData.stats, metadata: [...itemData.stats.metadata, ''] } });
                                         }}
@@ -164,7 +223,7 @@ export default function NewItemPage() {
                                             key={idx}
                                         >
                                             <TextField.Root
-                                                radius="full"
+                                                radius="none"
                                                 size="3"
                                                 mb="1"
                                                 value={itemData.stats.metadata[idx]}
@@ -182,7 +241,7 @@ export default function NewItemPage() {
                                             />
 
                                             <IconButton
-                                                style={{cursor: 'pointer'}}
+                                                style={{ cursor: 'pointer' }}
                                                 onClick={() => {
                                                     let array = itemData.stats.metadata
                                                     array.splice(idx, 1);
@@ -218,6 +277,35 @@ export default function NewItemPage() {
                                 <input {...getInputProps()} name='itemImage' id='itemImage' />
                                 <Text>Drag and drop image file here, or click to select file</Text>
                             </Box>
+
+                            {
+                                itemData.imageUrl?.length > 0 &&
+                                <Flex
+                                    style={{
+                                        width: "100%",
+                                        height: "200px",
+                                        marginBottom: "10px",
+                                        backgroundImage: `url(${itemData.imageUrl})`,
+                                        backgroundRepeat: "no-repeat",
+                                        backgroundSize: "cover",
+                                        backgroundPosition: "center",
+                                        justifyContent: "end"
+                                    }}
+                                >
+                                    <IconButton
+                                        radius='none'
+                                        color="red"
+                                        style={{
+                                            margin: "5px",
+                                            cursor: "pointer",
+                                            borderBottom: "4px rgba(0, 0, 0, 0.1) solid"
+                                        }}
+                                        onClick={() => deleteImage()}
+                                    >
+                                        <MdDelete />
+                                    </IconButton>
+                                </Flex>
+                            }
                         </Box>
 
                         <Box
@@ -347,14 +435,16 @@ export default function NewItemPage() {
                         </Box>
 
                     </Flex>
-                    
-                        <Button
-                        radius='full'
+
+                    <Button
+                        radius='none'
                         size='3'
                         style={{
-                            width: '95%',
-                            margin: ' 10px auto 0 auto',
-                            cursor: 'pointer'
+                            width: "95%",
+                            cursor: 'pointer',
+                            backgroundColor: "darkgray",
+                            margin: "0 auto",
+                            borderBottom: "8px rgba(0, 0, 0, 0.1) solid"
                         }}
                     >
                         Submit

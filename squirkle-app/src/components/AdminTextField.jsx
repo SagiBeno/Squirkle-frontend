@@ -12,7 +12,7 @@ export default function AdminTextField( { placeholder, name, id, value, onChange
             </Text>
 
             <TextField.Root
-                radius="full"
+                radius="none"
                 placeholder={placeholder}
                 size="3"
                 name={name}
