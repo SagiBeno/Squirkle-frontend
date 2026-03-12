@@ -1,4 +1,4 @@
-import { Box, Flex, Card, Text, TextField, TextArea, Table, IconButton, Button } from '@radix-ui/themes';
+import { Box, Flex, Card, Text, TextField, TextArea, Table, IconButton, Button, Select } from '@radix-ui/themes';
 import Navbar from '../components/Navbar';
 import { useCallback, useState } from 'react';
 import Dropzone, { useDropzone } from "react-dropzone";
@@ -8,6 +8,7 @@ import AdminTextField from '../components/AdminTextField';
 export default function NewItemPage() {
     const [itemData, setItemData] = useState({
         name: "",
+        typeOfItem: "",
         description: "",
         imageUrl: "",
         knockback: 0,
@@ -89,6 +90,35 @@ export default function NewItemPage() {
                                 width: '45%',
                             }}
                         >
+                            <Flex
+                                style={{
+                                    justifyContent: "row",
+                                    alignItems: "center"
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        marginRight: "5px"
+                                    }}
+                                >
+                                    Type of item
+                                </Text>
+
+                                <Select.Root
+                                    onValueChange={(value) => setItemData( { ...itemData, typeOfItem: value } )}
+                                    value={itemData.typeOfItem}
+                                >
+                                    <Select.Trigger />
+                                    <Select.Content>
+                                        <Select.Group>
+                                            <Select.Label>Type of item</Select.Label>
+                                            <Select.Item value="Weapon">Weapon</Select.Item>
+                                            <Select.Item value="Armor">Armor</Select.Item>
+                                        </Select.Group>
+                                    </Select.Content>
+                                </Select.Root>
+                            </Flex>
+
                             <AdminTextField
                                 title="Item's name"
                                 placeholder="Item's name"
@@ -144,7 +174,7 @@ export default function NewItemPage() {
                                         Item's metadata
                                     </Text>
                                     <IconButton
-                                        style={{cursor: 'pointer'}}
+                                        style={{ cursor: 'pointer' }}
                                         onClick={() => {
                                             setItemData({ ...itemData, stats: { ...itemData.stats, metadata: [...itemData.stats.metadata, ''] } });
                                         }}
@@ -182,7 +212,7 @@ export default function NewItemPage() {
                                             />
 
                                             <IconButton
-                                                style={{cursor: 'pointer'}}
+                                                style={{ cursor: 'pointer' }}
                                                 onClick={() => {
                                                     let array = itemData.stats.metadata
                                                     array.splice(idx, 1);
@@ -347,8 +377,8 @@ export default function NewItemPage() {
                         </Box>
 
                     </Flex>
-                    
-                        <Button
+
+                    <Button
                         radius='full'
                         size='3'
                         style={{
