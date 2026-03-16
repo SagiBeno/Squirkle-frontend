@@ -117,6 +117,82 @@ export default function NewItemPage({ user }) {
         maxFiles: 1,
     });
 
+    function updateItemField (field, value) {
+        setItemData(prev => ({
+            ...prev,
+            [field]: value
+        }));
+    } 
+
+    function updateNumberField (section, field, rawValue, min, max) {
+        
+        let value = rawValue;
+
+        if (field === 'critDamage') {
+
+            if (value.includes(' ')) return;
+
+            if (value.charAt(0) === '.') return;
+
+            if (value.includes(".")) {
+
+                const valuesParts = value.split(".");
+
+                if (valuesParts.length !== 2) return;
+
+                const firstPart = Number(valuesParts[0]);
+                const secondPart = valuesParts[1];
+
+                if (!isNaN(firstPart) && (firstPart <= max && firstPart >= min)) value = firstPart;
+                else return;
+                
+                if (!isNaN(secondPart) && secondPart.length < 3) value += "." + secondPart;
+                else return;
+                
+                if (!isNaN(value) && (Number(value) >= min && Number(value) <= max)) {
+                    updateStatsField(field, value);
+                    return;
+                }
+                else return;
+            } else {
+                if (value === '') {
+                    updateStatsField(field, '');
+                    return;
+                }
+                if (!isNaN(value) && (Number(value) >= min && Number(value) <= max)) {
+                    updateStatsField(field, Number(value));
+                    return;
+                }
+                else return;
+            }
+        }
+
+        value = Number(rawValue);
+
+        if (isNaN(value)) return;
+        if (value < min || value > max) return;
+
+        if (section === 'root') {
+            updateItemField(field, value);
+            return;
+        }
+        else {
+            updateStatsField(field, value);
+            return;
+        }
+    }
+
+    function updateStatsField(field, value) {
+
+        setItemData(prev => ({
+            ...prev,
+            stats: {
+                ...prev.stats,
+                [field]: value
+            }
+        }));
+    }
+
     return (
         <Flex className='mainContainer'>
 
@@ -174,10 +250,7 @@ export default function NewItemPage({ user }) {
                                 </Text>
 
                                 <Select.Root
-                                    onValueChange={(value) => {
-                                        setItemData(prev => ({ ...prev, typeOfItem: value }));
-                                        isValidData({ ...itemData, typeOfItem: value });
-                                    }}
+                                    onValueChange={(value) => updateItemField('typeOfItem', value)}
                                     value={itemData.typeOfItem}
                                 >
                                     <Select.Trigger />
@@ -200,8 +273,7 @@ export default function NewItemPage({ user }) {
                                 onChange={(e) => {
                                     let value = e.target.value;
                                     value = value.charAt(0).toUpperCase() + value.substring(1);
-                                    setItemData(prev => ({ ...prev, name: value }));
-                                    isValidData({ ...itemData, name: value });
+                                    updateItemField('name', value);
                                 }}
                             />
 
@@ -227,8 +299,7 @@ export default function NewItemPage({ user }) {
                                 onChange={(e) => {
                                     let value = e.target.value;
                                     value = value.charAt(0).toUpperCase() + value.slice(1);
-                                    setItemData(prev => ({ ...prev, description: value }));
-                                    isValidData({ ...itemData, description: value });
+                                    updateItemField('description', value);
                                 }}
                                 style={{
                                     maxHeight: '500px'
@@ -373,14 +444,7 @@ export default function NewItemPage({ user }) {
                                 name="knockback"
                                 id="knockback"
                                 value={itemData.knockback}
-                                onChange={(e) => {
-                                    let value = Number(e.target.value);
-                                    if (isNaN(value)) return;
-                                    else {
-                                        if (value < 0 || value > 1000) return;
-                                        else setItemData(prev => ({ ...prev, knockback: value }));
-                                    }
-                                }}
+                                onChange={(e) => {updateNumberField('root', 'knockback', e.target.value, 0, 1000)}}
                             />
 
                             <AdminTextField
@@ -389,14 +453,7 @@ export default function NewItemPage({ user }) {
                                 name="circleDamage"
                                 id="circleDamage"
                                 value={itemData.stats.circleDamage}
-                                onChange={(e) => {
-                                    let value = Number(e.target.value);
-                                    if (isNaN(value)) return;
-                                    else {
-                                        if (value < 0 || value > 1000) return;
-                                        else setItemData(prev => ({ ...prev, stats: { ...prev.stats, circleDamage: value } }));
-                                    }
-                                }}
+                                onChange={(e) => {updateNumberField('stats', 'circleDamage', e.target.value, 0, 1000)}}
                             />
 
                             <AdminTextField
@@ -405,14 +462,7 @@ export default function NewItemPage({ user }) {
                                 name="squareDamage"
                                 id="squareDamage"
                                 value={itemData.stats.squareDamage}
-                                onChange={(e) => {
-                                    let value = Number(e.target.value);
-                                    if (isNaN(value)) return;
-                                    else {
-                                        if (value < 0 || value > 1000) return;
-                                        else setItemData(prev => ({ ...prev, stats: { ...prev.stats, squareDamage: value } }));
-                                    }
-                                }}
+                                onChange={(e) => {updateNumberField('stats', 'squareDamage', e.target.value, 0, 1000)}}
                             />
 
                             <AdminTextField
@@ -421,14 +471,7 @@ export default function NewItemPage({ user }) {
                                 name="triangleDamage"
                                 id="triangleDamage"
                                 value={itemData.stats.triangleDamage}
-                                onChange={(e) => {
-                                    let value = Number(e.target.value);
-                                    if (isNaN(value)) return;
-                                    else {
-                                        if (value < 0 || value > 1000) return;
-                                        else setItemData(prev => ({ ...prev, stats: { ...prev.stats, triangleDamage: value } }));
-                                    }
-                                }}
+                                onChange={(e) => {updateNumberField('stats', 'triangleDamage', e.target.value, 0, 1000)}}
                             />
 
                             <AdminTextField
@@ -437,14 +480,7 @@ export default function NewItemPage({ user }) {
                                 name="critChance"
                                 id="critChance"
                                 value={itemData.stats.critChance}
-                                onChange={(e) => {
-                                    let value = Number(e.target.value);
-                                    if (isNaN(value)) return;
-                                    else {
-                                        if (value < 0 || value > 100) return;
-                                        else setItemData(prev => ({ ...prev, stats: { ...prev.stats, critChance: value } }));
-                                    }
-                                }}
+                                onChange={(e) => {updateNumberField('stats', 'critChance', e.target.value, 0, 100)}}
                             />
 
                             <AdminTextField
@@ -453,35 +489,7 @@ export default function NewItemPage({ user }) {
                                 name="critDamage"
                                 id="critDamage"
                                 value={itemData.stats.critDamage}
-                                onChange={(e) => {
-                                    let value = e.target.value;
-
-                                    if (value.includes(' ')) return;
-                                    if (value.charAt(0) === '.') return;
-
-                                    if (value.includes(".")) {
-                                        const valuesParts = value.split(".");
-
-                                        if (valuesParts.length !== 2) return;
-                                        else {
-                                            const firstPart = valuesParts[0];
-                                            const secondPart = valuesParts[1];
-
-                                            if (!isNaN(firstPart) || firstPart <= 10) value = firstPart;
-                                            else return;
-
-                                            if (!isNaN(secondPart) && secondPart.length < 3) value += "." + secondPart;
-                                            else return;
-
-
-                                            if (value > 10 || value < 1) return;
-                                            else setItemData(prev => ({ ...prev, stats: { ...prev.stats, critDamage: Number(value) } }));
-                                        }
-                                    } else {
-                                        if (!isNaN(value) && (value <= 10 && value >= 1) || value === '') setItemData(prev => ({ ...prev, stats: { ...prev.stats, critDamage: Number(value) } }));
-                                        else return;
-                                    }
-                                }}
+                                onChange={(e) => {updateNumberField('stats', 'critDamage', e.target.value, 1, 10.99)}}
                             />
                         </Box>
 
