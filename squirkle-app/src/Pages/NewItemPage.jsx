@@ -27,20 +27,12 @@ export default function NewItemPage({ user }) {
 
     const [file, setFile] = useState();
 
-    const [validData, setValidData] = useState(false);
-
-    function isValidData(data) {
-
-        if (data.name.length === 0) return setValidData(false);
-        if (data.typeOfItem.length === 0) return setValidData(false);
-        if (data.description.length === 0) return setValidData(false);
-        if (data.imageUrl.length === 0) return setValidData(false);
-
-        if (data.stats.metadata.length === 0) return setValidData(true);
-        else if (data.stats.metadata.filter(element => element.length === 0).length > 0) return setValidData(false);
-
-        return setValidData(true);
-    }
+    const isValid = 
+        itemData.name.trim().length > 0 &&
+        itemData.typeOfItem.trim().length > 0 &&
+        itemData.description.trim().length > 0 &&
+        itemData.imageUrl.trim().length > 0 &&
+        itemData.stats.metadata.every(data => data.trim.length > 0)
 
     function uploadImage(file) {
 
@@ -521,19 +513,17 @@ export default function NewItemPage({ user }) {
 
                     </Flex>
 
-                    {
-                        JSON.stringify(validData)
-                    }
-
                     <Button
+                        disabled={!isValid}
                         radius='none'
                         size='3'
                         style={{
                             width: "95%",
-                            cursor: 'pointer',
+                            cursor: isValid ? 'pointer' : 'not-allowed',
                             backgroundColor: "darkgray",
                             margin: "0 auto",
-                            borderBottom: "8px rgba(0, 0, 0, 0.1) solid"
+                            borderBottom: "8px rgba(0, 0, 0, 0.1) solid",
+                            opacity: isValid ? 1 : 0.6
                         }}
                         onClick={handleNewItem}
                     >
