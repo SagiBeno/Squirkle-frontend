@@ -148,7 +148,7 @@ export default function NewItemPage({ user }) {
                 
                 if (!isNaN(secondPart) && secondPart.length < 3) value += "." + secondPart;
                 else return;
-                
+
                 if (!isNaN(value) && (Number(value) >= min && Number(value) <= max)) {
                     updateStatsField(field, value);
                     return;
@@ -191,6 +191,47 @@ export default function NewItemPage({ user }) {
                 [field]: value
             }
         }));
+    }
+
+    function addMetadata() {
+        setItemData(prev => ({
+            ...prev,
+            stats: {
+                ...prev.stats,
+                metadata: [...prev.stats.metadata, '']
+            }
+        }));
+    }
+
+    function updateMetadata (index, value) {
+        setItemData(prev => {
+            const newMetadata = [ ...prev.stats.metadata ];
+            newMetadata[index] = value;
+
+            return {
+                ...prev,
+                stats: {
+                    ...prev.stats,
+                    metadata: newMetadata
+                }
+            }
+        });
+    }
+
+    function removeMetadata (index) {
+
+        setItemData(prev => {
+            const newMetadata = [ ...prev.stats.metadata ];
+            newMetadata.splice(index, 1);
+
+            return {
+                ...prev,
+                stats: {
+                    ...prev.stats,
+                    metadata: newMetadata
+                }
+            }
+        });
     }
 
     return (
@@ -320,10 +361,7 @@ export default function NewItemPage({ user }) {
                                     </Text>
                                     <IconButton
                                         style={{ cursor: 'pointer' }}
-                                        onClick={() => {
-                                            setItemData(prev => ({ ...prev, stats: { ...prev.stats, metadata: [...prev.stats.metadata, ''] } }));
-                                            isValidData({ ...itemData, stats: { ...itemData.stats, metadata: [...itemData.stats.metadata, ''] } });
-                                        }}
+                                        onClick={addMetadata}
                                     >
                                         <PlusIcon />
                                     </IconButton>
@@ -343,16 +381,10 @@ export default function NewItemPage({ user }) {
                                                 radius="none"
                                                 size="3"
                                                 mb="1"
-                                                value={itemData.stats.metadata[idx]}
+                                                value={data}
                                                 required
-                                                onChange={(e) => {
-                                                    const newMetadata = [...itemData.stats.metadata];
-                                                    newMetadata[idx] = e.target.value.trim();
-
-                                                    setItemData(prev => ({ ...prev, stats: { ...prev.stats, metadata: newMetadata}}));
-
-                                                    isValidData({...itemData, stats: {...itemData.stats, metadata: newMetadata}});
-                                                }}
+                                                onChange={ (e) => updateMetadata(idx, e.target.value.trim() ) }
+                                                    
                                                 placeholder='Matedata'
                                                 style={{
                                                     width: '100%',
@@ -362,13 +394,7 @@ export default function NewItemPage({ user }) {
 
                                             <IconButton
                                                 style={{ cursor: 'pointer' }}
-                                                onClick={() => {
-                                                    const newMetadata = itemData.stats.metadata.filter((_, i) => i !== idx);
-
-                                                    setItemData(prev => ({...prev, stats: { ...prev.stats, metadata: newMetadata}}));
-
-                                                    isValidData({...itemData, stats: {...itemData.stats, metadata: newMetadata}});
-                                                }}
+                                                onClick={() => removeMetadata(idx)}
                                             >
                                                 <MinusIcon />
                                             </IconButton>
