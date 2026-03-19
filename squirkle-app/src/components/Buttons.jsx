@@ -2,7 +2,7 @@ import { Spinner, Button } from "@radix-ui/themes";
 import { EnterIcon, PersonIcon } from "@radix-ui/react-icons";
 import { FaGoogle } from 'react-icons/fa'
 
-export function DisabledLoadingButton( { text } ) {
+export function DisabledLoadingButton({ text }) {
     return (
         <Button
             variant="outline"
@@ -22,7 +22,7 @@ export function DisabledLoadingButton( { text } ) {
     )
 }
 
-export function EnterButton( { text, onClick } ) {
+export function EnterButton({ text, onClick }) {
     return (
         <Button
             variant="outline"
@@ -42,7 +42,7 @@ export function EnterButton( { text, onClick } ) {
     )
 }
 
-export function DisabledButton( { text } ) {
+export function DisabledButton({ text }) {
     return (
         <Button
             variant="outline"
@@ -61,7 +61,7 @@ export function DisabledButton( { text } ) {
     )
 }
 
-export function OrButton( { text, onClick } ) {
+export function OrButton({ text, onClick }) {
     return (
         <Button
             variant="outline"
@@ -82,7 +82,7 @@ export function OrButton( { text, onClick } ) {
     )
 }
 
-export function GoogleLoginButton( { text, onClick } ) {
+export function GoogleLoginButton({ text, onClick }) {
     return (
         <Button
             className="googleLoginButton"
@@ -98,12 +98,12 @@ export function GoogleLoginButton( { text, onClick } ) {
             }}
             onClick={onClick}
         >
-            <FaGoogle/> {text}
+            <FaGoogle /> {text}
         </Button>
     )
 }
 
-export function UsernameDisabledLoadingButton ( { text } ) {
+export function UsernameDisabledLoadingButton({ text }) {
     return (
         <Button
             variant="outline"
@@ -123,7 +123,7 @@ export function UsernameDisabledLoadingButton ( { text } ) {
     )
 }
 
-export function UsernameDisabledButton ( { text } ) {
+export function UsernameDisabledButton({ text }) {
     return (
         <Button
             variant="outline"
@@ -142,7 +142,7 @@ export function UsernameDisabledButton ( { text } ) {
     )
 }
 
-export function UsernameConfirmButton ( { text, onClick } ) {
+export function UsernameConfirmButton({ text, onClick }) {
     return (
         <Button
             variant="outline"
@@ -162,20 +162,22 @@ export function UsernameConfirmButton ( { text, onClick } ) {
     )
 }
 
-export function NavbarButton( { icon, onClick } ) {
+export function NavbarButton({ icon, onClick, compact = false }) {
     return (
         <Button
             variant="solid"
             mb="3"
-            size="3"
+            size={compact ? "2" : "3"}
             radius="none"
             style={{
                 cursor: 'pointer',
                 height: "100%",
-                aspectRatio: 1.5,
+                aspectRatio: compact ? 1 : 1.5,
                 backgroundColor: "darkgray",
                 margin: 0,
-                borderBottom: "8px rgba(0, 0, 0, 0.1) solid"
+                borderBottom: compact
+                    ? "5px rgba(0, 0, 0, 0.1) solid"
+                    : "8px rgba(0, 0, 0, 0.1) solid"
             }}
             onClick={onClick}
         >
@@ -184,7 +186,7 @@ export function NavbarButton( { icon, onClick } ) {
     )
 }
 
-export function LogoutButton( { text, onClick } ) {
+export function LogoutButton({ text, onClick }) {
     return (
         <Button
             variant="solid"
