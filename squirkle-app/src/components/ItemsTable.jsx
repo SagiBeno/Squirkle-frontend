@@ -1,5 +1,4 @@
 import { Table, Avatar, Code, Flex, IconButton } from '@radix-ui/themes';
-import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 
@@ -93,14 +92,8 @@ export default function ItemsPage( { items, handleSelectedModify } ) {
                                         }}                                    
                                     >
 
-                                        <IconButton
-                                            style={{marginRight: '10px'}}
-                                            onClick={() => handleSelectedModify(item)}
-                                        >
+                                        <IconButton onClick={() => handleSelectedModify(item)} >
 	                                        <FaEdit width="18" height="18" />
-                                        </IconButton>
-                                        <IconButton>
-	                                        <MdDelete width="18" height="18" />
                                         </IconButton>
                                     </Flex>
                                 </Table.Cell>

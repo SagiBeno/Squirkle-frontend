@@ -7,6 +7,7 @@ import { MdExitToApp } from "react-icons/md";
 export default function AllItemsDialog( { open, setOpen, handleSelectedModify } ) {
 
     const [items, setItems] = useState([]);
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
     useEffect( () => {
         getItems();
