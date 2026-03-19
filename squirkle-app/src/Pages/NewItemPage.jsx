@@ -8,7 +8,7 @@ import { MdDelete } from "react-icons/md";
 import { RiContactsBookLine } from 'react-icons/ri';
 
 export default function NewItemPage({ user }) {
-//ITEM id: NAME_NAME
+
     const [itemData, setItemData] = useState({
         name: "",
         typeOfItem: "",
