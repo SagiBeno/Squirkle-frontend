@@ -1,270 +1,13 @@
 import { Box, Flex, Card, Text, TextField, TextArea, Table, IconButton, Button, Select, SegmentedControl } from '@radix-ui/themes';
-import Navbar from '../components/Navbar';
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 import Dropzone, { useDropzone } from "react-dropzone";
 import { PlusIcon, MinusIcon } from '@radix-ui/react-icons';
-import AdminTextField from '../components/AdminTextField';
+import AdminTextField from './AdminTextField';
 import { MdDelete } from "react-icons/md";
-import AllItemsDialog from '../components/Dialogs/AllItemsDialog'
 
-export default function NewItemPage({ user }) {
-
-    const [itemData, setItemData] = useState({
-        name: "",
-        type: "",
-        description: "",
-        imageUrl: "",
-        knockback: 0,
-        stats: {
-            circleDamage: 0,
-            squareDamage: 0,
-            triangleDamage: 0,
-            critChance: 0,
-            critDamage: 1.0,
-            metadata: []
-        }
-    });
-
-    const [segmentedControlValue, setSegmentedControlValue] = useState('newItem');
-
-    const [file, setFile] = useState();
-
-    const [itemsDialog, setItemsDialog] = useState(false);
-
-    const isValid = 
-        itemData.name.trim().length > 0 &&
-        itemData.type.trim().length > 0 &&
-        itemData.description.trim().length > 0 &&
-        itemData.imageUrl.trim().length > 0 &&
-        itemData.stats.metadata.every(data => data.trim.length > 0)
-
-    useEffect( () => {
-        
-        if (segmentedControlValue === 'modifyItem') {
-            setItemsDialog(true);
-        }
-
-        else {
-            setItemData({
-                name: "",
-                type: "",
-                description: "",
-                imageUrl: "",
-                knockback: 0,
-                stats: {
-                    circleDamage: 0,
-                    squareDamage: 0,
-                    triangleDamage: 0,
-                    critChance: 0,
-                    critDamage: 1.0,
-                    metadata: []
-                }
-            })
-        }
-
-    }, [segmentedControlValue]);
-
-    function uploadImage(file) {
-
-        if (user.user?.uid) {
-
-            let formData = new FormData();
-            formData.append("file", file);
-            formData.append("userId", user.user.uid)
-
-            fetch('https://squirkle-backend.vercel.app/api/upload-image', {
-                method: 'POST',
-                body: formData
-            })
-                .then(async (resJSON) => {
-                    const res = await resJSON.json();
-                    setItemData(prev => ({ ...prev, imageUrl: res.url }));
-                })
-                .catch(console.warn);
-        }
-    }
-
-    function deleteImage() {
-
-        fetch('https://squirkle-backend.vercel.app/api/delete-image', {
-            method: 'DELETE',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userId: user.user.uid, filename: file.name })
-        })
-            .then(res => {
-                if (res.status === 200) setItemData(prev => ({ ...prev, imageUrl: "" }));
-            })
-            .catch(console.warn)
-    }
-
-    function handleNewItem() {
-        const itemId = itemData.name.toUpperCase().replace(' ', '_');
-        const reqBody = {
-            userId: user.user.uid,
-            id: itemId,
-            ...itemData
-        };
-        
-        fetch('https://squirkle-backend.vercel.app/api/create-item', {
-            method: 'POST',
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(reqBody)
-        })
-            .then(async resJSON => {
-                const res = await resJSON.json();
-                console.log(res)
-            } )
-            .catch(console.warn);
-    }
-
-    const onDrop = useCallback((acceptedFiles) => {
-        const file = acceptedFiles?.[0];
-        if (!file) return;
-        else {
-            setFile(file);
-            uploadImage(file);
-        }
-    }, []);
-
-    const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
-        onDrop,
-        accept: {
-            'image/*': ['.png', '.jpg', '.jpeg', '.gif']
-        },
-        maxFiles: 1,
-    });
-
-    function updateItemField (field, value) {
-        setItemData(prev => ({
-            ...prev,
-            [field]: value
-        }));
-    } 
-
-    function handleSelectedModify(item) {
-        console.log(item);
-
-        fetch(`https://squirkle-backend.vercel.app/api/get-item/${item.id}`)
-            .then( async (resJSON) => {
-                const res = await resJSON.json();
-                console.log(res?.item)
-                setItemData(res?.item);
-            })
-            .catch(console.warn);
-    }
-
-    function updateNumberField (section, field, rawValue, min, max) {
-        
-        let value = rawValue;
-
-        if (field === 'critDamage') {
-
-            if (value.includes(' ')) return;
-
-            if (value.charAt(0) === '.') return;
-
-            if (value.includes(".")) {
-
-                const valuesParts = value.split(".");
-
-                if (valuesParts.length !== 2) return;
-
-                const firstPart = Number(valuesParts[0]);
-                const secondPart = valuesParts[1];
-
-                if (!isNaN(firstPart) && (firstPart <= max && firstPart >= min)) value = firstPart;
-                else return;
-                
-                if (!isNaN(secondPart) && secondPart.length < 3) value += "." + secondPart;
-                else return;
-
-                if (!isNaN(value) && (Number(value) >= min && Number(value) <= max)) {
-                    updateStatsField(field, value);
-                    return;
-                }
-                else return;
-            } else {
-                if (value === '') {
-                    updateStatsField(field, '');
-                    return;
-                }
-                if (!isNaN(value) && (Number(value) >= min && Number(value) <= max)) {
-                    updateStatsField(field, Number(value));
-                    return;
-                }
-                else return;
-            }
-        }
-
-        value = Number(rawValue);
-
-        if (isNaN(value)) return;
-        if (value < min || value > max) return;
-
-        if (section === 'root') {
-            updateItemField(field, value);
-            return;
-        }
-        else {
-            updateStatsField(field, value);
-            return;
-        }
-    }
-
-    function updateStatsField(field, value) {
-
-        setItemData(prev => ({
-            ...prev,
-            stats: {
-                ...prev.stats,
-                [field]: value
-            }
-        }));
-    }
-
-    function addMetadata() {
-        setItemData(prev => ({
-            ...prev,
-            stats: {
-                ...prev.stats,
-                metadata: [...prev.stats.metadata, '']
-            }
-        }));
-    }
-
-    function updateMetadata(index, value) {
-        setItemData(prev => {
-            const newMetadata = [ ...prev.stats.metadata ];
-            newMetadata[index] = value;
-
-            return {
-                ...prev,
-                stats: {
-                    ...prev.stats,
-                    metadata: newMetadata
-                }
-            }
-        });
-    }
-
-    function removeMetadata(index) {
-
-        setItemData(prev => {
-            const newMetadata = [ ...prev.stats.metadata ];
-            newMetadata.splice(index, 1);
-
-            return {
-                ...prev,
-                stats: {
-                    ...prev.stats,
-                    metadata: newMetadata
-                }
-            }
-        });
-    }
+export default function NewItemPage( { i } ) {
 
     return (
-        <>
         <Flex className='mainContainer'>
 
             <Box className='navbarSpacer' />
@@ -281,15 +24,6 @@ export default function NewItemPage({ user }) {
                         borderRadius: '20px',
                     }}
                 >
-                    
-                    <SegmentedControl.Root 
-                        size="1"
-                        onValueChange={(value) => {setSegmentedControlValue(value)}}
-                        value={segmentedControlValue}
-                    >
-		                <SegmentedControl.Item value="newItem">New item</SegmentedControl.Item>
-		                <SegmentedControl.Item value="modifyItem">Modify item</SegmentedControl.Item>
-	                </SegmentedControl.Root>
 
                     <Text
                         size="7"
@@ -297,9 +31,7 @@ export default function NewItemPage({ user }) {
                             fontWeight: 'bold'
                         }}
                     >
-                        {
-                            segmentedControlValue === 'newItem' ? 'Create new item' : 'Modify item'
-                        }
+                        Create new item
                     </Text>
 
                     <Flex
@@ -333,8 +65,8 @@ export default function NewItemPage({ user }) {
                                 </Text>
 
                                 <Select.Root
-                                    onValueChange={(value) => updateItemField('type', value)}
-                                    value={itemData.type}
+                                    onValueChange={(value) => updateItemField('typeOfItem', value)}
+                                    value={itemData.typeOfItem}
                                 >
                                     <Select.Trigger />
                                     <Select.Content>
@@ -581,16 +313,6 @@ export default function NewItemPage({ user }) {
                     </Button>
                 </Flex>
             </Flex>
-            
         </Flex>
-        {
-            itemsDialog === true && 
-                <AllItemsDialog 
-                    open={itemsDialog} 
-                    setOpen={setItemsDialog}
-                    handleSelectedModify={handleSelectedModify}
-                />
-        }
-    </>
     )
 }
