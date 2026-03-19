@@ -32,6 +32,32 @@ function App() {
   const loggedIn = user?.accessToken != null
   let navigate = useNavigate();
 
+  function getUserIdFromUserObject(userObject) {
+    return userObject?.user?.uid ?? userObject?.user?.user?.uid ?? null;
+  }
+
+  async function getCoinCount(userId) {
+    if (!userId) return 0;
+
+    try {
+      const resultJSON = await fetch(`https://squirkle-backend.vercel.app/api/get-coins/${userId}`);
+      const result = await resultJSON.json();
+      const parsedCoinCount = Number(result?.coinCount ?? result?.coins ?? 0);
+      return Number.isFinite(parsedCoinCount) ? parsedCoinCount : 0;
+    } catch (error) {
+      console.warn(error);
+      return 0;
+    }
+  }
+
+  async function withCoinCount(userObject) {
+    if (!userObject) return userObject;
+
+    const userId = getUserIdFromUserObject(userObject);
+    const coinCount = await getCoinCount(userId);
+    return { ...userObject, coinCount };
+  }
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
@@ -43,7 +69,8 @@ function App() {
             return;
           }
           else {
-            setUser({ user: currentUser, username: username });
+            const userWithCoinCount = await withCoinCount({ user: currentUser, username: username });
+            setUser(userWithCoinCount);
           }
         } //else navigate('/');
       } //else navigate('/login');
@@ -72,7 +99,8 @@ function App() {
           const username = await getUsername(userId);
           if (!username) return;
           else {
-            setUser({ user: result, username: username });
+            const userWithCoinCount = await withCoinCount({ user: result, username: username });
+            setUser(userWithCoinCount);
             navigate('/');
           }
         } else return;
@@ -136,7 +164,8 @@ function App() {
               .then(async (res) => {
                 if (res.status === 201) {
                   setToastData({ open: true, title: 'Successfully registartion!', description: '', isError: false });
-                  setUser({ user: registerResult, username: username });
+                  const userWithCoinCount = await withCoinCount({ user: registerResult, username: username });
+                  setUser(userWithCoinCount);
                   navigate('/');
                 }
               })
@@ -157,29 +186,29 @@ function App() {
   return (
     <>
       <Theme>
-          <Routes>
-            {
-              <>
-                <Route path='/' element={<HomePage user={user}/>} />
-                <Route path='/game' element={<GamePage user={user} signOut={signOut}/>} />
-                {user?.user && <Route path='/admin/new-item' element={<NewItemPage user={user} />} /> }
-              </>
-            }
+        <Routes>
+          {
+            <>
+              <Route path='/' element={<HomePage user={user} />} />
+              <Route path='/game' element={<GamePage user={user} signOut={signOut} />} />
+              {user?.user && <Route path='/admin/new-item' element={<NewItemPage user={user} />} />}
+            </>
+          }
 
-            {
-              <>
-                <Route path='/login' element={<LoginPage handleLoginWithEmailAndPW={handleLoginWithEmailAndPW} handleLoginWithGoogle={handleLoginWithGoogle} loading={loading} />} />
-                <Route path='/register' element={<RegisterPage loading={loading} handleRegistration={handleRegistration} handleLoginWithGoogle={handleLoginWithGoogle} />} />
-              </>
-            }
-          </Routes>
+          {
+            <>
+              <Route path='/login' element={<LoginPage handleLoginWithEmailAndPW={handleLoginWithEmailAndPW} handleLoginWithGoogle={handleLoginWithGoogle} loading={loading} />} />
+              <Route path='/register' element={<RegisterPage loading={loading} handleRegistration={handleRegistration} handleLoginWithGoogle={handleLoginWithGoogle} />} />
+            </>
+          }
+        </Routes>
 
         <AppToast
           toastData={toastData}
           setToastData={setToastData}
         />
         {
-          usernameDialogOpen && <UsernameInputDialog open={usernameDialogOpen} setOpen={setUsernameDialogOpen} toastData={toastData} setToastData={setToastData} existingUsername={existingUsername} userData={loginWithGoogleUserData} setUser={setUser} />
+          usernameDialogOpen && <UsernameInputDialog open={usernameDialogOpen} setOpen={setUsernameDialogOpen} toastData={toastData} setToastData={setToastData} existingUsername={existingUsername} userData={loginWithGoogleUserData} setUser={async (userObject) => setUser(await withCoinCount(userObject))} />
         }
       </Theme>
     </>
