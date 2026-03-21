@@ -697,7 +697,7 @@ export default function NewItemPage({ user }) {
 
                     </Flex>
                 </Flex>
-                <Box style={{ minHeight: "30px" }}></Box>
+                <Box style={{ minHeight: "10px" }} />
             </Flex>
             {
                 showItemsDialog === true &&

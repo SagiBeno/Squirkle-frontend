@@ -106,7 +106,7 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
 
                 </Flex>
             </Flex>
-            <Box style={{minHeight: '20px'}}/>
+            <Box style={{minHeight: '10px'}}/>
         </Flex>
     )
 }
