@@ -6,17 +6,16 @@ export function DisabledLoadingButton({ text }) {
     return (
         <Button
             radius="none"
-            className="button"
+            className="button inactiveButton"
             mb="3"
             size="3"
             disabled
             style={{
                 width: '100%',
-                fontFamily: `"Fredoka", sans-serif`,
                 fontSize: '1.1rem',
             }}
         >
-            <Spinner loading />
+            <Spinner />
             <EnterIcon width='20px' height='20px' /> {text}
         </Button>
     )
@@ -25,16 +24,13 @@ export function DisabledLoadingButton({ text }) {
 export function EnterButton({ text, onClick }) {
     return (
         <Button
-            className="button"
+            className="button activeButton"
             mb="3"
             size="3"
             radius="none"
             style={{
-                cursor: 'pointer',
                 width: '100%',
-                fontFamily: `"Fredoka", sans-serif`,
                 fontSize: '1.1rem',
-                color: 'black'
             }}
             onClick={onClick}
         >
@@ -46,14 +42,13 @@ export function EnterButton({ text, onClick }) {
 export function DisabledButton({ text }) {
     return (
         <Button
-            className="button"
+            className="button inactiveButton"
             mb="3"
             size="3"
             radius="none"
             disabled
             style={{
                 width: '100%',
-                fontFamily: `"Fredoka", sans-serif`,
                 fontSize: '1.1rem'
             }}
         >
@@ -65,17 +60,14 @@ export function DisabledButton({ text }) {
 export function OrButton({ text, onClick }) {
     return (
         <Button
-            className="button"
+            className="button activeButton"
             mb="3"
             mt="2"
             size="3"
             radius="none"
             style={{
                 width: '100%',
-                cursor: 'pointer',
-                fontFamily: `"Fredoka", sans-serif`,
                 fontSize: '1.1rem',
-                color: 'black'
             }}
             onClick={onClick}
         >
@@ -87,16 +79,13 @@ export function OrButton({ text, onClick }) {
 export function GoogleLoginButton({ text, onClick }) {
     return (
         <Button
-            className="googleLoginButton button"
+            className="googleLoginButton button activeButton"
             mb="3"
             size="3"
             radius="none"
             style={{
                 width: '100%',
-                cursor: 'pointer',
-                fontFamily: `"Fredoka", sans-serif`,
                 fontSize: '1.1rem',
-                color: 'black'
             }}
             onClick={onClick}
         >
@@ -108,18 +97,17 @@ export function GoogleLoginButton({ text, onClick }) {
 export function UsernameDisabledLoadingButton({ text }) {
     return (
         <Button
-            variant="outline"
+            className="button inactiveButton"
             mb="3"
             size="3"
-            radius="full"
+            radius="none"
             disabled
             style={{
                 width: '100%',
-                fontFamily: `"Fredoka", sans-serif`,
                 fontSize: '1.1rem'
             }}
         >
-            <Spinner loading />
+            <Spinner />
             <PersonIcon width='20px' height='20px' /> {text}
         </Button>
     )
@@ -128,14 +116,13 @@ export function UsernameDisabledLoadingButton({ text }) {
 export function UsernameDisabledButton({ text }) {
     return (
         <Button
-            variant="outline"
+            className="button inactiveButton"
             mb="3"
             size="3"
-            radius="full"
+            radius="none"
             disabled
             style={{
                 width: '100%',
-                fontFamily: `"Fredoka", sans-serif`,
                 fontSize: '1.1rem'
             }}
         >
@@ -147,14 +134,12 @@ export function UsernameDisabledButton({ text }) {
 export function UsernameConfirmButton({ text, onClick }) {
     return (
         <Button
-            variant="outline"
+            className="button activeButton"
             mb="3"
             size="3"
-            radius="full"
+            radius="none"
             style={{
                 width: '100%',
-                cursor: 'pointer',
-                fontFamily: `"Fredoka", sans-serif`,
                 fontSize: '1.1rem'
             }}
             onClick={onClick}

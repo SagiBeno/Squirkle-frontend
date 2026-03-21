@@ -38,6 +38,27 @@
 .button {
     background-color: darkgray !important;
     border-bottom: 8px rgba(0, 0, 0, 0.2) solid !important;
+    color: black !important;
+    font-family: "Fredoka", sans-serif !important;
+    font-size: 1.1rem !important;
+}
+
+.inactiveButton {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+}
+
+.activeButton {
+    cursor: pointer !important;
+}
+
+.activeButton:hover {
+    animation: pulseForButton 2s infinite;
+    box-shadow: 0px 0px 4px 2px rgb(255, 148, 34);
+}
+
+.activeButton:active {
+    transform: translateY(1px) !important;
 }
 
 .navbarSpacer {
@@ -73,6 +94,20 @@
     to {
         opacity: 0;
         transform: translateX(-50%) translateY(-10px);
+    }
+}
+
+@keyframes pulseForButton {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.02);
+    }
+
+    100% {
+        transform: scale(1);
     }
 }
 

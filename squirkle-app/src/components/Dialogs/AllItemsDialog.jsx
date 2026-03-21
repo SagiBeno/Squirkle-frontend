@@ -2,9 +2,9 @@ import { Flex, Box, Text, Dialog, IconButton } from "@radix-ui/themes"
 import { useState } from "react";
 import { useEffect } from "react";
 import ItemsTable from '../ItemsTable';
-import { MdExitToApp } from "react-icons/md";
+import { HiXMark } from "react-icons/hi2";
 
-export default function AllItemsDialog( { open, setOpen, handleSelectedModify } ) {
+export default function AllItemsDialog( { open, setOpen, handleSelectedModify, setSegmentedControlValue } ) {
 
     const [items, setItems] = useState([]);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -32,8 +32,13 @@ export default function AllItemsDialog( { open, setOpen, handleSelectedModify } 
                         }}
                     >
                         <Text>All items</Text>
-                        <IconButton onClick={() => setOpen(false)}>
-                            <MdExitToApp />
+                        <IconButton
+                            onClick={() => {
+                                setOpen(false);
+                                setSegmentedControlValue('newItem');
+                            }}
+                        >
+                            <HiXMark />
                         </IconButton>
                     </Flex>
                     
