@@ -15,17 +15,22 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
 
     return (
         <Flex className="mainContainer">
+            <Box style={{minHeight: '10px'}}/>
+
             <Flex className="contentContainer">
+
                 <Flex
                     style={{
                         margin: 'auto',
                         width: '80%',
                         maxWidth: '720px',
                         flexDirection: 'column',
-                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                        padding: '10px',
+                        background: 'linear-gradient(180deg, #1e1e28, #21212c)',
+                        boxShadow: '0px 0px 10px 2px #bababa',
+                        padding: '20px',
                         borderRadius: '20px',
                         textAlign: 'center',
+                        color: 'white'
                     }}
                 >
                     <Text
@@ -45,7 +50,8 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
                     >
                         <Text as='label' size='4' htmlFor="email" style={{ cursor: 'pointer' }}>Email</Text>
                         <TextField.Root
-                            radius="full"
+                            className="textField"
+                            radius="none"
                             placeholder="example@gmail.com"
                             size="3"
                             name="email"
@@ -100,6 +106,7 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
 
                 </Flex>
             </Flex>
+            <Box style={{minHeight: '10px'}}/>
         </Flex>
     )
 }
