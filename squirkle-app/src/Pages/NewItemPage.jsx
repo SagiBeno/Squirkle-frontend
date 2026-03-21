@@ -281,13 +281,13 @@ export default function NewItemPage({ user }) {
                             type: "",
                             description: "",
                             imageUrl: "",
-                            knockback: 0,
+                            knockback: "0",
                             stats: {
                                 circleDamage: 0,
                                 squareDamage: 0,
                                 triangleDamage: 0,
                                 critChance: 0,
-                                critDamage: 1.0,
+                                critDamage: "1.0",
                                 metadata: []
                             }
                         });
@@ -314,16 +314,24 @@ export default function NewItemPage({ user }) {
                             width: '95%',
                             textAlign: 'center',
                             flexDirection: 'column',
-                            backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                            padding: '10px',
+                            background: 'linear-gradient(180deg, #1e1e28, #21212c)',
+                            boxShadow: '0px 0px 10px 2px #bababa',
+                            padding: '20px',
                             borderRadius: '20px',
+                            color: 'white',
                         }}
                     >
 
                         <SegmentedControl.Root
-                            size="1"
+                            radius="none"
+                            size="2"
                             onValueChange={(value) => { setSegmentedControlValue(value) }}
                             value={segmentedControlValue}
+                            style={{
+                                backgroundColor: '#bababa',
+                                padding: 0,
+                                marginBottom: '10px'
+                            }}
                         >
                             <SegmentedControl.Item value="newItem">New item</SegmentedControl.Item>
                             <SegmentedControl.Item value="modifyItem">Modify item</SegmentedControl.Item>
@@ -332,7 +340,8 @@ export default function NewItemPage({ user }) {
                         <Text
                             size="7"
                             style={{
-                                fontWeight: 'bold'
+                                fontWeight: 'bold',
+                                marginBottom: "10px"
                             }}
                         >
                             {
@@ -363,6 +372,7 @@ export default function NewItemPage({ user }) {
                                     }}
                                 >
                                     <Text
+                                        size='4'
                                         style={{
                                             marginRight: "5px"
                                         }}
@@ -375,7 +385,15 @@ export default function NewItemPage({ user }) {
                                         value={itemData.type}
                                     >
                                         <Select.Trigger />
-                                        <Select.Content>
+                                        <Select.Content 
+                                            color='gold'
+                                            style={{
+                                                borderRadius: 0,
+                                                background: '#bababa',
+                                                border: '3px solid #d5d5d5',
+                                                boxShadow: '0px 0px 8px 2px rgb(255, 148, 34)'
+                                            }}
+                                        >
                                             <Select.Group>
                                                 <Select.Label>Type of item</Select.Label>
                                                 <Select.Item value="Weapon">Weapon</Select.Item>
@@ -399,6 +417,7 @@ export default function NewItemPage({ user }) {
                                 />
 
                                 <Text
+                                    size='4'
                                     as='label'
                                     htmlFor='itemDescription'
                                     style={{ cursor: 'pointer' }}
@@ -407,6 +426,7 @@ export default function NewItemPage({ user }) {
                                 </Text>
 
                                 <TextArea
+                                    className='descriptionTextArea'
                                     radius="none"
                                     placeholder="Item's description"
                                     size="3"
@@ -423,7 +443,7 @@ export default function NewItemPage({ user }) {
                                         updateItemField('description', value);
                                     }}
                                     style={{
-                                        maxHeight: '500px'
+                                        maxHeight: '500px',
                                     }}
                                 />
 
@@ -436,11 +456,16 @@ export default function NewItemPage({ user }) {
 
                                         }}
                                     >
-                                        <Text>
+                                        <Text size='4'>
                                             Item's metadata
                                         </Text>
                                         <IconButton
-                                            style={{ cursor: 'pointer' }}
+                                            style={{ 
+                                                cursor: 'pointer',
+                                                color: 'black',
+                                                borderBottom: "8px rgba(0, 0, 0, 0.2) solid",
+                                                backgroundColor: "darkgray",
+                                            }}
                                             onClick={addMetadata}
                                         >
                                             <PlusIcon />
@@ -458,6 +483,7 @@ export default function NewItemPage({ user }) {
                                                 key={idx}
                                             >
                                                 <TextField.Root
+                                                    className='metadataTextField'
                                                     radius="none"
                                                     size="3"
                                                     mb="1"
@@ -473,7 +499,12 @@ export default function NewItemPage({ user }) {
                                                 />
 
                                                 <IconButton
-                                                    style={{ cursor: 'pointer' }}
+                                                    style={{ 
+                                                        cursor: 'pointer' ,
+                                                        borderBottom: "8px rgba(0, 0, 0, 0.2) solid",
+                                                        backgroundColor: "darkgray",
+                                                        color: 'black',
+                                                    }}
                                                     onClick={() => removeMetadata(idx)}
                                                 >
                                                     <MinusIcon />
@@ -484,6 +515,7 @@ export default function NewItemPage({ user }) {
                                 </Box>
 
                                 <Text
+                                    size='4'
                                     as='label'
                                     htmlFor='itemImage'
                                     style={{ cursor: 'pointer', marginBottom: '10px' }}
@@ -494,12 +526,13 @@ export default function NewItemPage({ user }) {
                                 <Box
                                     {...getRootProps({ className: 'dropzone' })}
                                     style={{
-                                        backgroundColor: 'white',
-                                        borderRadius: '10px',
+                                        backgroundColor: '#bababa',
+                                        borderBottom: '6px solid #626262',
                                         padding: '10px',
                                         textAlign: 'center',
                                         cursor: 'pointer',
-                                        marginBottom: '10px'
+                                        margin: '10px 0px',
+                                        color: 'black'
                                     }}
                                 >
                                     <input {...getInputProps()} name='itemImage' id='itemImage' />
@@ -609,10 +642,11 @@ export default function NewItemPage({ user }) {
                                         radius='none'
                                         size='3'
                                         style={{
-                                            width: "95%",
+                                            width: "100%",
+                                            color: 'black',
                                             cursor: isValid ? 'pointer' : 'not-allowed',
                                             backgroundColor: "darkgray",
-                                            margin: "0 auto",
+                                            margin: "10px auto",
                                             borderBottom: "8px rgba(0, 0, 0, 0.1) solid",
                                             opacity: isValid ? 1 : 0.6
                                         }}
@@ -634,7 +668,7 @@ export default function NewItemPage({ user }) {
                                                 width: "45%",
                                                 cursor: isValid ? 'pointer' : 'not-allowed',
                                                 backgroundColor: "darkgray",
-                                                margin: "0 auto",
+                                                margin: "10px auto",
                                                 borderBottom: "8px rgba(0, 0, 0, 0.1) solid",
                                                 opacity: isValid ? 1 : 0.6
                                             }}
@@ -647,10 +681,11 @@ export default function NewItemPage({ user }) {
                                             radius='none'
                                             size='3'
                                             style={{
+                                                color: 'black',
                                                 width: "45%",
                                                 cursor: 'pointer',
                                                 backgroundColor: "darkgray",
-                                                margin: "0 auto",
+                                                margin: "10px auto",
                                                 borderBottom: "8px rgba(0, 0, 0, 0.1) solid",
                                             }}
                                             onClick={() => setShowDeleteAlert(true)}
@@ -662,7 +697,7 @@ export default function NewItemPage({ user }) {
 
                     </Flex>
                 </Flex>
-
+                <Box style={{ minHeight: "30px" }}></Box>
             </Flex>
             {
                 showItemsDialog === true &&
