@@ -13,7 +13,7 @@ export default function AdminTextField( { placeholder, name, id, value, onChange
             </Text>
 
             <TextField.Root
-                className="itemTextField"
+                className="textField"
                 radius="none"
                 placeholder={placeholder}
                 size="3"

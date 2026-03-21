@@ -426,7 +426,7 @@ export default function NewItemPage({ user }) {
                                 </Text>
 
                                 <TextArea
-                                    className='descriptionTextArea'
+                                    className='textArea'
                                     radius="none"
                                     placeholder="Item's description"
                                     size="3"
@@ -483,7 +483,7 @@ export default function NewItemPage({ user }) {
                                                 key={idx}
                                             >
                                                 <TextField.Root
-                                                    className='metadataTextField'
+                                                    className='textField'
                                                     radius="none"
                                                     size="3"
                                                     mb="1"
