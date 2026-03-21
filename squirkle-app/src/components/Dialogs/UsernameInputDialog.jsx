@@ -1,14 +1,15 @@
-import { Dialog, TextField, Button, Text, Box } from "@radix-ui/themes";
+import { Dialog, TextField, Button, Text, Flex } from "@radix-ui/themes";
 import { useState } from "react";
 import { UsernameDisabledLoadingButton, UsernameDisabledButton, UsernameConfirmButton } from "../Buttons";
 import { useNavigate } from "react-router-dom";
+import { BiErrorAlt } from "react-icons/bi";
 
 export default function UsernameInputDialog({ open, setOpen, setToastData, toastData, existingUsername, userData, setUser }) {
 
     let navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState({ content: '', error: false });
+    const [message, setMessage] = useState({ content: 'The username could not be saved. Please try again or enter a different one.', error: true });
 
     async function handleUsername() {
         setLoading(true);
@@ -43,18 +44,29 @@ export default function UsernameInputDialog({ open, setOpen, setToastData, toast
 
     return (
         <Dialog.Root open={open} >
-            <Dialog.Content maxWidth="80vw">
-                <Dialog.Title>Username</Dialog.Title>
-                <Dialog.Description size="2" mb="4">
-                    Please enter a username
+            <Dialog.Content 
+                style={{
+                    color: 'white',
+                    maxWidth: "80vw",
+                    background: '#21212c',
+                    fontFamily: `"Fredoka", sans-serif`,
+                }}
+            >
+                <Dialog.Title size="6">Username</Dialog.Title>
+                <Dialog.Description size="4" mb="4">
+                    You don't have a username. Please enter one.
                 </Dialog.Description>
 
                 <TextField.Root
+                    className="textField"
                     placeholder="Username"
                     size="3"
-                    radius="full"
+                    radius="none"
                     value={username}
                     onChange={(e) => setUsername(e.target.value.trim())}
+                    style={{
+                        marginBottom: '15px'
+                    }}
                 />
 
                 {
@@ -71,21 +83,36 @@ export default function UsernameInputDialog({ open, setOpen, setToastData, toast
 
                 {
                     message.content.length > 0 &&
-                    <Box
+                    <Flex
                         style={{
                             width: '100%',
-                            textAlign: 'center'
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexWrap: 'wrap'
                         }}
                     >
+                        {
+                            message.error &&
+                            <BiErrorAlt 
+                                style={{ 
+                                    color: 'tomato',
+                                    width: '25px',
+                                    height: '25px',
+                                    marginRight: '5px'
+                                }} 
+                            /> 
+                        }
+                        
                         <Text
                             size='5'
                             style={{
-                                color: message.error ? 'red' : 'green',
+                                color: message.error ? 'tomato' : 'lightgreen',
                             }}
                         >
                             {message.content}
                         </Text>
-                    </Box>
+                    </Flex>
 
                 }
 

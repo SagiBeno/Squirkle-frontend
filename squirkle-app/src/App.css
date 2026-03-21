@@ -39,6 +39,8 @@
     background-color: darkgray !important;
     border-bottom: 8px rgba(0, 0, 0, 0.2) solid !important;
     color: black !important;
+    font-family: "Fredoka", sans-serif !important;
+    font-size: 1.1rem !important;
 }
 
 .inactiveButton {

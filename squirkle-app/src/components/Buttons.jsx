@@ -12,11 +12,10 @@ export function DisabledLoadingButton({ text }) {
             disabled
             style={{
                 width: '100%',
-                fontFamily: `"Fredoka", sans-serif`,
                 fontSize: '1.1rem',
             }}
         >
-            <Spinner loading />
+            <Spinner />
             <EnterIcon width='20px' height='20px' /> {text}
         </Button>
     )
@@ -30,11 +29,8 @@ export function EnterButton({ text, onClick }) {
             size="3"
             radius="none"
             style={{
-                cursor: 'pointer',
                 width: '100%',
-                fontFamily: `"Fredoka", sans-serif`,
                 fontSize: '1.1rem',
-                color: 'black'
             }}
             onClick={onClick}
         >
@@ -53,7 +49,6 @@ export function DisabledButton({ text }) {
             disabled
             style={{
                 width: '100%',
-                fontFamily: `"Fredoka", sans-serif`,
                 fontSize: '1.1rem'
             }}
         >
@@ -72,10 +67,7 @@ export function OrButton({ text, onClick }) {
             radius="none"
             style={{
                 width: '100%',
-                cursor: 'pointer',
-                fontFamily: `"Fredoka", sans-serif`,
                 fontSize: '1.1rem',
-                color: 'black'
             }}
             onClick={onClick}
         >
@@ -93,10 +85,7 @@ export function GoogleLoginButton({ text, onClick }) {
             radius="none"
             style={{
                 width: '100%',
-                cursor: 'pointer',
-                fontFamily: `"Fredoka", sans-serif`,
                 fontSize: '1.1rem',
-                color: 'black'
             }}
             onClick={onClick}
         >
@@ -108,18 +97,17 @@ export function GoogleLoginButton({ text, onClick }) {
 export function UsernameDisabledLoadingButton({ text }) {
     return (
         <Button
-            variant="outline"
+            className="button inactiveButton"
             mb="3"
             size="3"
-            radius="full"
+            radius="none"
             disabled
             style={{
                 width: '100%',
-                fontFamily: `"Fredoka", sans-serif`,
                 fontSize: '1.1rem'
             }}
         >
-            <Spinner loading />
+            <Spinner />
             <PersonIcon width='20px' height='20px' /> {text}
         </Button>
     )
@@ -128,14 +116,13 @@ export function UsernameDisabledLoadingButton({ text }) {
 export function UsernameDisabledButton({ text }) {
     return (
         <Button
-            variant="outline"
+            className="button inactiveButton"
             mb="3"
             size="3"
-            radius="full"
+            radius="none"
             disabled
             style={{
                 width: '100%',
-                fontFamily: `"Fredoka", sans-serif`,
                 fontSize: '1.1rem'
             }}
         >
@@ -147,14 +134,12 @@ export function UsernameDisabledButton({ text }) {
 export function UsernameConfirmButton({ text, onClick }) {
     return (
         <Button
-            variant="outline"
+            className="button activeButton"
             mb="3"
             size="3"
-            radius="full"
+            radius="none"
             style={{
                 width: '100%',
-                cursor: 'pointer',
-                fontFamily: `"Fredoka", sans-serif`,
                 fontSize: '1.1rem'
             }}
             onClick={onClick}
