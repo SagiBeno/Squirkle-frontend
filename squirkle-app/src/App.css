@@ -57,6 +57,10 @@
     box-shadow: 0px 0px 4px 2px rgb(255, 148, 34);
 }
 
+.activeButton:active {
+    transform: translateY(1px) !important;
+}
+
 .navbarSpacer {
     min-height: 60px;
 }

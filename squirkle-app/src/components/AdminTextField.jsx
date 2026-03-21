@@ -7,7 +7,7 @@ export default function AdminTextField( { placeholder, name, id, value, onChange
                 size="4"
                 as='label'
                 htmlFor={name}
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: 'pointer', marginBottom: '5px', marginTop: '10px' }}
             >
                 {title}
             </Text>
@@ -24,6 +24,7 @@ export default function AdminTextField( { placeholder, name, id, value, onChange
                 value={value}
                 required
                 onChange={(e) => {onChange(e)}}
+                style={{  marginBottom: '12px' }}
             />
         </>
     )

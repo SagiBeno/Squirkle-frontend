@@ -68,7 +68,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                             textAlign: 'left'
                         }}
                     >
-                        <Text as='label' htmlFor="username" size='4' style={{ cursor: 'pointer' }}>Username</Text>
+                        <Text as='label' htmlFor="username" size='4' style={{ cursor: 'pointer', marginBottom: '5px' }}>Username</Text>
                         <TextField.Root
                             className="textField"
                             radius="none"
@@ -83,11 +83,11 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                                 else setFormData({ ...formData, username: e.target.value })
                             }}
                             style={{
-                                fontFamily: `"Fredoka", sans-serif`,
+                                marginBottom: '12px'
                             }}
                         />
 
-                        <Text as='label' htmlFor="email" style={{ marginTop: '10px', cursor: 'pointer' }} size='4'>Email</Text>
+                        <Text as='label' htmlFor="email" style={{ marginTop: '10px', cursor: 'pointer', marginBottom: '5px' }} size='4'>Email</Text>
                         <TextField.Root
                             className="textField"
                             radius="none"
@@ -105,7 +105,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                                 }
                             }}
                             style={{
-                                fontFamily: `"Fredoka", sans-serif`,
+                                marginBottom: '12px'
                             }}
                         />
 
@@ -118,7 +118,8 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                                     justifyContent: 'center',
                                     marginTop: '5px',
                                     padding: '10px',
-                                    color: 'gold'
+                                    color: 'gold',
+                                    flexWrap: 'wrap'
                                 }}
                             >
                                 <ExclamationTriangleIcon 
@@ -131,6 +132,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                                 <Text
                                     as="p"
                                     size='3'
+                                    align='center'
                                 >
                                     Invalid email format!
                                 </Text>
@@ -138,7 +140,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
 
                         }
 
-                        <Text as='label' htmlFor="password" style={{ marginTop: '10px', cursor: "pointer" }} size='4'>Password</Text>
+                        <Text as='label' htmlFor="password" style={{ marginTop: '10px', cursor: "pointer", marginBottom: '5px' }} size='4'>Password</Text>
                         <PasswordInput
                             inputName="password"
                             value={formData.password}
@@ -146,12 +148,10 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                                 if (e.target.value.includes(' ')) return;
                                 else setFormData({ ...formData, password: e.target.value })
                             }}
-                            style={{
-                                fontFamily: `"Fredoka", sans-serif`,
-                            }}
+                            
                         />
 
-                        <Text as='label' htmlFor="confirmPassword" style={{ marginTop: '10px', cursor: 'pointer' }} size='4'>Confirm password</Text>
+                        <Text as='label' htmlFor="confirmPassword" style={{ marginTop: '22px', cursor: 'pointer', marginBottom: '5px' }} size='4'>Confirm password</Text>
                         <PasswordInput
                             inputName="confirmPassword"
                             value={formData.confirmPassword}
@@ -159,9 +159,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                                 if (e.target.value.includes(' ')) return;
                                 else setFormData({ ...formData, confirmPassword: e.target.value })
                             }}
-                            style={{
-                                fontFamily: `"Fredoka", sans-serif`,
-                            }}
+
                         />
 
                         {

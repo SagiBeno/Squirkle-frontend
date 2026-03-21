@@ -150,6 +150,7 @@ export default function NewItemPage({ user }) {
     }
 
     function handleSelectedModify(item) {
+
         setItemID(item.id)
 
         fetch(`https://squirkle-backend.vercel.app/api/get-item/${item.id}`)
@@ -368,7 +369,8 @@ export default function NewItemPage({ user }) {
                                 <Flex
                                     style={{
                                         justifyContent: "row",
-                                        alignItems: "center"
+                                        alignItems: "center",
+                                        marginBottom: '12px'
                                     }}
                                 >
                                     <Text
@@ -420,7 +422,7 @@ export default function NewItemPage({ user }) {
                                     size='4'
                                     as='label'
                                     htmlFor='itemDescription'
-                                    style={{ cursor: 'pointer' }}
+                                    style={{ cursor: 'pointer', marginTop: '10px', marginBottom: '5px' }}
                                 >
                                     Item's description
                                 </Text>
@@ -444,6 +446,7 @@ export default function NewItemPage({ user }) {
                                     }}
                                     style={{
                                         maxHeight: '500px',
+                                    
                                     }}
                                 />
 
@@ -452,7 +455,9 @@ export default function NewItemPage({ user }) {
                                         style={{
                                             flexDirection: 'row',
                                             alignItems: 'center',
-                                            justifyContent: 'space-between'
+                                            justifyContent: 'space-between',
+                                            marginTop: '10px',
+                                            marginBottom: '12px'
 
                                         }}
                                     >
@@ -478,7 +483,8 @@ export default function NewItemPage({ user }) {
                                                 style={{
                                                     flexDirection: 'row',
                                                     alignItems: 'center',
-                                                    justifyContent: 'space-between'
+                                                    justifyContent: 'space-between',
+                                                    marginBottom: '15px'
                                                 }}
                                                 key={idx}
                                             >
@@ -494,7 +500,7 @@ export default function NewItemPage({ user }) {
                                                     placeholder='Matedata'
                                                     style={{
                                                         width: '100%',
-                                                        marginRight: '5px'
+                                                        marginRight: '5px',
                                                     }}
                                                 />
 
@@ -695,6 +701,7 @@ export default function NewItemPage({ user }) {
                     open={showItemsDialog}
                     setOpen={setShowItemsDialog}
                     handleSelectedModify={handleSelectedModify}
+                    setSegmentedControlValue={setSegmentedControlValue}
                 />
             }
 
