@@ -38,6 +38,20 @@
 .button {
     background-color: darkgray !important;
     border-bottom: 8px rgba(0, 0, 0, 0.2) solid !important;
+    color: black !important;
+}
+
+.inactiveButton {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+}
+
+.activeButton {
+    cursor: pointer !important;
+}
+
+.activeButton:hover {
+    animation: pulseForButton 2s infinite;
 }
 
 .navbarSpacer {
@@ -73,6 +87,20 @@
     to {
         opacity: 0;
         transform: translateX(-50%) translateY(-10px);
+    }
+}
+
+@keyframes pulseForButton {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.02);
+    }
+
+    100% {
+        transform: scale(1);
     }
 }
 

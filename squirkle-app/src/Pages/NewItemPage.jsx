@@ -338,10 +338,10 @@ export default function NewItemPage({ user }) {
                         </SegmentedControl.Root>
 
                         <Text
-                            size="7"
+                            size="8"
                             style={{
                                 fontWeight: 'bold',
-                                marginBottom: "10px"
+                                marginBottom: "20px"
                             }}
                         >
                             {
@@ -638,17 +638,13 @@ export default function NewItemPage({ user }) {
                             segmentedControlValue === 'newItem'
                                 ?
                                     <Button
+                                        className={`button ${isValid ? 'activeButton' : 'inactiveButton'}`}
                                         disabled={!isValid}
                                         radius='none'
                                         size='3'
                                         style={{
                                             width: "100%",
-                                            color: 'black',
-                                            cursor: isValid ? 'pointer' : 'not-allowed',
-                                            backgroundColor: "darkgray",
                                             margin: "10px auto",
-                                            borderBottom: "8px rgba(0, 0, 0, 0.1) solid",
-                                            opacity: isValid ? 1 : 0.6
                                         }}
                                         onClick={handleNewItem}
                                     >
@@ -661,16 +657,13 @@ export default function NewItemPage({ user }) {
                                         }}
                                     >
                                         <Button
+                                            className={`button ${isValid ? 'activeButton' : 'inactiveButton'}`}
                                             disabled={!isValid}
                                             radius='none'
                                             size='3'
                                             style={{
                                                 width: "45%",
-                                                cursor: isValid ? 'pointer' : 'not-allowed',
-                                                backgroundColor: "darkgray",
                                                 margin: "10px auto",
-                                                borderBottom: "8px rgba(0, 0, 0, 0.1) solid",
-                                                opacity: isValid ? 1 : 0.6
                                             }}
                                             onClick={handleNewItem}
                                         >
@@ -678,15 +671,12 @@ export default function NewItemPage({ user }) {
                                         </Button>
 
                                         <Button
+                                            className='button activeButton'
                                             radius='none'
                                             size='3'
                                             style={{
-                                                color: 'black',
                                                 width: "45%",
-                                                cursor: 'pointer',
-                                                backgroundColor: "darkgray",
                                                 margin: "10px auto",
-                                                borderBottom: "8px rgba(0, 0, 0, 0.1) solid",
                                             }}
                                             onClick={() => setShowDeleteAlert(true)}
                                         >

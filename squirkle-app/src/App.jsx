@@ -191,6 +191,7 @@ function App() {
             <>
               <Route path='/' element={<HomePage user={user} />} />
               <Route path='/game' element={<GamePage user={user} signOut={signOut} />} />
+              <Route path='/admin/new-item' element={<NewItemPage user={user} />} />
               {user?.user && <Route path='/admin/new-item' element={<NewItemPage user={user} />} />}
             </>
           }

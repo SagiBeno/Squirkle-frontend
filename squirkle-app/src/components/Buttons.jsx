@@ -6,7 +6,7 @@ export function DisabledLoadingButton({ text }) {
     return (
         <Button
             radius="none"
-            className="button"
+            className="button inactiveButton"
             mb="3"
             size="3"
             disabled
@@ -25,7 +25,7 @@ export function DisabledLoadingButton({ text }) {
 export function EnterButton({ text, onClick }) {
     return (
         <Button
-            className="button"
+            className="button activeButton"
             mb="3"
             size="3"
             radius="none"
@@ -46,7 +46,7 @@ export function EnterButton({ text, onClick }) {
 export function DisabledButton({ text }) {
     return (
         <Button
-            className="button"
+            className="button inactiveButton"
             mb="3"
             size="3"
             radius="none"
@@ -65,7 +65,7 @@ export function DisabledButton({ text }) {
 export function OrButton({ text, onClick }) {
     return (
         <Button
-            className="button"
+            className="button activeButton"
             mb="3"
             mt="2"
             size="3"
@@ -87,7 +87,7 @@ export function OrButton({ text, onClick }) {
 export function GoogleLoginButton({ text, onClick }) {
     return (
         <Button
-            className="googleLoginButton button"
+            className="googleLoginButton button activeButton"
             mb="3"
             size="3"
             radius="none"
