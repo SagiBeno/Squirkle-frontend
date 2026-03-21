@@ -5,15 +5,15 @@ import { FaGoogle } from 'react-icons/fa'
 export function DisabledLoadingButton( { text } ) {
     return (
         <Button
-            variant="outline"
+            radius="none"
+            className="button"
             mb="3"
             size="3"
-            radius="full"
             disabled
             style={{
                 width: '100%',
                 fontFamily: `"Fredoka", sans-serif`,
-                fontSize: '1.1rem'
+                fontSize: '1.1rem',
             }}
         >
             <Spinner loading />
@@ -25,15 +25,16 @@ export function DisabledLoadingButton( { text } ) {
 export function EnterButton( { text, onClick } ) {
     return (
         <Button
-            variant="outline"
+            className="button"
             mb="3"
             size="3"
-            radius="full"
+            radius="none"
             style={{
                 cursor: 'pointer',
                 width: '100%',
                 fontFamily: `"Fredoka", sans-serif`,
-                fontSize: '1.1rem'
+                fontSize: '1.1rem',
+                color: 'black'
             }}
             onClick={onClick}
         >
@@ -45,10 +46,10 @@ export function EnterButton( { text, onClick } ) {
 export function DisabledButton( { text } ) {
     return (
         <Button
-            variant="outline"
+            className="button"
             mb="3"
             size="3"
-            radius="full"
+            radius="none"
             disabled
             style={{
                 width: '100%',
@@ -64,16 +65,17 @@ export function DisabledButton( { text } ) {
 export function OrButton( { text, onClick } ) {
     return (
         <Button
-            variant="outline"
+            className="button"
             mb="3"
             mt="2"
             size="3"
-            radius="full"
+            radius="none"
             style={{
                 width: '100%',
                 cursor: 'pointer',
                 fontFamily: `"Fredoka", sans-serif`,
-                fontSize: '1.1rem'
+                fontSize: '1.1rem',
+                color: 'black'
             }}
             onClick={onClick}
         >
@@ -85,16 +87,16 @@ export function OrButton( { text, onClick } ) {
 export function GoogleLoginButton( { text, onClick } ) {
     return (
         <Button
-            className="googleLoginButton"
-            variant="outline"
+            className="googleLoginButton button"
             mb="3"
             size="3"
-            radius="full"
+            radius="none"
             style={{
                 width: '100%',
                 cursor: 'pointer',
                 fontFamily: `"Fredoka", sans-serif`,
                 fontSize: '1.1rem',
+                color: 'black'
             }}
             onClick={onClick}
         >

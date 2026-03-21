@@ -35,6 +35,11 @@
     box-shadow: 0px 0px 8px 2px rgb(255, 148, 34);
 }
 
+.button {
+    background-color: darkgray !important;
+    border-bottom: 8px rgba(0, 0, 0, 0.2) solid !important;
+}
+
 .navbarSpacer {
     min-height: 60px;
 }
@@ -71,8 +76,9 @@
     }
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (max-width: 390px) {
     .googleLoginButton {
         font-size: 0.9rem !important;
+        padding: 25px !important;
     }
 }
