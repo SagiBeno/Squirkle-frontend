@@ -15,13 +15,13 @@ export default function NewItemPage({ user }) {
         type: "",
         description: "",
         imageUrl: "",
-        knockback: 0,
+        knockback: "0",
         stats: {
             circleDamage: 0,
             squareDamage: 0,
             triangleDamage: 0,
             critChance: 0,
-            critDamage: 1.0,
+            critDamage: "1.0",
             metadata: []
         }
     });
@@ -36,8 +36,10 @@ export default function NewItemPage({ user }) {
         itemData.name.trim().length > 0 &&
         itemData.type.trim().length > 0 &&
         itemData.description.trim().length > 0 &&
-        itemData.imageUrl.trim().length > 0 &&
-        itemData.stats?.metadata?.every(data => data.trim().length > 0)
+        itemData.imageUrl.length > 0 &&
+        itemData.stats?.metadata?.every(data => data.trim().length > 0) &&
+        itemData.knockback.length > 0 &&
+        itemData.stats.critDamage.length > 0;
 
     useEffect(() => {
 
@@ -51,13 +53,13 @@ export default function NewItemPage({ user }) {
                 type: "",
                 description: "",
                 imageUrl: "",
-                knockback: 0,
+                knockback: "0",
                 stats: {
                     circleDamage: 0,
                     squareDamage: 0,
                     triangleDamage: 0,
                     critChance: 0,
-                    critDamage: 1.0,
+                    critDamage: "1.0",
                     metadata: []
                 }
             })
@@ -103,9 +105,14 @@ export default function NewItemPage({ user }) {
         const reqBody = {
             userId: user.user.uid,
             id: itemId,
-            ...itemData
+            ...itemData,
+            knockback: Number(itemData.knockback),
+            stats: {
+                ...itemData.stats,
+                critDamage: Number(itemData.stats.critDamage)
+            }
         };
-
+        
         fetch('https://squirkle-backend.vercel.app/api/create-item', {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
@@ -157,48 +164,7 @@ export default function NewItemPage({ user }) {
 
     function updateNumberField(section, field, rawValue, min, max) {
 
-        let value = rawValue;
-
-        if (field === 'critDamage') {
-
-            if (value.includes(' ')) return;
-
-            if (value.charAt(0) === '.') return;
-
-            if (value.includes(".")) {
-
-                const valuesParts = value.split(".");
-
-                if (valuesParts.length !== 2) return;
-
-                const firstPart = Number(valuesParts[0]);
-                const secondPart = valuesParts[1];
-
-                if (!isNaN(firstPart) && (firstPart <= max && firstPart >= min)) value = firstPart;
-                else return;
-
-                if (!isNaN(secondPart) && secondPart.length < 3) value += "." + secondPart;
-                else return;
-
-                if (!isNaN(value) && (Number(value) >= min && Number(value) <= max)) {
-                    updateStatsField(field, value);
-                    return;
-                }
-                else return;
-            } else {
-                if (value === '') {
-                    updateStatsField(field, '');
-                    return;
-                }
-                if (!isNaN(value) && (Number(value) >= min && Number(value) <= max)) {
-                    updateStatsField(field, Number(value));
-                    return;
-                }
-                else return;
-            }
-        }
-
-        value = Number(rawValue);
+        const value = Number(rawValue);
 
         if (isNaN(value)) return;
         if (value < min || value > max) return;
@@ -222,6 +188,38 @@ export default function NewItemPage({ user }) {
                 [field]: value
             }
         }));
+    }
+
+    function handleDecimalChange(field, value, min, max) {
+
+        if (value === '' && field  === 'critDamage') {
+            updateStatsField(field, "");
+            return;
+        }
+
+        if (value === '' && field === 'knockback') {
+            updateItemField(field, '');
+            return;
+        }
+
+        const regex = /^\d+(\.\d{0,2})?$/;
+
+        if (!regex.test(value)) return;
+
+        const numberValue = Number(value);
+
+        if (isNaN(numberValue)) return;
+        if (numberValue < min || numberValue > max) return;
+
+        if (field === 'critDamage') {
+            updateStatsField(field, value);
+            return;
+        }
+
+        if (field === 'knockback') {
+            updateItemField(field, value);
+            return;
+        }
     }
 
     function addMetadata() {
@@ -552,7 +550,7 @@ export default function NewItemPage({ user }) {
                                     name="knockback"
                                     id="knockback"
                                     value={itemData.knockback}
-                                    onChange={(e) => { updateNumberField('root', 'knockback', e.target.value, 0, 1000) }}
+                                    onChange={(e) => { handleDecimalChange('knockback', e.target.value, 0, 10.99) }}
                                 />
 
                                 <AdminTextField
@@ -597,7 +595,7 @@ export default function NewItemPage({ user }) {
                                     name="critDamage"
                                     id="critDamage"
                                     value={itemData.stats.critDamage}
-                                    onChange={(e) => { updateNumberField('stats', 'critDamage', e.target.value, 1, 10.99) }}
+                                    onChange={(e) => { handleDecimalChange('critDamage', e.target.value, 1, 10.99) }}
                                 />
                             </Box>
 
