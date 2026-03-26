@@ -1,17 +1,22 @@
 import { useState } from "react";
-import { Flex, Box, SegmentedControl, Text } from '@radix-ui/themes';
+import { Flex, Box, SegmentedControl, Text, Button } from '@radix-ui/themes';
 import AdminTextField from "../components/AdminTextField";
 import AdminTextArea from "../components/AdminTextArea";
 import Sketch from '@uiw/react-color-sketch';
+import MetadataBlock from "../components/MetadataBlock";
 
 export default function CreateMetadata({ user }) {
 
     const [metadata, setMetadata] = useState({
         title: '',
         description: '',
-        backgroundColor: '',
-        textColor: ''
+        backgroundColor: '#FFFFFF',
+        textColor: '#000000'
     });
+
+    const isValid =
+        metadata.title.trim().length > 0 &&
+        metadata.description.trim().length > 0;
 
     const [segmentedControlValue, setSegmentedControlValue] = useState('newMetadata');
 
@@ -20,6 +25,33 @@ export default function CreateMetadata({ user }) {
             ...prev,
             [field]: value
         }));
+    }
+
+    function handleNewMetadata() {
+
+        if (user?.user.uid) {
+            const userId = user.user.uid;
+            const metadataID = metadata.title.toUpperCase().replace(' ', '_');
+            const reqBody = {
+                userId: userId,
+                id: metadataID,
+                ...metadata,
+                title: metadata.title.trim(),
+                description: metadata.description.trim()
+            };
+
+            fetch('https://squirkle-backend.vercel.app/api/create-metadata', {
+                method: 'POST',
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(reqBody)
+            })
+                .then(async (resJSON) => {
+                    const res = await resJSON.json();
+                    console.log(res);
+                })
+                .catch(console.warn);
+        }
+
     }
 
     return (
@@ -71,83 +103,112 @@ export default function CreateMetadata({ user }) {
 
                         <Flex
                             style={{
+                                flexDirection: 'row',
                                 justifyContent: 'space-around',
-                                textAlign: 'left',
-                                flexDirection: 'column',
+                                flexWrap: 'wrap'
                             }}
                         >
-                            <AdminTextField
-                                title="Metadata's title"
-                                placeholder="Metadata's title"
-                                name="metadataName"
-                                id="metadataName"
-                                value={metadata.title}
-                                onChange={(e) => {
-                                    let value = e.target.value;
-                                    value = value.charAt(0).toUpperCase() + value.substring(1);
-                                    updateMetadata('title', value);
-                                }}
-                            />
-
-                            <AdminTextArea
-                                title="Metadata's description"
-                                placeholder="Metadata's description"
-                                name='metadataDescription'
-                                id='metadataDescription'
-                                value={metadata.description}
-                                onChange={(e) => {
-                                    let value = e.target.value;
-                                    value = value.charAt(0).toUpperCase() + value.slice(1);
-                                    updateMetadata('description', value);
-                                }}
-                            />
-
-                            <Flex
+                            <Box
                                 style={{
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-around',
-                                    flexWrap: 'wrap'
+                                    width: '20%',
+                                    minWidth: '300px',
+                                    maxWidth: '600px',
                                 }}
                             >
-                                <Flex
-                                    style={{
-                                        minWidth: '300px',
-                                        maxWidth: '700px',
-                                        width: '50%',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        marginTop: '10px'
+                                <Text size="4" style={{ marginBottom: '20px' }}>Text color</Text>
+                                <Sketch
+                                    color={metadata.textColor}
+                                    onChange={(e) => {
+                                        let value = e.hex;
+                                        updateMetadata('textColor', value);
                                     }}
-                                >
-                                    <Text size="4" style={{ marginBottom: '10px' }}>Background color</Text>
-                                    <Sketch
-                                        onChange={(e) => {
-                                            let value = e.hex;
-                                            updateMetadata('backgoundColor', value);
-                                        }}
-                                    />
-                                </Flex>
+                                    style={{ margin: '0 auto 10px auto' }}
+                                />
+                            </Box>
 
-                                <Flex
-                                    style={{
-                                        minWidth: '300px',
-                                        maxWidth: '700px',
-                                        width: '50%',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        marginTop: '10px'
-                                    }}    
-                                >
-                                    <Text size="4" style={{ marginBottom: '10px' }}>Text color</Text>
-                                    <Sketch
-                                        onChange={(e) => {
-                                            let value = e.hex;
-                                            updateMetadata('textColor', value);
-                                        }}
-                                    />
-                                </Flex>
-                            </Flex>
+                            <Box
+                                style={{
+                                    width: '80%',
+                                    minWidth: '300px',
+                                    maxWidth: '600px',
+                                }}
+                            >
+                                <AdminTextField
+                                    title="Metadata's title"
+                                    placeholder="Metadata's title"
+                                    name="metadataName"
+                                    id="metadataName"
+                                    value={metadata.title}
+                                    onChange={(e) => {
+                                        let value = e.target.value;
+                                        value = value.charAt(0).toUpperCase() + value.substring(1);
+                                        updateMetadata('title', value);
+                                    }}
+                                />
+
+                                <AdminTextArea
+                                    title="Metadata's description"
+                                    placeholder="Metadata's description"
+                                    name='metadataDescription'
+                                    id='metadataDescription'
+                                    value={metadata.description}
+                                    onChange={(e) => {
+                                        let value = e.target.value;
+                                        value = value.charAt(0).toUpperCase() + value.slice(1);
+                                        updateMetadata('description', value);
+                                    }}
+                                />
+                            </Box>
                         </Flex>
+
+                        <Flex
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-around',
+                                flexWrap: 'wrap'
+                            }}
+                        >
+                            <Box
+                                style={{
+                                    width: '20%',
+                                    minWidth: '300px',
+                                    maxWidth: '600px',
+                                }}
+                            >
+                                <Text size="4" style={{ marginBottom: '20px' }}>Backgorund color</Text>
+                                <Sketch
+                                    color={metadata.backgroundColor}
+                                    onChange={(e) => {
+                                        let value = e.hex;
+                                        updateMetadata('backgroundColor', value);
+                                    }}
+                                    style={{ margin: '0 auto 10px auto' }}
+                                />
+                            </Box>
+                            <Box
+                                style={{
+                                    width: '80%',
+                                    minWidth: '300px',
+                                    maxWidth: '600px',
+                                }}
+                            >
+                                <Text size="4">Test</Text>
+                                <MetadataBlock meta={metadata} />
+                            </Box>
+                        </Flex>
+                        <Button
+                            className={`button ${isValid ? 'activeButton' : 'inactiveButton'}`}
+                            disabled={!isValid}
+                            radius='none'
+                            size='3'
+                            style={{
+                                width: "100%",
+                                margin: "10px auto",
+                            }}
+                            onClick={handleNewMetadata}
+                        >
+                            Submit
+                        </Button>
                     </Flex>
                 </Flex>
             </Flex>
