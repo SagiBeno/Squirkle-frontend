@@ -81,7 +81,7 @@ export default function NewItemPage({ user }) {
             })
                 .then(async (resJSON) => {
                     const res = await resJSON.json();
-                    setItemData(prev => ({ ...prev, imageUrl: res.url }));
+                    setItemData(prev => ({ ...prev, imageUrl: res.url, imageName: file.name }));
                 })
                 .catch(console.warn);
         }
@@ -101,6 +101,7 @@ export default function NewItemPage({ user }) {
     }
 
     function handleNewItem() {
+        
         const itemId = itemData.name.toUpperCase().replace(' ', '_');
         const reqBody = {
             userId: user.user.uid,
@@ -151,14 +152,26 @@ export default function NewItemPage({ user }) {
 
     function handleSelectedModify(item) {
 
-        setItemID(item.id)
-
         fetch(`https://squirkle-backend.vercel.app/api/get-item/${item.id}`)
             .then(async (resJSON) => {
                 const res = await resJSON.json();
-                console.log(res)
-                setItemData(res?.item);
-                setShowItemsDialog(false);
+
+                if (res?.item) {
+                    const modifyItemData = {
+                        itemID: item.id,
+                        ...res.item,
+                        knockback: res.item.knockback.toString(),
+                        stats: {
+                            ...res.item.stats,
+                            critDamage: res.item.stats.critDamage.toString()
+                        }
+                    }
+
+                    setFile({ name: modifyItemData.imageName });
+                    setItemData(modifyItemData);
+                    setShowItemsDialog(false);
+                }
+                
             })
             .catch(console.warn);
     }
@@ -300,6 +313,30 @@ export default function NewItemPage({ user }) {
                 })
                 .catch(console.warn);
         }
+    }
+
+    function handleModifyItem () {
+
+        const reqBody = {
+            userId: user.user.uid,
+            ...itemData,
+            knockback: Number(itemData.knockback),
+            stats: {
+                ...itemData.stats,
+                critDamage: Number(itemData.stats.critDamage)
+            }
+        };
+
+        fetch(`https://squirkle-backend.vercel.app/api/update-item/${reqBody.itemID}`, {
+            method: "PATCH",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(reqBody)
+        })
+            .then( async (resJSON) => {
+                const res = await resJSON.json();
+                console.log(res);
+            })
+            .catch(console.warn);
     }
 
     return (
@@ -671,7 +708,7 @@ export default function NewItemPage({ user }) {
                                                 width: "45%",
                                                 margin: "10px auto",
                                             }}
-                                            onClick={handleNewItem}
+                                            onClick={handleModifyItem}
                                         >
                                             Submit
                                         </Button>
