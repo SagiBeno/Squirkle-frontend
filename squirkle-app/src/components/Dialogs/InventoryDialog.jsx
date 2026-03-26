@@ -1,6 +1,8 @@
 import { Box, Dialog, Flex } from '@radix-ui/themes'
 import React from 'react'
 import ItemSlot from '../ItemSlot'
+import ItemDetailsDialog from './ItemDetailsDialog'
+import { useState } from 'react'
 
 export default function InventoryDialog() {
 
@@ -23,39 +25,23 @@ export default function InventoryDialog() {
         }
     }
 
+    const [ selectedItem, setSelectedItem ] = useState(null)
+
     return (
         <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: "auto" }}>
             <Dialog.Title style={{ marginTop: 15, color: "white" }}>INVENTORY</Dialog.Title>
 
-            <Flex wrap="wrap" justify="start" gap="2">
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-                <ItemSlot itemData={testData.item} />
-            </Flex>
+            <Dialog.Root>
+                <Flex wrap="wrap" justify="start" gap="2">
+                    <ItemSlot itemData={testData.item} onClick={setSelectedItem} />
+                    <ItemSlot itemData={testData.item} onClick={setSelectedItem} />
+                    <ItemSlot itemData={testData.item} onClick={setSelectedItem} />
+                    <ItemSlot itemData={testData.item} onClick={setSelectedItem} />
+                    <ItemSlot itemData={testData.item} onClick={setSelectedItem} />
+                    <ItemSlot itemData={testData.item} onClick={setSelectedItem} />
+                </Flex>
+                <ItemDetailsDialog itemData={selectedItem}/>
+            </Dialog.Root>
 
         </Dialog.Content>
     )
