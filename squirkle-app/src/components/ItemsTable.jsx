@@ -2,7 +2,7 @@ import { Table, Avatar, Code, Flex, IconButton } from '@radix-ui/themes';
 import { FaEdit } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 
-export default function ItemsPage( { items, handleSelectedModify } ) {
+export default function ItemsTable( { items, handleSelectedModify } ) {
 
     return (
         <Flex

@@ -13,6 +13,7 @@ import AppToast from './components/AppToast';
 import UsernameInputDialog from './components/Dialogs/UsernameInputDialog';
 import NewItemPage from './Pages/NewItemPage';
 import GamePage from './Pages/GamePage';
+import CreateMetadata from './Pages/CreateMetadata';
 
 function App() {
   const firebaseApp = initializeApp({
@@ -192,6 +193,7 @@ function App() {
               <Route path='/' element={<HomePage user={user} />} />
               <Route path='/game' element={<GamePage user={user} signOut={signOut} />} />
               {user?.user && <Route path='/admin/new-item' element={<NewItemPage user={user} />} />}
+              {user?.user && <Route path='/admin/modify-metadata' element={<CreateMetadata user={user} />} />}
             </>
           }
 

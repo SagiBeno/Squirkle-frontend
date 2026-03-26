@@ -50,7 +50,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                         padding: '20px',
                         borderRadius: '20px',
                         textAlign: 'center',
-                        color: 'white'
+                        color: 'white',
                     }}
                 >
                     <Text
@@ -217,7 +217,11 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                         }
                     </Flex>
 
-                    <Box>
+                    <Box
+                        style={{
+                            marginTop: '10px'
+                        }}
+                    >
                         {
                             validEmailFormat && formData.email && formData.password.length >= 8 && formData.password === formData.confirmPassword
                                 ?
