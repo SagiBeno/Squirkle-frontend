@@ -15,17 +15,22 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
 
     return (
         <Flex className="mainContainer">
+            <Box style={{minHeight: '10px'}}/>
+
             <Flex className="contentContainer">
+
                 <Flex
                     style={{
                         margin: 'auto',
                         width: '80%',
                         maxWidth: '720px',
                         flexDirection: 'column',
-                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                        padding: '10px',
+                        background: 'linear-gradient(180deg, #1e1e28, #21212c)',
+                        boxShadow: '0px 0px 10px 2px #bababa',
+                        padding: '20px',
                         borderRadius: '20px',
                         textAlign: 'center',
+                        color: 'white'
                     }}
                 >
                     <Text
@@ -43,9 +48,10 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
                             textAlign: 'left'
                         }}
                     >
-                        <Text as='label' size='4' htmlFor="email" style={{ cursor: 'pointer' }}>Email</Text>
+                        <Text as='label' size='4' htmlFor="email" style={{ cursor: 'pointer', marginBottom: '5px' }}>Email</Text>
                         <TextField.Root
-                            radius="full"
+                            className="textField"
+                            radius="none"
                             placeholder="example@gmail.com"
                             size="3"
                             name="email"
@@ -57,11 +63,11 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
                                 else setFormData({ ...formData, email: e.target.value })
                             }}
                             style={{
-                                fontFamily: `"Fredoka", sans-serif`,
+                                marginBottom: '12px',
                             }}
                         />
 
-                        <Text as='label' size='4' htmlFor="password" style={{ cursor: 'pointer', marginTop: '10px' }}>Password</Text>
+                        <Text as='label' size='4' htmlFor="password" style={{ cursor: 'pointer', marginTop: '10px', marginBottom: '5px' }}>Password</Text>
                         <PasswordInput
                             inputName="password"
                             value={formData.password}
@@ -69,13 +75,12 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
                                 if (e.target.value.includes(' ')) return;
                                 else setFormData({ ...formData, password: e.target.value })
                             }}
-                            style={{
-                                fontFamily: `"Fredoka", sans-serif`,
-                            }}
                         />
                     </Flex>
 
-                    <Box mt='2'>
+                    <Box style={{
+                        marginTop: '15px'
+                    }}>
                         {
                             formData.email.length > 0 && formData.password.length >= 8
                                 ?
@@ -100,6 +105,7 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
 
                 </Flex>
             </Flex>
+            <Box style={{minHeight: '10px'}}/>
         </Flex>
     )
 }

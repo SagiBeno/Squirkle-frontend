@@ -6,7 +6,7 @@ import { FaCircle, FaSquare } from "react-icons/fa";
 import { RiTriangleFill } from "react-icons/ri";
 import { TbSquarePercentage } from "react-icons/tb";
 import { GiPunch } from "react-icons/gi";
-import MetadataBlock from '../MetaDataBlock';
+import MetadataBlock from '../MetadataBlock';
 import { useEffect } from 'react';
 
 export default function ItemDetailsDialog({ itemData }) {

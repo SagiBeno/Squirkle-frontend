@@ -12,7 +12,7 @@ export default function Separator( { text } ) {
             <Box
                 style={{
                     height: 1,
-                    backgroundColor: "gray",
+                    backgroundColor: "darkgray",
                 }}
             />
 
@@ -24,9 +24,9 @@ export default function Separator( { text } ) {
                     top: "50%",
                     left: "50%",
                     transform: "translate(-50%, -50%)",
-                    background: "white",
+                    background: "#21212c",
                     padding: "0 8px",
-                    color: "gray",
+                    color: "white",
                     fontFamily: `"Fredoka", sans-serif`,
                 }}
             >

@@ -11,7 +11,8 @@ export default function PasswordInput( { inputName, value, onChange } ) {
 
     return (
         <TextField.Root
-            radius="full"
+            className="textField"
+            radius="none"
             placeholder="Password"
             size="3"
             name={inputName}
@@ -26,6 +27,7 @@ export default function PasswordInput( { inputName, value, onChange } ) {
                 <IconButton
                     style={{
                         cursor: "pointer",
+                        color: 'black'
                     }}
                     variant="ghost"
                     size="2"

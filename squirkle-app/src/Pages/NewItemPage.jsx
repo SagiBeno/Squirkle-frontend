@@ -1,46 +1,71 @@
-import { Box, Flex, Card, Text, TextField, TextArea, Table, IconButton, Button, Select } from '@radix-ui/themes';
+import { Box, Flex, Card, Text, TextField, TextArea, Table, IconButton, Button, Select, SegmentedControl } from '@radix-ui/themes';
 import Navbar from '../components/Navbar';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import Dropzone, { useDropzone } from "react-dropzone";
 import { PlusIcon, MinusIcon } from '@radix-ui/react-icons';
 import AdminTextField from '../components/AdminTextField';
 import { MdDelete } from "react-icons/md";
-import { RiContactsBookLine } from 'react-icons/ri';
+import AllItemsDialog from '../components/Dialogs/AllItemsDialog';
+import DeleteAlert from '../components/DeleteAlert';
 
 export default function NewItemPage({ user }) {
-//ITEM id: NAME_NAME
+
     const [itemData, setItemData] = useState({
         name: "",
-        typeOfItem: "",
+        type: "",
         description: "",
         imageUrl: "",
-        knockback: 0,
+        knockback: "0",
         stats: {
             circleDamage: 0,
             squareDamage: 0,
             triangleDamage: 0,
             critChance: 0,
-            critDamage: 1.0,
+            critDamage: "1.0",
             metadata: []
         }
     });
 
+    const [segmentedControlValue, setSegmentedControlValue] = useState('newItem');
     const [file, setFile] = useState();
+    const [showItemsDialog, setShowItemsDialog] = useState(false);
+    const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+    const [itemID, setItemID] = useState('');
 
-    const [validData, setValidData] = useState(false);
+    const isValid =
+        itemData.name.trim().length > 0 &&
+        itemData.type.trim().length > 0 &&
+        itemData.description.trim().length > 0 &&
+        itemData.imageUrl.length > 0 &&
+        itemData.stats?.metadata?.every(data => data.trim().length > 0) &&
+        itemData.knockback.length > 0 &&
+        itemData.stats.critDamage.length > 0;
 
-    function isValidData(data) {
+    useEffect(() => {
 
-        if (data.name.length === 0) return setValidData(false);
-        if (data.typeOfItem.length === 0) return setValidData(false);
-        if (data.description.length === 0) return setValidData(false);
-        if (data.imageUrl.length === 0) return setValidData(false);
+        if (segmentedControlValue === 'modifyItem') {
+            setShowItemsDialog(true);
+        }
 
-        if (data.stats.metadata.length === 0) return setValidData(true);
-        else if (data.stats.metadata.filter(element => element.length === 0).length > 0) return setValidData(false);
+        else {
+            setItemData({
+                name: "",
+                type: "",
+                description: "",
+                imageUrl: "",
+                knockback: "0",
+                stats: {
+                    circleDamage: 0,
+                    squareDamage: 0,
+                    triangleDamage: 0,
+                    critChance: 0,
+                    critDamage: "1.0",
+                    metadata: []
+                }
+            })
+        }
 
-        return setValidData(true);
-    }
+    }, [segmentedControlValue]);
 
     function uploadImage(file) {
 
@@ -80,23 +105,23 @@ export default function NewItemPage({ user }) {
         const reqBody = {
             userId: user.user.uid,
             id: itemId,
-            name: itemData.name,
-            description: itemData.description, 
-            type: itemData.typeOfItem, 
-            knockback: itemData.knockback,
-            imageUrl: itemData.imageUrl,
-            stats: itemData.stats
+            ...itemData,
+            knockback: Number(itemData.knockback),
+            stats: {
+                ...itemData.stats,
+                critDamage: Number(itemData.stats.critDamage)
+            }
         };
         
         fetch('https://squirkle-backend.vercel.app/api/create-item', {
             method: 'POST',
-            headers: {"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(reqBody)
         })
             .then(async resJSON => {
                 const res = await resJSON.json();
                 console.log(res)
-            } )
+            })
             .catch(console.warn);
     }
 
@@ -117,396 +142,579 @@ export default function NewItemPage({ user }) {
         maxFiles: 1,
     });
 
+    function updateItemField(field, value) {
+        setItemData(prev => ({
+            ...prev,
+            [field]: value
+        }));
+    }
+
+    function handleSelectedModify(item) {
+
+        setItemID(item.id)
+
+        fetch(`https://squirkle-backend.vercel.app/api/get-item/${item.id}`)
+            .then(async (resJSON) => {
+                const res = await resJSON.json();
+                console.log(res)
+                setItemData(res?.item);
+                setShowItemsDialog(false);
+            })
+            .catch(console.warn);
+    }
+
+    function updateNumberField(section, field, rawValue, min, max) {
+
+        const value = Number(rawValue);
+
+        if (isNaN(value)) return;
+        if (value < min || value > max) return;
+
+        if (section === 'root') {
+            updateItemField(field, value);
+            return;
+        }
+        else {
+            updateStatsField(field, value);
+            return;
+        }
+    }
+
+    function updateStatsField(field, value) {
+
+        setItemData(prev => ({
+            ...prev,
+            stats: {
+                ...prev.stats,
+                [field]: value
+            }
+        }));
+    }
+
+    function handleDecimalChange(field, value, min, max) {
+
+        if (value === '' && field  === 'critDamage') {
+            updateStatsField(field, "");
+            return;
+        }
+
+        if (value === '' && field === 'knockback') {
+            updateItemField(field, '');
+            return;
+        }
+
+        const regex = /^\d+(\.\d{0,2})?$/;
+
+        if (!regex.test(value)) return;
+
+        const numberValue = Number(value);
+
+        if (isNaN(numberValue)) return;
+        if (numberValue < min || numberValue > max) return;
+
+        if (field === 'critDamage') {
+            updateStatsField(field, value);
+            return;
+        }
+
+        if (field === 'knockback') {
+            updateItemField(field, value);
+            return;
+        }
+    }
+
+    function addMetadata() {
+        setItemData(prev => ({
+            ...prev,
+            stats: {
+                ...prev.stats,
+                metadata: [...prev.stats.metadata, '']
+            }
+        }));
+    }
+
+    function updateMetadata(index, value) {
+        setItemData(prev => {
+            const newMetadata = [...prev.stats.metadata];
+            newMetadata[index] = value;
+
+            return {
+                ...prev,
+                stats: {
+                    ...prev.stats,
+                    metadata: newMetadata
+                }
+            }
+        });
+    }
+
+    function removeMetadata(index) {
+
+        setItemData(prev => {
+            const newMetadata = [...prev.stats.metadata];
+            newMetadata.splice(index, 1);
+
+            return {
+                ...prev,
+                stats: {
+                    ...prev.stats,
+                    metadata: newMetadata
+                }
+            }
+        });
+    }
+
+    function handleDeleteItem() {
+        
+        if (user?.user?.uid) {
+            const reqBody = { userId: user.user.uid };
+            fetch(`https://squirkle-backend.vercel.app/api/delete-item/${itemID}`, {
+                method: 'DELETE',
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(reqBody)
+            })
+                .then( async (resJSON) => {
+                    const res = await resJSON.json();
+
+                    if (resJSON.status === 200) {
+                        setItemData({
+                            name: "",
+                            type: "",
+                            description: "",
+                            imageUrl: "",
+                            knockback: "0",
+                            stats: {
+                                circleDamage: 0,
+                                squareDamage: 0,
+                                triangleDamage: 0,
+                                critChance: 0,
+                                critDamage: "1.0",
+                                metadata: []
+                            }
+                        });
+
+                        setShowDeleteAlert(false);
+                    }
+
+                    console.log(res.message);
+                })
+                .catch(console.warn);
+        }
+    }
+
     return (
-        <Flex className='mainContainer'>
+        <>
+            <Flex className='mainContainer'>
 
-            <Box className='navbarSpacer' />
+                <Box className='navbarSpacer' />
 
-            <Flex className='contentContainer'>
-                <Flex
-                    style={{
-                        margin: '20px',
-                        width: '95%',
-                        textAlign: 'center',
-                        flexDirection: 'column',
-                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                        padding: '10px',
-                        borderRadius: '20px',
-                    }}
-                >
-                    <Text
-                        size="7"
-                        style={{
-                            fontWeight: 'bold'
-                        }}
-                    >
-                        Create new item
-                    </Text>
-
+                <Flex className='contentContainer'>
                     <Flex
                         style={{
-                            justifyContent: 'space-around',
+                            margin: '20px',
+                            width: '95%',
                             textAlign: 'center',
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
+                            flexDirection: 'column',
+                            background: 'linear-gradient(180deg, #1e1e28, #21212c)',
+                            boxShadow: '0px 0px 10px 2px #bababa',
+                            padding: '20px',
+                            borderRadius: '20px',
+                            color: 'white',
                         }}
                     >
-                        <Box
+
+                        <SegmentedControl.Root
+                            radius="none"
+                            size="2"
+                            onValueChange={(value) => { setSegmentedControlValue(value) }}
+                            value={segmentedControlValue}
                             style={{
-                                textAlign: 'left',
-                                minWidth: '200px',
-                                maxWidth: '600px',
-                                width: '45%',
+                                backgroundColor: '#bababa',
+                                padding: 0,
+                                marginBottom: '10px'
                             }}
                         >
-                            <Flex
+                            <SegmentedControl.Item value="newItem">New item</SegmentedControl.Item>
+                            <SegmentedControl.Item value="modifyItem">Modify item</SegmentedControl.Item>
+                        </SegmentedControl.Root>
+
+                        <Text
+                            size="8"
+                            style={{
+                                fontWeight: 'bold',
+                                marginBottom: "20px"
+                            }}
+                        >
+                            {
+                                segmentedControlValue === 'newItem' ? 'Create new item' : 'Modify item'
+                            }
+                        </Text>
+
+                        <Flex
+                            style={{
+                                justifyContent: 'space-around',
+                                textAlign: 'center',
+                                flexDirection: 'row',
+                                flexWrap: 'wrap',
+                            }}
+                        >
+                            <Box
                                 style={{
-                                    justifyContent: "row",
-                                    alignItems: "center"
+                                    textAlign: 'left',
+                                    minWidth: '200px',
+                                    maxWidth: '600px',
+                                    width: '45%',
                                 }}
                             >
-                                <Text
-                                    style={{
-                                        marginRight: "5px"
-                                    }}
-                                >
-                                    Type of item
-                                </Text>
-
-                                <Select.Root
-                                    onValueChange={(value) => {
-                                        setItemData(prev => ({ ...prev, typeOfItem: value }));
-                                        isValidData({ ...itemData, typeOfItem: value });
-                                    }}
-                                    value={itemData.typeOfItem}
-                                >
-                                    <Select.Trigger />
-                                    <Select.Content>
-                                        <Select.Group>
-                                            <Select.Label>Type of item</Select.Label>
-                                            <Select.Item value="Weapon">Weapon</Select.Item>
-                                            <Select.Item value="Armor">Armor</Select.Item>
-                                        </Select.Group>
-                                    </Select.Content>
-                                </Select.Root>
-                            </Flex>
-
-                            <AdminTextField
-                                title="Item's name"
-                                placeholder="Item's name"
-                                name="itemName"
-                                id="itemName"
-                                value={itemData.name}
-                                onChange={(e) => {
-                                    let value = e.target.value;
-                                    value = value.charAt(0).toUpperCase() + value.substring(1);
-                                    setItemData(prev => ({ ...prev, name: value }));
-                                    isValidData({ ...itemData, name: value });
-                                }}
-                            />
-
-                            <Text
-                                as='label'
-                                htmlFor='itemDescription'
-                                style={{ cursor: 'pointer' }}
-                            >
-                                Item's description
-                            </Text>
-
-                            <TextArea
-                                radius="none"
-                                placeholder="Item's description"
-                                size="3"
-                                name="itemDescription"
-                                id="itemDescription"
-                                mt="2"
-                                mb="3"
-                                value={itemData.description}
-                                required
-                                resize='vertical'
-                                onChange={(e) => {
-                                    let value = e.target.value;
-                                    value = value.charAt(0).toUpperCase() + value.slice(1);
-                                    setItemData(prev => ({ ...prev, description: value }));
-                                    isValidData({ ...itemData, description: value });
-                                }}
-                                style={{
-                                    maxHeight: '500px'
-                                }}
-                            />
-
-                            <Box>
                                 <Flex
                                     style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between'
-
+                                        justifyContent: "row",
+                                        alignItems: "center",
+                                        marginBottom: '12px'
                                     }}
                                 >
-                                    <Text>
-                                        Item's metadata
-                                    </Text>
-                                    <IconButton
-                                        style={{ cursor: 'pointer' }}
-                                        onClick={() => {
-                                            setItemData(prev => ({ ...prev, stats: { ...prev.stats, metadata: [...prev.stats.metadata, ''] } }));
-                                            isValidData({ ...itemData, stats: { ...itemData.stats, metadata: [...itemData.stats.metadata, ''] } });
+                                    <Text
+                                        size='4'
+                                        style={{
+                                            marginRight: "5px"
                                         }}
                                     >
-                                        <PlusIcon />
-                                    </IconButton>
+                                        Type of item
+                                    </Text>
+
+                                    <Select.Root
+                                        onValueChange={(value) => updateItemField('type', value)}
+                                        value={itemData.type}
+                                    >
+                                        <Select.Trigger />
+                                        <Select.Content 
+                                            color='gold'
+                                            style={{
+                                                borderRadius: 0,
+                                                background: '#bababa',
+                                                border: '3px solid #d5d5d5',
+                                                boxShadow: '0px 0px 8px 2px rgb(255, 148, 34)'
+                                            }}
+                                        >
+                                            <Select.Group>
+                                                <Select.Label>Type of item</Select.Label>
+                                                <Select.Item value="Weapon">Weapon</Select.Item>
+                                                <Select.Item value="Armor">Armor</Select.Item>
+                                            </Select.Group>
+                                        </Select.Content>
+                                    </Select.Root>
                                 </Flex>
 
-                                {
-                                    itemData.stats.metadata.map((data, idx) => (
-                                        <Flex
-                                            style={{
-                                                flexDirection: 'row',
-                                                alignItems: 'center',
-                                                justifyContent: 'space-between'
+                                <AdminTextField
+                                    title="Item's name"
+                                    placeholder="Item's name"
+                                    name="itemName"
+                                    id="itemName"
+                                    value={itemData.name}
+                                    onChange={(e) => {
+                                        let value = e.target.value;
+                                        value = value.charAt(0).toUpperCase() + value.substring(1);
+                                        updateItemField('name', value);
+                                    }}
+                                />
+
+                                <Text
+                                    size='4'
+                                    as='label'
+                                    htmlFor='itemDescription'
+                                    style={{ cursor: 'pointer', marginTop: '10px', marginBottom: '5px' }}
+                                >
+                                    Item's description
+                                </Text>
+
+                                <TextArea
+                                    className='textArea'
+                                    radius="none"
+                                    placeholder="Item's description"
+                                    size="3"
+                                    name="itemDescription"
+                                    id="itemDescription"
+                                    mt="2"
+                                    mb="3"
+                                    value={itemData.description}
+                                    required
+                                    resize='vertical'
+                                    onChange={(e) => {
+                                        let value = e.target.value;
+                                        value = value.charAt(0).toUpperCase() + value.slice(1);
+                                        updateItemField('description', value);
+                                    }}
+                                    style={{
+                                        maxHeight: '500px',
+                                    
+                                    }}
+                                />
+
+                                <Box>
+                                    <Flex
+                                        style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                            marginTop: '10px',
+                                            marginBottom: '12px'
+
+                                        }}
+                                    >
+                                        <Text size='4'>
+                                            Item's metadata
+                                        </Text>
+                                        <IconButton
+                                            style={{ 
+                                                cursor: 'pointer',
+                                                color: 'black',
+                                                borderBottom: "8px rgba(0, 0, 0, 0.2) solid",
+                                                backgroundColor: "darkgray",
                                             }}
-                                            key={idx}
+                                            onClick={addMetadata}
                                         >
-                                            <TextField.Root
-                                                radius="none"
-                                                size="3"
-                                                mb="1"
-                                                value={itemData.stats.metadata[idx]}
-                                                required
-                                                onChange={(e) => {
-                                                    const newMetadata = [...itemData.stats.metadata];
-                                                    newMetadata[idx] = e.target.value.trim();
+                                            <PlusIcon />
+                                        </IconButton>
+                                    </Flex>
 
-                                                    setItemData(prev => ({ ...prev, stats: { ...prev.stats, metadata: newMetadata}}));
-
-                                                    isValidData({...itemData, stats: {...itemData.stats, metadata: newMetadata}});
-                                                }}
-                                                placeholder='Matedata'
+                                    {
+                                        itemData.stats.metadata?.map((data, idx) => (
+                                            <Flex
                                                 style={{
-                                                    width: '100%',
-                                                    marginRight: '5px'
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'space-between',
+                                                    marginBottom: '15px'
                                                 }}
-                                            />
-
-                                            <IconButton
-                                                style={{ cursor: 'pointer' }}
-                                                onClick={() => {
-                                                    const newMetadata = itemData.stats.metadata.filter((_, i) => i !== idx);
-
-                                                    setItemData(prev => ({...prev, stats: { ...prev.stats, metadata: newMetadata}}));
-
-                                                    isValidData({...itemData, stats: {...itemData.stats, metadata: newMetadata}});
-                                                }}
+                                                key={idx}
                                             >
-                                                <MinusIcon />
-                                            </IconButton>
-                                        </Flex>
-                                    ))
+                                                <TextField.Root
+                                                    className='textField'
+                                                    radius="none"
+                                                    size="3"
+                                                    mb="1"
+                                                    value={data}
+                                                    required
+                                                    onChange={(e) => updateMetadata(idx, e.target.value.trim())}
+
+                                                    placeholder='Matedata'
+                                                    style={{
+                                                        width: '100%',
+                                                        marginRight: '5px',
+                                                    }}
+                                                />
+
+                                                <IconButton
+                                                    style={{ 
+                                                        cursor: 'pointer' ,
+                                                        borderBottom: "8px rgba(0, 0, 0, 0.2) solid",
+                                                        backgroundColor: "darkgray",
+                                                        color: 'black',
+                                                    }}
+                                                    onClick={() => removeMetadata(idx)}
+                                                >
+                                                    <MinusIcon />
+                                                </IconButton>
+                                            </Flex>
+                                        ))
+                                    }
+                                </Box>
+
+                                <Text
+                                    size='4'
+                                    as='label'
+                                    htmlFor='itemImage'
+                                    style={{ cursor: 'pointer', marginBottom: '10px' }}
+                                >
+                                    Item's image
+                                </Text>
+
+                                <Box
+                                    {...getRootProps({ className: 'dropzone' })}
+                                    style={{
+                                        backgroundColor: '#bababa',
+                                        borderBottom: '6px solid #626262',
+                                        padding: '10px',
+                                        textAlign: 'center',
+                                        cursor: 'pointer',
+                                        margin: '10px 0px',
+                                        color: 'black'
+                                    }}
+                                >
+                                    <input {...getInputProps()} name='itemImage' id='itemImage' />
+                                    <Text>Drag and drop image file here, or click to select file</Text>
+                                </Box>
+
+                                {
+                                    itemData.imageUrl?.length > 0 &&
+                                    <Flex
+                                        style={{
+                                            width: "100%",
+                                            height: "200px",
+                                            marginBottom: "10px",
+                                            backgroundImage: `url(${itemData.imageUrl})`,
+                                            backgroundRepeat: "no-repeat",
+                                            backgroundSize: "cover",
+                                            backgroundPosition: "center",
+                                            justifyContent: "end"
+                                        }}
+                                    >
+                                        <IconButton
+                                            radius='none'
+                                            color="red"
+                                            style={{
+                                                margin: "5px",
+                                                cursor: "pointer",
+                                                borderBottom: "4px rgba(0, 0, 0, 0.1) solid"
+                                            }}
+                                            onClick={() => deleteImage()}
+                                        >
+                                            <MdDelete />
+                                        </IconButton>
+                                    </Flex>
                                 }
                             </Box>
 
-                            <Text
-                                as='label'
-                                htmlFor='itemImage'
-                                style={{ cursor: 'pointer', marginBottom: '10px' }}
-                            >
-                                Item's image
-                            </Text>
-
                             <Box
-                                {...getRootProps({ className: 'dropzone' })}
                                 style={{
-                                    backgroundColor: 'white',
-                                    borderRadius: '10px',
-                                    padding: '10px',
-                                    textAlign: 'center',
-                                    cursor: 'pointer',
-                                    marginBottom: '10px'
+                                    textAlign: 'left',
+                                    minWidth: '200px',
+                                    width: '45%',
+                                    maxWidth: '600px'
                                 }}
                             >
-                                <input {...getInputProps()} name='itemImage' id='itemImage' />
-                                <Text>Drag and drop image file here, or click to select file</Text>
+                                <AdminTextField
+                                    title="Knockback"
+                                    placeholder="Knockback"
+                                    name="knockback"
+                                    id="knockback"
+                                    value={itemData.knockback}
+                                    onChange={(e) => { handleDecimalChange('knockback', e.target.value, 0, 10.99) }}
+                                />
+
+                                <AdminTextField
+                                    title="Circle damage"
+                                    placeholder="Circle damage"
+                                    name="circleDamage"
+                                    id="circleDamage"
+                                    value={itemData.stats.circleDamage}
+                                    onChange={(e) => { updateNumberField('stats', 'circleDamage', e.target.value, 0, 1000) }}
+                                />
+
+                                <AdminTextField
+                                    title="Square damage"
+                                    placeholder="Square damage"
+                                    name="squareDamage"
+                                    id="squareDamage"
+                                    value={itemData.stats.squareDamage}
+                                    onChange={(e) => { updateNumberField('stats', 'squareDamage', e.target.value, 0, 1000) }}
+                                />
+
+                                <AdminTextField
+                                    title="Triangle damage"
+                                    placeholder="Triangle damage"
+                                    name="triangleDamage"
+                                    id="triangleDamage"
+                                    value={itemData.stats.triangleDamage}
+                                    onChange={(e) => { updateNumberField('stats', 'triangleDamage', e.target.value, 0, 1000) }}
+                                />
+
+                                <AdminTextField
+                                    title="Crit chance"
+                                    placeholder="Crit chance"
+                                    name="critChance"
+                                    id="critChance"
+                                    value={itemData.stats.critChance}
+                                    onChange={(e) => { updateNumberField('stats', 'critChance', e.target.value, 0, 100) }}
+                                />
+
+                                <AdminTextField
+                                    title="Crit damage"
+                                    placeholder="Crit damage"
+                                    name="critDamage"
+                                    id="critDamage"
+                                    value={itemData.stats.critDamage}
+                                    onChange={(e) => { handleDecimalChange('critDamage', e.target.value, 1, 10.99) }}
+                                />
                             </Box>
 
-                            {
-                                itemData.imageUrl?.length > 0 &&
-                                <Flex
-                                    style={{
-                                        width: "100%",
-                                        height: "200px",
-                                        marginBottom: "10px",
-                                        backgroundImage: `url(${itemData.imageUrl})`,
-                                        backgroundRepeat: "no-repeat",
-                                        backgroundSize: "cover",
-                                        backgroundPosition: "center",
-                                        justifyContent: "end"
-                                    }}
-                                >
-                                    <IconButton
+                        </Flex>
+
+                        {
+                            segmentedControlValue === 'newItem'
+                                ?
+                                    <Button
+                                        className={`button ${isValid ? 'activeButton' : 'inactiveButton'}`}
+                                        disabled={!isValid}
                                         radius='none'
-                                        color="red"
+                                        size='3'
                                         style={{
-                                            margin: "5px",
-                                            cursor: "pointer",
-                                            borderBottom: "4px rgba(0, 0, 0, 0.1) solid"
+                                            width: "100%",
+                                            margin: "10px auto",
                                         }}
-                                        onClick={() => deleteImage()}
+                                        onClick={handleNewItem}
                                     >
-                                        <MdDelete />
-                                    </IconButton>
-                                </Flex>
-                            }
-                        </Box>
+                                        Submit
+                                    </Button>
+                                :
+                                    <Flex
+                                        style={{
+                                            justifyContent: 'space-between'
+                                        }}
+                                    >
+                                        <Button
+                                            className={`button ${isValid ? 'activeButton' : 'inactiveButton'}`}
+                                            disabled={!isValid}
+                                            radius='none'
+                                            size='3'
+                                            style={{
+                                                width: "45%",
+                                                margin: "10px auto",
+                                            }}
+                                            onClick={handleNewItem}
+                                        >
+                                            Submit
+                                        </Button>
 
-                        <Box
-                            style={{
-                                textAlign: 'left',
-                                minWidth: '200px',
-                                width: '45%',
-                                maxWidth: '600px'
-                            }}
-                        >
-                            <AdminTextField
-                                title="Knockback"
-                                placeholder="Knockback"
-                                name="knockback"
-                                id="knockback"
-                                value={itemData.knockback}
-                                onChange={(e) => {
-                                    let value = Number(e.target.value);
-                                    if (isNaN(value)) return;
-                                    else {
-                                        if (value < 0 || value > 1000) return;
-                                        else setItemData(prev => ({ ...prev, knockback: value }));
-                                    }
-                                }}
-                            />
-
-                            <AdminTextField
-                                title="Circle damage"
-                                placeholder="Circle damage"
-                                name="circleDamage"
-                                id="circleDamage"
-                                value={itemData.stats.circleDamage}
-                                onChange={(e) => {
-                                    let value = Number(e.target.value);
-                                    if (isNaN(value)) return;
-                                    else {
-                                        if (value < 0 || value > 1000) return;
-                                        else setItemData(prev => ({ ...prev, stats: { ...prev.stats, circleDamage: value } }));
-                                    }
-                                }}
-                            />
-
-                            <AdminTextField
-                                title="Square damage"
-                                placeholder="Square damage"
-                                name="squareDamage"
-                                id="squareDamage"
-                                value={itemData.stats.squareDamage}
-                                onChange={(e) => {
-                                    let value = Number(e.target.value);
-                                    if (isNaN(value)) return;
-                                    else {
-                                        if (value < 0 || value > 1000) return;
-                                        else setItemData(prev => ({ ...prev, stats: { ...prev.stats, squareDamage: value } }));
-                                    }
-                                }}
-                            />
-
-                            <AdminTextField
-                                title="Triangle damage"
-                                placeholder="Triangle damage"
-                                name="triangleDamage"
-                                id="triangleDamage"
-                                value={itemData.stats.triangleDamage}
-                                onChange={(e) => {
-                                    let value = Number(e.target.value);
-                                    if (isNaN(value)) return;
-                                    else {
-                                        if (value < 0 || value > 1000) return;
-                                        else setItemData(prev => ({ ...prev, stats: { ...prev.stats, triangleDamage: value } }));
-                                    }
-                                }}
-                            />
-
-                            <AdminTextField
-                                title="Crit chance"
-                                placeholder="Crit chance"
-                                name="critChance"
-                                id="critChance"
-                                value={itemData.stats.critChance}
-                                onChange={(e) => {
-                                    let value = Number(e.target.value);
-                                    if (isNaN(value)) return;
-                                    else {
-                                        if (value < 0 || value > 100) return;
-                                        else setItemData(prev => ({ ...prev, stats: { ...prev.stats, critChance: value } }));
-                                    }
-                                }}
-                            />
-
-                            <AdminTextField
-                                title="Crit damage"
-                                placeholder="Crit damage"
-                                name="critDamage"
-                                id="critDamage"
-                                value={itemData.stats.critDamage}
-                                onChange={(e) => {
-                                    let value = e.target.value;
-
-                                    if (value.includes(' ')) return;
-                                    if (value.charAt(0) === '.') return;
-
-                                    if (value.includes(".")) {
-                                        const valuesParts = value.split(".");
-
-                                        if (valuesParts.length !== 2) return;
-                                        else {
-                                            const firstPart = valuesParts[0];
-                                            const secondPart = valuesParts[1];
-
-                                            if (!isNaN(firstPart) || firstPart <= 10) value = firstPart;
-                                            else return;
-
-                                            if (!isNaN(secondPart) && secondPart.length < 3) value += "." + secondPart;
-                                            else return;
-
-
-                                            if (value > 10 || value < 1) return;
-                                            else setItemData(prev => ({ ...prev, stats: { ...prev.stats, critDamage: Number(value) } }));
-                                        }
-                                    } else {
-                                        if (!isNaN(value) && (value <= 10 && value >= 1) || value === '') setItemData(prev => ({ ...prev, stats: { ...prev.stats, critDamage: Number(value) } }));
-                                        else return;
-                                    }
-                                }}
-                            />
-                        </Box>
+                                        <Button
+                                            className='button activeButton'
+                                            radius='none'
+                                            size='3'
+                                            style={{
+                                                width: "45%",
+                                                margin: "10px auto",
+                                            }}
+                                            onClick={() => setShowDeleteAlert(true)}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </Flex>
+                        }
 
                     </Flex>
-
-                    {
-                        JSON.stringify(validData)
-                    }
-
-                    <Button
-                        radius='none'
-                        size='3'
-                        style={{
-                            width: "95%",
-                            cursor: 'pointer',
-                            backgroundColor: "darkgray",
-                            margin: "0 auto",
-                            borderBottom: "8px rgba(0, 0, 0, 0.1) solid"
-                        }}
-                        onClick={handleNewItem}
-                    >
-                        Submit
-                    </Button>
                 </Flex>
+                <Box style={{ minHeight: "10px" }} />
             </Flex>
-        </Flex>
+            {
+                showItemsDialog === true &&
+                <AllItemsDialog
+                    open={showItemsDialog}
+                    setOpen={setShowItemsDialog}
+                    handleSelectedModify={handleSelectedModify}
+                    setSegmentedControlValue={setSegmentedControlValue}
+                />
+            }
+
+            {
+                showDeleteAlert === true &&
+                <DeleteAlert
+                    open={showDeleteAlert}
+                    setOpen={setShowDeleteAlert}
+                    data={itemData}
+                    itemID={itemID}
+                    handleDelete={handleDeleteItem}
+                />
+            }
+        </>
     )
 }

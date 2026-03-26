@@ -37,6 +37,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
 
     return (
         <Flex className="mainContainer">
+            <Box style={{minHeight: '10px'}}/>
             <Flex className="contentContainer">
                 <Flex
                     style={{
@@ -44,10 +45,12 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                         width: '80%',
                         maxWidth: '720px',
                         flexDirection: 'column',
-                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                        padding: '10px',
+                        background: 'linear-gradient(180deg, #1e1e28, #21212c)',
+                        boxShadow: '0px 0px 10px 2px #bababa',
+                        padding: '20px',
                         borderRadius: '20px',
                         textAlign: 'center',
+                        color: 'white'
                     }}
                 >
                     <Text
@@ -65,9 +68,10 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                             textAlign: 'left'
                         }}
                     >
-                        <Text as='label' htmlFor="username" size='4' style={{ cursor: 'pointer' }}>Username</Text>
+                        <Text as='label' htmlFor="username" size='4' style={{ cursor: 'pointer', marginBottom: '5px' }}>Username</Text>
                         <TextField.Root
-                            radius="full"
+                            className="textField"
+                            radius="none"
                             placeholder="Username"
                             size="3"
                             name="username"
@@ -79,13 +83,14 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                                 else setFormData({ ...formData, username: e.target.value })
                             }}
                             style={{
-                                fontFamily: `"Fredoka", sans-serif`,
+                                marginBottom: '12px'
                             }}
                         />
 
-                        <Text as='label' htmlFor="email" style={{ marginTop: '10px', cursor: 'pointer' }} size='4'>Email</Text>
+                        <Text as='label' htmlFor="email" style={{ marginTop: '10px', cursor: 'pointer', marginBottom: '5px' }} size='4'>Email</Text>
                         <TextField.Root
-                            radius="full"
+                            className="textField"
+                            radius="none"
                             placeholder="example@gmail.com"
                             size="3"
                             name="email"
@@ -100,7 +105,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                                 }
                             }}
                             style={{
-                                fontFamily: `"Fredoka", sans-serif`,
+                                marginBottom: '12px'
                             }}
                         />
 
@@ -112,23 +117,22 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     marginTop: '5px',
-                                    border: '1px solid black',
-                                    borderRadius: '20px',
-                                    padding: '10px'
+                                    padding: '10px',
+                                    color: 'gold',
+                                    flexWrap: 'wrap'
                                 }}
                             >
                                 <ExclamationTriangleIcon 
                                     style={{
                                         width: '20px',
                                         height: '20px',
-                                        color: 'tomato',
                                         marginRight: '5px',
                                     }}
                                 />
                                 <Text
                                     as="p"
                                     size='3'
-                                    color="tomato"
+                                    align='center'
                                 >
                                     Invalid email format!
                                 </Text>
@@ -136,7 +140,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
 
                         }
 
-                        <Text as='label' htmlFor="password" style={{ marginTop: '10px', cursor: "pointer" }} size='4'>Password</Text>
+                        <Text as='label' htmlFor="password" style={{ marginTop: '10px', cursor: "pointer", marginBottom: '5px' }} size='4'>Password</Text>
                         <PasswordInput
                             inputName="password"
                             value={formData.password}
@@ -144,12 +148,10 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                                 if (e.target.value.includes(' ')) return;
                                 else setFormData({ ...formData, password: e.target.value })
                             }}
-                            style={{
-                                fontFamily: `"Fredoka", sans-serif`,
-                            }}
+                            
                         />
 
-                        <Text as='label' htmlFor="confirmPassword" style={{ marginTop: '10px', cursor: 'pointer' }} size='4'>Confirm password</Text>
+                        <Text as='label' htmlFor="confirmPassword" style={{ marginTop: '22px', cursor: 'pointer', marginBottom: '5px' }} size='4'>Confirm password</Text>
                         <PasswordInput
                             inputName="confirmPassword"
                             value={formData.confirmPassword}
@@ -157,9 +159,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                                 if (e.target.value.includes(' ')) return;
                                 else setFormData({ ...formData, confirmPassword: e.target.value })
                             }}
-                            style={{
-                                fontFamily: `"Fredoka", sans-serif`,
-                            }}
+
                         />
 
                         {
@@ -167,20 +167,19 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                             <Flex
                                 style={{
                                     flexDirection: 'row',
-                                    border: '1px solid black',
-                                    borderRadius: '20px',
                                     marginTop: '10px',
                                     marginBottom: '10px',
                                     padding: '10px',
                                     justifyContent: "space-around",
-                                    alignItems: 'center'
+                                    alignItems: 'center',
+                                    color: '#64c8c8'
                                 }}
                             >
                                 <Flex>
                                     <InfoCircledIcon
                                         style={{
-                                            width: '20px',
-                                            height: '20px',
+                                            width: '25px',
+                                            height: '25px',
                                             marginRight: '5px'
                                         }}
                                     />
@@ -243,6 +242,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
 
                 </Flex>
             </Flex>
+            <Box style={{minHeight: '10px'}}/>
         </Flex>
     )
 }
