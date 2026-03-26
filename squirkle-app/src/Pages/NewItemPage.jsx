@@ -7,6 +7,7 @@ import AdminTextField from '../components/AdminTextField';
 import { MdDelete } from "react-icons/md";
 import AllItemsDialog from '../components/Dialogs/AllItemsDialog';
 import DeleteAlert from '../components/DeleteAlert';
+import AdminTextArea from '../components/AdminTextArea';
 
 export default function NewItemPage({ user }) {
 
@@ -455,35 +456,16 @@ export default function NewItemPage({ user }) {
                                     }}
                                 />
 
-                                <Text
-                                    size='4'
-                                    as='label'
-                                    htmlFor='itemDescription'
-                                    style={{ cursor: 'pointer', marginTop: '10px', marginBottom: '5px' }}
-                                >
-                                    Item's description
-                                </Text>
-
-                                <TextArea
-                                    className='textArea'
-                                    radius="none"
+                                <AdminTextArea 
+                                    title="Item's description"
                                     placeholder="Item's description"
-                                    size="3"
-                                    name="itemDescription"
-                                    id="itemDescription"
-                                    mt="2"
-                                    mb="3"
+                                    name='itemDescription'
+                                    id='itemDescription'
                                     value={itemData.description}
-                                    required
-                                    resize='vertical'
                                     onChange={(e) => {
                                         let value = e.target.value;
                                         value = value.charAt(0).toUpperCase() + value.slice(1);
                                         updateItemField('description', value);
-                                    }}
-                                    style={{
-                                        maxHeight: '500px',
-                                    
                                     }}
                                 />
 
