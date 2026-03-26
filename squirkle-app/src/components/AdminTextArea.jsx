@@ -1,7 +1,6 @@
 import { TextArea, Text } from "@radix-ui/themes";
 
 export default function AdminTextArea({ placeholder, name, id, value, onChange, title }) {
-    console.log(value)
 
     return (
         <>
