@@ -1,6 +1,4 @@
 import { Box, Flex, Text, Button } from '@radix-ui/themes';
-import GameWindow from '../components/GameWindow';
-import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 

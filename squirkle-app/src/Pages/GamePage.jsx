@@ -1,13 +1,12 @@
 import { Box, Dialog, Flex } from '@radix-ui/themes';
-import GameWindow from '../components/GameWindow';
 import Navbar from '../components/Navbar';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { areas } from '../AreaData';
-import GameAreaPanel from '../components/GameAreaPanel';
 import AreaSelectorDialog from '../components/Dialogs/AreaSelectorDialog';
 import InventoryDialog from '../components/Dialogs/InventoryDialog';
 import AuctionHouseDialog from '../components/Dialogs/AuctionHouseDialog';
+import { GameContext } from '../components/GameContext';
+import GameLoader from "../components/GameLoader"
 
 export const GAME_STATE = 0
 export const AREA_SELECTOR_STATE = 1
@@ -23,7 +22,10 @@ export default function GamePage({ user, signOut }) {
     useEffect(() => {
         if (user == null) {
             navigate("/")
+            return
         }
+
+        setCoins(user.coinCount)
     }, [user])
 
     function RenderCurrentDialog()
@@ -40,19 +42,34 @@ export default function GamePage({ user, signOut }) {
         return null
     }
 
+    const [ isGameLoaded, setIsGameLoaded ] = useState(false)
+    const [ isLoading, setIsLoading ] = useState(false)
+    const [ filePaths, setFilePaths ] = useState({})
+    const [ coins, setCoins ] = useState(0)
+    
+    const gameContext = {
+        isGameLoaded, setIsGameLoaded, 
+        isLoading, setIsLoading,
+        filePaths, setFilePaths,
+        coins: coins,
+        setCoins: x => setCoins(coins + x),
+    }
+
     return (
         <Dialog.Root>
-            <Navbar user={user} signOut={signOut} setDialogState={setDialogState}/>
-            <Flex className='mainContainer'>
+            <GameContext.Provider value={gameContext}>
+                <Navbar user={user} signOut={signOut} setDialogState={setDialogState}/>
+                <Flex className='mainContainer'>
 
-                <Box className='navbarSpacer' />
+                    <Box className='navbarSpacer' />
 
-                <Flex className='contentContainer'>
-                    <GameWindow user={user}/>
+                    <Flex className='contentContainer'>   
+                        <GameLoader user={user}/>
+                    </Flex>
                 </Flex>
-            </Flex>
 
-            {RenderCurrentDialog()}
+                {RenderCurrentDialog()}
+            </GameContext.Provider>
         </Dialog.Root>
     )
 }

@@ -8,6 +8,7 @@ import { GiTwoCoins } from "react-icons/gi";
 import { RiAuctionFill, RiMenuFill } from "react-icons/ri";
 import { AREA_SELECTOR_STATE, AUCTION_HOUSE_STATE, GAME_STATE, INVENTORY_STATE } from "../Pages/GamePage";
 import NavbarMobileDropdown from "./NavbarMobileDropdown";
+import CoinCounter from "./CoinCounter";
 
 export default function Navbar({ user, signOut, setDialogState }) {
     const [isMobile, setIsMobile] = useState(false)
@@ -23,7 +24,6 @@ export default function Navbar({ user, signOut, setDialogState }) {
     }, [])
 
     const iconSize = isMobile ? 24 : 32
-    const coinCount = user?.coinCount ?? user?.coins ?? 0
 
     return (
         <Flex
@@ -58,12 +58,7 @@ export default function Navbar({ user, signOut, setDialogState }) {
             </Flex>
 
             <Flex align="center" justify="end" gap="3" flexGrow="1">
-                <Flex align="center" gap="2" style={{ marginRight: isMobile ? 10 : 0 }}>
-                    <GiTwoCoins size={24} color="#f2c94c" />
-                    <Text size="3" style={{ color: '#f2c94c', fontWeight: 700 }}>
-                        {coinCount}
-                    </Text>
-                </Flex>
+                <CoinCounter isMobile={isMobile}/>
 
                 {user == null || isMobile ? null : (
                     <>
