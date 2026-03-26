@@ -25,14 +25,16 @@
 
 .textField, .textArea {
     background: #bababa !important;
-    border: 3px solid #d5d5d5 !important;
+    padding-top: 4px !important;
+    border-top: 4px rgba(0, 0, 0, 0.2) solid !important;
     color: rgb(0, 0, 0) !important;
     font-family: "Fredoka", sans-serif !important;
     outline: none !important;
+    box-shadow: none !important;
 }
 
 .textField:focus-within, .textArea:focus-within {
-    box-shadow: 0px 0px 8px 2px rgb(255, 148, 34);
+    background-color: #c8c8c8 !important;
 }
 
 .button {
@@ -53,16 +55,36 @@
 }
 
 .activeButton:hover {
-    animation: pulseForButton 2s infinite;
-    box-shadow: 0px 0px 4px 2px rgb(255, 148, 34);
+    border-bottom-width: 4px !important;
+    transform: scaleY(0.95);
+    background-color: #c8c8c8 !important;
 }
 
 .activeButton:active {
     transform: translateY(1px) !important;
 }
 
+.squirkleButton
+{
+    margin: 0px !important;
+    border-radius: 0px !important;
+    border-bottom: 8px rgba(0, 0, 0, 0.1) solid !important;
+    cursor: pointer !important;
+}
+
+.squirkleDropdown
+{
+    border-radius: 0 !important;
+    box-shadow: none !important; 
+}
+
+.squirkleDropdownItem
+{
+    border-radius: 0 !important;
+}
+
 .navbarSpacer {
-    min-height: 60px;
+    min-height: 50px;
 }
 
 .toastStyle[data-state="open"] {
@@ -94,20 +116,6 @@
     to {
         opacity: 0;
         transform: translateX(-50%) translateY(-10px);
-    }
-}
-
-@keyframes pulseForButton {
-    0% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.02);
-    }
-
-    100% {
-        transform: scale(1);
     }
 }
 

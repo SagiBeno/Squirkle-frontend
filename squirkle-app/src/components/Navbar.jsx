@@ -1,12 +1,13 @@
 import { Button, Dialog, DropdownMenu, Flex, Text } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
-import { NavbarButton } from "./Buttons";
+import { DropdownNavbarButton, NavbarButton } from "./Buttons";
 import { FaMap } from "react-icons/fa";
 import { MdBackpack } from "react-icons/md";
 import { IoGameController } from "react-icons/io5";
 import { GiTwoCoins } from "react-icons/gi";
 import { RiAuctionFill, RiMenuFill } from "react-icons/ri";
 import { AREA_SELECTOR_STATE, AUCTION_HOUSE_STATE, GAME_STATE, INVENTORY_STATE } from "../Pages/GamePage";
+import NavbarMobileDropdown from "./NavbarMobileDropdown";
 
 export default function Navbar({ user, signOut, setDialogState }) {
     const [isMobile, setIsMobile] = useState(false)
@@ -26,134 +27,58 @@ export default function Navbar({ user, signOut, setDialogState }) {
 
     return (
         <Flex
-            align="center"
-            justify="between"
             style={{
-                height: isMobile ? '52px' : '60px',
+                height: 50,
                 width: '100%',
                 backgroundColor: 'gray',
                 top: 0,
                 position: 'fixed',
-                paddingInline: isMobile ? 8 : 15,
                 fontFamily: "'Fredoka', sans-serif",
             }}
         >
-            <Flex align="center" style={{ flex: 1, minWidth: 0 }}>
-                {isMobile ? (
-                    <DropdownMenu.Root>
-                        <DropdownMenu.Trigger>
-                            <Button
-                                variant="solid"
-                                size="2"
-                                radius="none"
-                                style={{
-                                    cursor: 'pointer',
-                                    height: "100%",
-                                    aspectRatio: 1,
-                                    backgroundColor: "darkgray",
-                                    margin: 0,
-                                    borderBottom: "5px rgba(0, 0, 0, 0.1) solid"
-                                }}
-                            >
-                                <RiMenuFill size={iconSize} />
-                            </Button>
-                        </DropdownMenu.Trigger>
-
-                        <DropdownMenu.Content align="start">
-                            {user ? <DropdownMenu.Label>{user.username}</DropdownMenu.Label> : null}
-
-                            <DropdownMenu.Item onClick={() => setDialogState(GAME_STATE)}>
-                                <IoGameController size={18} style={{ marginRight: 8 }} /> Game
-                            </DropdownMenu.Item>
-                            <DropdownMenu.Item onClick={() => setDialogState(AREA_SELECTOR_STATE)}>
-                                <FaMap size={18} style={{ marginRight: 8 }} /> Area
-                            </DropdownMenu.Item>
-                            <DropdownMenu.Item onClick={() => setDialogState(INVENTORY_STATE)}>
-                                <MdBackpack size={18} style={{ marginRight: 8 }} /> Inventory
-                            </DropdownMenu.Item>
-                            <DropdownMenu.Item onClick={() => setDialogState(AUCTION_HOUSE_STATE)}>
-                                <RiAuctionFill size={18} style={{ marginRight: 8 }} /> Auction House
-                            </DropdownMenu.Item>
-
-                            {user ? (
-                                <>
-                                    <DropdownMenu.Separator />
-                                    <DropdownMenu.Item color="red" onClick={signOut}>
-                                        Logout
-                                    </DropdownMenu.Item>
-                                </>
-                            ) : null}
-                        </DropdownMenu.Content>
-                    </DropdownMenu.Root>
-                ) : (
+            <Flex align="center">
+                {isMobile ? <NavbarMobileDropdown setDialogState={setDialogState} user={user} signOut={signOut} iconSize={iconSize}/> : (
                     <>
-                        {/* game */}
-                        <NavbarButton compact={isMobile} icon={<IoGameController size={iconSize} />} onClick={() => setDialogState(GAME_STATE)} />
-
                         {/* area chooser */}
                         <Dialog.Trigger>
-                            <NavbarButton compact={isMobile} icon={<FaMap size={iconSize} />} onClick={() => setDialogState(AREA_SELECTOR_STATE)} />
+                            <NavbarButton icon={<FaMap size={iconSize} />} onClick={() => setDialogState(AREA_SELECTOR_STATE)} />
                         </Dialog.Trigger>
 
                         {/* inventory */}
                         <Dialog.Trigger>
-                            <NavbarButton compact={isMobile} icon={<MdBackpack size={iconSize} />} onClick={() => setDialogState(INVENTORY_STATE)} />
+                            <NavbarButton icon={<MdBackpack size={iconSize} />} onClick={() => setDialogState(INVENTORY_STATE)} />
                         </Dialog.Trigger>
 
                         {/* auction house */}
                         <Dialog.Trigger>
-                            <NavbarButton compact={isMobile} icon={<RiAuctionFill size={iconSize} />} onClick={() => setDialogState(AUCTION_HOUSE_STATE)} />
+                            <NavbarButton icon={<RiAuctionFill size={iconSize} />} onClick={() => setDialogState(AUCTION_HOUSE_STATE)} />
                         </Dialog.Trigger>
                     </>
                 )}
             </Flex>
 
-            <Flex
-                align="center"
-                gap="2"
-                style={{
-                    flexShrink: 0,
-                    backgroundColor: '#4b4b4b',
-                    border: '2px solid #8b6b11',
-                    borderRadius: 999,
-                    padding: isMobile ? '4px 8px' : '6px 12px',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
-                    zIndex: 5,
-                }}
-            >
-                <GiTwoCoins size={isMobile ? 14 : 18} color="#f2c94c" />
-                <Text size={isMobile ? "2" : "3"} style={{ color: '#f2c94c', fontWeight: 700 }}>
-                    {coinCount}
-                </Text>
-            </Flex>
+            <Flex align="center" justify="end" gap="3" flexGrow="1">
+                <Flex align="center" gap="2" style={{ marginRight: isMobile ? 10 : 0 }}>
+                    <GiTwoCoins size={24} color="#f2c94c" />
+                    <Text size="3" style={{ color: '#f2c94c', fontWeight: 700 }}>
+                        {coinCount}
+                    </Text>
+                </Flex>
 
-            <Flex align="center" justify="end" style={{ flex: 1, minWidth: 0 }}>
                 {user == null || isMobile ? null : (
-                    <DropdownMenu.Root>
-                        <DropdownMenu.Trigger>
-                            <Button size={isMobile ? "2" : "3"}>
-                                <Text
-                                    size={isMobile ? "4" : "6"}
-                                    style={{
-                                        color: 'white',
-                                        fontWeight: '500',
-                                        maxWidth: isMobile ? 96 : 180,
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                        whiteSpace: 'nowrap',
-                                    }}
-                                >
-                                    {user.username}
-                                </Text>
-                            </Button>
-                        </DropdownMenu.Trigger>
+                    <>
+                        <Text size="4" style={{color: "white"}}>{user.username}</Text>
 
-                        <DropdownMenu.Content align="end">
-                            <DropdownMenu.Item color="red" onClick={signOut}>
-                                Logout
-                            </DropdownMenu.Item>
-                        </DropdownMenu.Content>
-                    </DropdownMenu.Root>
+                        <DropdownMenu.Root>
+                            <DropdownNavbarButton icon={<RiMenuFill size={iconSize} />} />
+
+                            <DropdownMenu.Content className="squirkleDropdown" style={{width: 150, marginTop: -12, marginRight: -20, backgroundColor: "transparent"}}>
+                                <Button className="squirkleButton" onClick={signOut} style={{padding: 5, backgroundColor: "#ee3c3c"}}>
+                                    <Text weight="bold">Logout</Text>
+                                </Button>
+                            </DropdownMenu.Content>
+                        </DropdownMenu.Root>
+                    </>
                 )}
             </Flex>
         </Flex>

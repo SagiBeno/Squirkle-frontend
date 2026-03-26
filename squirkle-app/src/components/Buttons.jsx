@@ -1,4 +1,4 @@
-import { Spinner, Button } from "@radix-ui/themes";
+import { Spinner, Button, DropdownMenu } from "@radix-ui/themes";
 import { EnterIcon, PersonIcon } from "@radix-ui/react-icons";
 import { FaGoogle } from 'react-icons/fa'
 
@@ -149,27 +149,48 @@ export function UsernameConfirmButton({ text, onClick }) {
     )
 }
 
-export function NavbarButton({ icon, onClick, compact = false }) {
+export function NavbarButton( { icon, onClick = null } ) {
     return (
         <Button
             variant="solid"
             mb="3"
-            size={compact ? "2" : "3"}
+            size="3"
             radius="none"
             style={{
                 cursor: 'pointer',
                 height: "100%",
-                aspectRatio: compact ? 1 : 1.5,
+                aspectRatio: 1.3,
                 backgroundColor: "darkgray",
                 margin: 0,
-                borderBottom: compact
-                    ? "5px rgba(0, 0, 0, 0.1) solid"
-                    : "8px rgba(0, 0, 0, 0.1) solid"
+                borderBottom: "8px rgba(0, 0, 0, 0.1) solid"
             }}
             onClick={onClick}
         >
             {icon}
         </Button>
+    )
+}
+
+export function DropdownNavbarButton({icon}) {
+    return (
+        <DropdownMenu.Trigger>
+            <Button
+                variant="solid"
+                mb="3"
+                size="3"
+                radius="none"
+                style={{
+                    cursor: 'pointer',
+                    height: "100%",
+                    aspectRatio: 1.3,
+                    backgroundColor: "darkgray",
+                    margin: 0,
+                    borderBottom: "8px rgba(0, 0, 0, 0.1) solid"
+                }}
+            >
+                {icon}
+            </Button>
+        </DropdownMenu.Trigger>
     )
 }
 
