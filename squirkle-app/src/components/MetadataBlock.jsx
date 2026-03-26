@@ -4,19 +4,7 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import GameSpinner from './GameSpinner'
 
-export default function MetadataBlock({ metaID }) {
-
-    const [meta, setMeta] = useState(null)
-
-    async function GetMeta() 
-    {
-        const json = await (await fetch("https://squirkle-backend.vercel.app/api/get-meta/" + metaID)).json()
-        setMeta(json)
-    }
-
-    useEffect(() => {
-        GetMeta()
-    }, [])
+export default function MetadataBlock({ meta }) {
 
     return (meta == null ? <GameSpinner/> : 
         <Flex direction="column" gap="1" style={{

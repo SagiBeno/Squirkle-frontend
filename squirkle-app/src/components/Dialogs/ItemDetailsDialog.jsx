@@ -8,8 +8,31 @@ import { TbSquarePercentage } from "react-icons/tb";
 import { GiPunch } from "react-icons/gi";
 import MetadataBlock from '../MetadataBlock';
 import { useEffect } from 'react';
+import { useState } from 'react';
 
 export default function ItemDetailsDialog({ itemData }) {
+
+    const [metadatas, setMetadatas] = useState(null)
+
+    async function GetMetadatas()
+    {
+        if (itemData == null || itemData.stats == null || itemData.stats.metadata == null) return
+        let result = []
+
+        for (let i = 0; i < itemData?.stats.metadata.length; i++) 
+        {
+            let json = await (await fetch("https://squirkle-backend.vercel.app/api/get-metadata/" + itemData.stats.metadata[i])).json()
+            result.push(json)
+
+            console.log(json)
+        }
+        
+        setMetadatas(json)
+    }
+
+    useEffect(() => {
+        GetMetadatas()
+    }, [])
 
     return (
         <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: "auto" }}>
@@ -23,7 +46,7 @@ export default function ItemDetailsDialog({ itemData }) {
                     </Blockquote>
 
                     {
-                        itemData?.stats.metadata?.map((x, i) => <MetadataBlock key={i} metaID={x}/>)
+                        metadatas?.map((x, i) => <MetadataBlock meta={x} key={i}/>)
                     }
 
                 </Flex>
