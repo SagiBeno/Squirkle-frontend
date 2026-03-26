@@ -23,8 +23,27 @@
     font-family: "Fredoka", sans-serif;
 }
 
+.squirkleButton
+{
+    margin: 0px !important;
+    border-radius: 0px !important;
+    border-bottom: 8px rgba(0, 0, 0, 0.1) solid !important;
+    cursor: pointer !important;
+}
+
+.squirkleDropdown
+{
+    border-radius: 0 !important;
+    box-shadow: none !important; 
+}
+
+.squirkleDropdownItem
+{
+    border-radius: 0 !important;
+}
+
 .navbarSpacer {
-    min-height: 60px;
+    min-height: 50px;
 }
 
 .toastStyle[data-state="open"] {
