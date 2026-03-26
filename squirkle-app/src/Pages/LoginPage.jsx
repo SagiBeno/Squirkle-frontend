@@ -27,60 +27,50 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
                         flexDirection: 'column',
                         background: 'linear-gradient(180deg, #1e1e28, #21212c)',
                         boxShadow: '0px 0px 10px 2px #bababa',
-                        padding: '20px',
+                        padding: '20px 10% 20px 10%',
                         borderRadius: '20px',
                         textAlign: 'center',
                         color: 'white'
                     }}
                 >
-                    <Text
-                        size='8'
-                        style={{
-                            fontWeight: 'bold'
-                        }}
-                    >
-                        Login
-                    </Text>
+                    <Text size='8' style={{ fontWeight: 'bold' }}>Login</Text>
 
-                    <Flex
-                        style={{
-                            flexDirection: 'column',
-                            textAlign: 'left'
-                        }}
-                    >
-                        <Text as='label' size='4' htmlFor="email" style={{ cursor: 'pointer', marginBottom: '5px' }}>Email</Text>
-                        <TextField.Root
-                            className="textField"
-                            radius="none"
-                            placeholder="example@gmail.com"
-                            size="3"
-                            name="email"
-                            id="email"
-                            value={formData.email}
-                            required
-                            onChange={(e) => {
-                                if (e.target.value.includes(' ')) return;
-                                else setFormData({ ...formData, email: e.target.value })
-                            }}
-                            style={{
-                                marginBottom: '12px',
-                            }}
-                        />
+                    <Flex style={{ flexDirection: 'column', justifyContent: "center", textAlign: 'left' }}>
+                        <div>
+                            <Text as='label' size='4' htmlFor="email" style={{ cursor: 'pointer', marginBottom: '5px' }}>Email</Text>
+                            <TextField.Root
+                                className="textField"
+                                radius="none"
+                                placeholder="example@gmail.com"
+                                size="3"
+                                name="email"
+                                id="email"
+                                value={formData.email}
+                                required
+                                onChange={(e) => {
+                                    if (e.target.value.includes(' ')) return;
+                                    else setFormData({ ...formData, email: e.target.value })
+                                }}
+                                style={{
+                                    marginBottom: '12px',
+                                }}
+                            />
+                        </div>
 
-                        <Text as='label' size='4' htmlFor="password" style={{ cursor: 'pointer', marginTop: '10px', marginBottom: '5px' }}>Password</Text>
-                        <PasswordInput
-                            inputName="password"
-                            value={formData.password}
-                            onChange={(e) => {
-                                if (e.target.value.includes(' ')) return;
-                                else setFormData({ ...formData, password: e.target.value })
-                            }}
-                        />
+                        <div>
+                            <Text as='label' size='4' htmlFor="password" style={{ cursor: 'pointer', marginTop: '10px', marginBottom: '5px' }}>Password</Text>
+                            <PasswordInput
+                                inputName="password"
+                                value={formData.password}
+                                onChange={(e) => {
+                                    if (e.target.value.includes(' ')) return;
+                                    else setFormData({ ...formData, password: e.target.value })
+                                }}
+                            />
+                        </div>
                     </Flex>
 
-                    <Box style={{
-                        marginTop: '15px'
-                    }}>
+                    <Box style={{ marginTop: '50px' }}>
                         {
                             formData.email.length > 0 && formData.password.length >= 8
                                 ?
