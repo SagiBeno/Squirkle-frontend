@@ -8,8 +8,9 @@ import { MdDelete } from "react-icons/md";
 import AllItemsDialog from '../components/Dialogs/AllItemsDialog';
 import DeleteAlert from '../components/DeleteAlert';
 import AdminTextArea from '../components/AdminTextArea';
+import AdminSpinner from '../components/AdminSpinner';
 
-export default function NewItemPage({ user }) {
+export default function ItemManagementPage({ user, toastData, setToastData }) {
 
     const [itemData, setItemData] = useState({
         name: "",
@@ -31,7 +32,7 @@ export default function NewItemPage({ user }) {
     const [file, setFile] = useState();
     const [showItemsDialog, setShowItemsDialog] = useState(false);
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-    const [itemID, setItemID] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const isValid =
         itemData.name.trim().length > 0 &&
@@ -71,7 +72,7 @@ export default function NewItemPage({ user }) {
     function uploadImage(file) {
 
         if (user.user?.uid) {
-
+            setLoading(true);
             let formData = new FormData();
             formData.append("file", file);
             formData.append("userId", user.user.uid)
@@ -82,27 +83,59 @@ export default function NewItemPage({ user }) {
             })
                 .then(async (resJSON) => {
                     const res = await resJSON.json();
-                    setItemData(prev => ({ ...prev, imageUrl: res.url, imageName: file.name }));
+                    if (res?.url) {
+                        setItemData(prev => ({ ...prev, imageUrl: res.url, imageName: file.name }));
+                        setToastData({ open: true, title: 'Image upload status', description: 'The image has been successfully uploaded.', isError: false });
+                    }
+
+                    if (res?.error) {
+                        setToastData({ open: true, title: 'Image upload status', description: res.error, isError: true });
+                    }
                 })
-                .catch(console.warn);
+                .catch(async (errorJSON) => {
+                    const errorRes = await errorJSON.json();
+                    console.warn(errorJSON);
+                    if (errorRes?.error) {
+                        setToastData({ open: true, title: 'Image upload status', description: errorRes.error, isError: true });
+                    }
+                })
+                .finally(() => setLoading(false));
         }
     }
 
     function deleteImage() {
 
+        setLoading(true)
         fetch('https://squirkle-backend.vercel.app/api/delete-image', {
             method: 'DELETE',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ userId: user.user.uid, filename: file.name })
         })
-            .then(res => {
-                if (res.status === 200) setItemData(prev => ({ ...prev, imageUrl: "" }));
+            .then(async (resJSON) => {
+                const res = await resJSON.json();
+                if (resJSON.status === 200) setItemData(prev => ({ ...prev, imageUrl: "" }));
+
+                if (res?.error) {
+                    setToastData({ open: true, title: 'Image deletion status', description: res.error, isError: true });
+                }
+
+                if (res?.message) {
+                    setToastData({ open: true, title: 'Image deletion status', description: res.message, isError: false });
+                }
             })
-            .catch(console.warn)
+            .catch(async (errorJSON) => {
+                const errorRes = await errorJSON.json();
+                console.warn(errorJSON);
+                if (errorRes?.error) {
+                    setToastData({ open: true, title: 'Image deletion status', description: errorRes.error, isError: true });
+                }
+            })
+            .finally(() => setLoading(false));
     }
 
     function handleNewItem() {
-        
+
+        setLoading(true);
         const itemId = itemData.name.toUpperCase().replace(' ', '_');
         const reqBody = {
             userId: user.user.uid,
@@ -114,7 +147,7 @@ export default function NewItemPage({ user }) {
                 critDamage: Number(itemData.stats.critDamage)
             }
         };
-        
+
         fetch('https://squirkle-backend.vercel.app/api/create-item', {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
@@ -122,9 +155,40 @@ export default function NewItemPage({ user }) {
         })
             .then(async resJSON => {
                 const res = await resJSON.json();
-                console.log(res)
+                if (res?.error) {
+                    setToastData({ open: true, title: 'Status of the new item submission', description: res.error, isError: true });
+                }
+
+                if (res?.message) {
+                    setToastData({ open: true, title: 'Status of the new item submission', description: res.message, isError: false });
+                }
+
+                if (resJSON.status === 201) {
+                    setItemData({
+                        name: "",
+                        type: "",
+                        description: "",
+                        imageUrl: "",
+                        knockback: "0",
+                        stats: {
+                            circleDamage: 0,
+                            squareDamage: 0,
+                            triangleDamage: 0,
+                            critChance: 0,
+                            critDamage: "1.0",
+                            metadata: []
+                        }
+                    })
+                }
             })
-            .catch(console.warn);
+            .catch(async (errorJSON) => {
+                const errorRes = await errorJSON.json();
+                console.warn(errorJSON);
+                if (errorRes?.error) {
+                    setToastData({ open: true, title: 'Status of the new item submission', description: errorRes.error, isError: true });
+                }
+            })
+            .finally(() => setLoading(false));
     }
 
     const onDrop = useCallback((acceptedFiles) => {
@@ -153,6 +217,9 @@ export default function NewItemPage({ user }) {
 
     function handleSelectedModify(item) {
 
+        setLoading(true);
+        setShowItemsDialog(false);
+
         fetch(`https://squirkle-backend.vercel.app/api/get-item/${item.id}`)
             .then(async (resJSON) => {
                 const res = await resJSON.json();
@@ -172,9 +239,19 @@ export default function NewItemPage({ user }) {
                     setItemData(modifyItemData);
                     setShowItemsDialog(false);
                 }
-                
+
+                if (res?.error) {
+                    setToastData({ open: true, title: 'Item query status', description: res.error, isError: true });
+                }
             })
-            .catch(console.warn);
+            .catch(async (errorJSON) => {
+                const errorRes = await errorJSON.json();
+                console.warn(errorJSON);
+                if (errorRes?.error) {
+                    setToastData({ open: true, title: 'Item query status', description: errorRes.error, isError: true });
+                }
+            })
+            .finally(() => setLoading(false));
     }
 
     function updateNumberField(section, field, rawValue, min, max) {
@@ -207,7 +284,7 @@ export default function NewItemPage({ user }) {
 
     function handleDecimalChange(field, value, min, max) {
 
-        if (value === '' && field  === 'critDamage') {
+        if (value === '' && field === 'critDamage') {
             updateStatsField(field, "");
             return;
         }
@@ -279,15 +356,17 @@ export default function NewItemPage({ user }) {
     }
 
     function handleDeleteItem() {
-        
+
         if (user?.user?.uid) {
+            setShowDeleteAlert(false);
+            setLoading(true);
             const reqBody = { userId: user.user.uid };
-            fetch(`https://squirkle-backend.vercel.app/api/delete-item/${itemID}`, {
+            fetch(`https://squirkle-backend.vercel.app/api/delete-item/${itemData.itemID}`, {
                 method: 'DELETE',
-                headers: {"Content-Type": "application/json"},
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(reqBody)
             })
-                .then( async (resJSON) => {
+                .then(async (resJSON) => {
                     const res = await resJSON.json();
 
                     if (resJSON.status === 200) {
@@ -307,17 +386,30 @@ export default function NewItemPage({ user }) {
                             }
                         });
 
-                        setShowDeleteAlert(false);
+                        if (resJSON.status === 200) setSegmentedControlValue('newItem');
                     }
 
-                    console.log(res.message);
+                    if (res?.error) {
+                        setToastData({ open: true, title: 'Deletion status', description: res.error, isError: true });
+                    }
+
+                    if (res?.message) {
+                        setToastData({ open: true, title: 'Deletion status', description: res.message, isError: false });
+                    }
                 })
-                .catch(console.warn);
+                .catch(async (errorJSON) => {
+                    const errorRes = await errorJSON.json();
+                    console.warn(errorJSON);
+                    if (errorRes?.error) {
+                        setToastData({ open: true, title: 'Deletion status', description: errorRes.error, isError: true });
+                    }
+                })
+                .finally(() => setLoading(false));
         }
     }
 
-    function handleModifyItem () {
-
+    function handleModifyItem() {
+        setLoading(true);
         const reqBody = {
             userId: user.user.uid,
             ...itemData,
@@ -330,14 +422,29 @@ export default function NewItemPage({ user }) {
 
         fetch(`https://squirkle-backend.vercel.app/api/update-item/${reqBody.itemID}`, {
             method: "PATCH",
-            headers: {"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(reqBody)
         })
-            .then( async (resJSON) => {
+            .then(async (resJSON) => {
                 const res = await resJSON.json();
-                console.log(res);
+                if (res?.error) {
+                    setToastData({ open: true, title: 'Status of the amendment', description: res.error, isError: true });
+                }
+
+                if (res?.message) {
+                    setToastData({ open: true, title: 'Status of the amendment', description: res.message, isError: false });
+                }
+
+                if (resJSON.status === 200) setSegmentedControlValue('newItem');
             })
-            .catch(console.warn);
+            .catch(async (errorJSON) => {
+                const errorRes = await errorJSON.json();
+                console.warn(errorJSON);
+                if (errorRes?.error) {
+                    setToastData({ open: true, title: 'Status of the amendment', description: errorRes.error, isError: true });
+                }
+            })
+            .finally(() => setLoading(false));
     }
 
     return (
@@ -376,17 +483,26 @@ export default function NewItemPage({ user }) {
                             <SegmentedControl.Item value="modifyItem">Modify item</SegmentedControl.Item>
                         </SegmentedControl.Root>
 
-                        <Text
-                            size="8"
-                            style={{
-                                fontWeight: 'bold',
-                                marginBottom: "20px"
-                            }}
-                        >
-                            {
-                                segmentedControlValue === 'newItem' ? 'Create new item' : 'Modify item'
-                            }
-                        </Text>
+                        {
+                            segmentedControlValue === 'newItem'
+                                ?
+                                <Text size="8" style={{ fontWeight: 'bold', marginBottom: "20px" }}>Create new item</Text>
+                                :
+                                <Flex
+                                    className='modifyWrapper'
+                                    style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'end',
+                                        alignItems: 'center',
+                                        flexWrap: 'wrap',
+                                        marginBottom: '20px',
+                                        position: 'relative'
+                                    }}
+                                >
+                                    <Text size="8" className='text' style={{ fontWeight: 'bold', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>Modify item</Text>
+                                    {segmentedControlValue === 'modifyItem' && <Button className='button activeButton' style={{ position: '' }} onClick={() => setShowItemsDialog(true)}>Select another item</Button>}
+                                </Flex>
+                        }
 
                         <Flex
                             style={{
@@ -404,6 +520,7 @@ export default function NewItemPage({ user }) {
                                     width: '45%',
                                 }}
                             >
+
                                 <Flex
                                     style={{
                                         justifyContent: "row",
@@ -425,13 +542,12 @@ export default function NewItemPage({ user }) {
                                         value={itemData.type}
                                     >
                                         <Select.Trigger />
-                                        <Select.Content 
+                                        <Select.Content
                                             color='gold'
                                             style={{
                                                 borderRadius: 0,
                                                 background: '#bababa',
                                                 border: '3px solid #d5d5d5',
-                                                boxShadow: '0px 0px 8px 2px rgb(255, 148, 34)'
                                             }}
                                         >
                                             <Select.Group>
@@ -456,7 +572,7 @@ export default function NewItemPage({ user }) {
                                     }}
                                 />
 
-                                <AdminTextArea 
+                                <AdminTextArea
                                     title="Item's description"
                                     placeholder="Item's description"
                                     name='itemDescription'
@@ -484,12 +600,7 @@ export default function NewItemPage({ user }) {
                                             Item's metadata
                                         </Text>
                                         <IconButton
-                                            style={{ 
-                                                cursor: 'pointer',
-                                                color: 'black',
-                                                borderBottom: "8px rgba(0, 0, 0, 0.2) solid",
-                                                backgroundColor: "darkgray",
-                                            }}
+                                            className="button activeButton"
                                             onClick={addMetadata}
                                         >
                                             <PlusIcon />
@@ -524,12 +635,7 @@ export default function NewItemPage({ user }) {
                                                 />
 
                                                 <IconButton
-                                                    style={{ 
-                                                        cursor: 'pointer' ,
-                                                        borderBottom: "8px rgba(0, 0, 0, 0.2) solid",
-                                                        backgroundColor: "darkgray",
-                                                        color: 'black',
-                                                    }}
+                                                    className="button activeButton"
                                                     onClick={() => removeMetadata(idx)}
                                                 >
                                                     <MinusIcon />
@@ -662,52 +768,52 @@ export default function NewItemPage({ user }) {
                         {
                             segmentedControlValue === 'newItem'
                                 ?
+                                <Button
+                                    className={`button ${isValid ? 'activeButton' : 'inactiveButton'}`}
+                                    disabled={!isValid}
+                                    radius='none'
+                                    size='3'
+                                    style={{
+                                        width: "100%",
+                                        margin: "10px auto",
+                                    }}
+                                    onClick={handleNewItem}
+                                >
+                                    Submit
+                                </Button>
+                                :
+                                <Flex
+                                    style={{
+                                        justifyContent: 'space-between'
+                                    }}
+                                >
                                     <Button
                                         className={`button ${isValid ? 'activeButton' : 'inactiveButton'}`}
                                         disabled={!isValid}
                                         radius='none'
                                         size='3'
                                         style={{
-                                            width: "100%",
+                                            width: "45%",
                                             margin: "10px auto",
                                         }}
-                                        onClick={handleNewItem}
+                                        onClick={handleModifyItem}
                                     >
                                         Submit
                                     </Button>
-                                :
-                                    <Flex
-                                        style={{
-                                            justifyContent: 'space-between'
-                                        }}
-                                    >
-                                        <Button
-                                            className={`button ${isValid ? 'activeButton' : 'inactiveButton'}`}
-                                            disabled={!isValid}
-                                            radius='none'
-                                            size='3'
-                                            style={{
-                                                width: "45%",
-                                                margin: "10px auto",
-                                            }}
-                                            onClick={handleModifyItem}
-                                        >
-                                            Submit
-                                        </Button>
 
-                                        <Button
-                                            className='button activeButton'
-                                            radius='none'
-                                            size='3'
-                                            style={{
-                                                width: "45%",
-                                                margin: "10px auto",
-                                            }}
-                                            onClick={() => setShowDeleteAlert(true)}
-                                        >
-                                            Delete
-                                        </Button>
-                                    </Flex>
+                                    <Button
+                                        className='button activeButton'
+                                        radius='none'
+                                        size='3'
+                                        style={{
+                                            width: "45%",
+                                            margin: "10px auto",
+                                        }}
+                                        onClick={() => setShowDeleteAlert(true)}
+                                    >
+                                        Delete
+                                    </Button>
+                                </Flex>
                         }
 
                     </Flex>
@@ -720,7 +826,6 @@ export default function NewItemPage({ user }) {
                     open={showItemsDialog}
                     setOpen={setShowItemsDialog}
                     handleSelectedModify={handleSelectedModify}
-                    setSegmentedControlValue={setSegmentedControlValue}
                 />
             }
 
@@ -730,9 +835,13 @@ export default function NewItemPage({ user }) {
                     open={showDeleteAlert}
                     setOpen={setShowDeleteAlert}
                     data={itemData}
-                    itemID={itemID}
+                    itemID={itemData.itemID}
                     handleDelete={handleDeleteItem}
                 />
+            }
+
+            {
+                loading && <AdminSpinner />
             }
         </>
     )
