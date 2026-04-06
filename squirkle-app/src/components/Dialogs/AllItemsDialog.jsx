@@ -74,15 +74,16 @@ export default function AllItemsDialog({ open, setOpen, handleSelectedModify }) 
 
                 </Dialog.Title>
 
+                <Dialog.Description>
+                    Search for an item or select one
+                </Dialog.Description>
+
                 {
                     loading
                         ?
                         <DialogSpinner />
                         :
                         <>
-                            <Dialog.Description>
-                                Search for an item or select one
-                            </Dialog.Description>
                             <TextField.Root
                                 className="textField"
                                 radius="none"
@@ -100,11 +101,16 @@ export default function AllItemsDialog({ open, setOpen, handleSelectedModify }) 
                             />
 
                             {
-                                filteredItems.length > 0 && <ItemsTable items={filteredItems} handleSelectedModify={handleSelectedModify} />
+                                filteredItems.length > 0
+                                    ?
+                                    <ItemsTable items={filteredItems} handleSelectedModify={handleSelectedModify} />
+                                    :
+                                    <Flex style={{ width: '100%', justifyContent: 'center' }}>
+                                        <Text size="5">No results found</Text>
+                                    </Flex>
                             }
                         </>
                 }
-
 
             </Dialog.Content>
 
