@@ -13,13 +13,14 @@ export const AREA_SELECTOR_STATE = 1
 export const INVENTORY_STATE = 2
 export const AUCTION_HOUSE_STATE = 3
 
-export default function GamePage({ user, signOut }) {
+export default function GamePage({ user, signOut, setShowAppLoader }) {
 
     const [dialogState, setDialogState] = useState(GAME_STATE)
 
     const navigate = useNavigate()
 
     useEffect(() => {
+        setShowAppLoader(false);
         if (user == null) {
             navigate("/")
             return

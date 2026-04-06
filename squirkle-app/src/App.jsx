@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-import { Theme } from '@radix-ui/themes';
+import { Theme, Box, Flex } from '@radix-ui/themes';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import HomePage from './Pages/HomePage';
 import LoginPage from './Pages/LoginPage';
 import RegisterPage from './Pages/RegisterPage';
 import Navbar from './components/Navbar';
-import { Box, Flex } from '@radix-ui/themes';
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import AppToast from './components/AppToast';
 import UsernameInputDialog from './components/Dialogs/UsernameInputDialog';
 import ItemManagementPage from './Pages/ItemManagementPage';
 import GamePage from './Pages/GamePage';
-import CreateMetadata from './Pages/CreateMetadata';
+import MetadataManagmentPage from './Pages/MetadataManagmentPage';
+import AppLoader from './components/AppLoader';
 
 function App() {
   const firebaseApp = initializeApp({
@@ -30,6 +30,7 @@ function App() {
   const [toastData, setToastData] = useState({ open: false, title: '', description: '', isError: false });
   const [usernameDialogOpen, setUsernameDialogOpen] = useState(false);
   const [loginWithGoogleUserData, setLoginWithGoogleUserData] = useState({});
+  const [showAppLoader, setShowAppLoader] = useState(true);
   const loggedIn = user?.accessToken != null
   let navigate = useNavigate();
 
@@ -190,17 +191,17 @@ function App() {
         <Routes>
           {
             <>
-              <Route path='/' element={<HomePage user={user} />} />
-              <Route path='/game' element={<GamePage user={user} signOut={signOut} />} />
-              {user?.user && <Route path='/admin/item-management' element={<ItemManagementPage user={user} toastData={toastData} setToastData={setToastData} />} />}
-              {user?.user && <Route path='/admin/metadata-management' element={<CreateMetadata user={user} toastData={toastData} setToastData={setToastData} />} />}
+              <Route path='/' element={<HomePage user={user} setShowAppLoader={setShowAppLoader} />} />
+              <Route path='/game' element={<GamePage user={user} signOut={signOut} setShowAppLoader={setShowAppLoader} />} />
+              {user?.user && <Route path='/admin/item-management' element={<ItemManagementPage user={user} toastData={toastData} setToastData={setToastData} setShowAppLoader={setShowAppLoader} />} />}
+              {user?.user && <Route path='/admin/metadata-management' element={<MetadataManagmentPage user={user} toastData={toastData} setToastData={setToastData} setShowAppLoader={setShowAppLoader} />} />}
             </>
           }
 
           {
             <>
-              <Route path='/login' element={<LoginPage handleLoginWithEmailAndPW={handleLoginWithEmailAndPW} handleLoginWithGoogle={handleLoginWithGoogle} loading={loading} />} />
-              <Route path='/register' element={<RegisterPage loading={loading} handleRegistration={handleRegistration} handleLoginWithGoogle={handleLoginWithGoogle} />} />
+              <Route path='/login' element={<LoginPage handleLoginWithEmailAndPW={handleLoginWithEmailAndPW} handleLoginWithGoogle={handleLoginWithGoogle} loading={loading} setShowAppLoader={setShowAppLoader} />} />
+              <Route path='/register' element={<RegisterPage loading={loading} handleRegistration={handleRegistration} handleLoginWithGoogle={handleLoginWithGoogle} setShowAppLoader={setShowAppLoader} />} />
             </>
           }
         </Routes>
@@ -213,6 +214,9 @@ function App() {
           usernameDialogOpen && <UsernameInputDialog open={usernameDialogOpen} setOpen={setUsernameDialogOpen} toastData={toastData} setToastData={setToastData} existingUsername={existingUsername} userData={loginWithGoogleUserData} setUser={async (userObject) => setUser(await withCoinCount(userObject))} />
         }
       </Theme>
+      {
+        showAppLoader && <AppLoader />
+      }
     </>
   )
 }

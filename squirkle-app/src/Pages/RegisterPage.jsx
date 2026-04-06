@@ -1,12 +1,12 @@
 import { Card, Flex, Box, Text, TextField, Button } from "@radix-ui/themes";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PasswordInput from "../components/PasswordInput";
 import { DisabledLoadingButton, EnterButton, DisabledButton, OrButton, GoogleLoginButton } from "../components/Buttons";
 import Separator from '../components/Separator';
 import { useNavigate } from "react-router-dom";
 import { InfoCircledIcon, ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
-export default function RegisterPage({ loading, handleRegistration, handleLoginWithGoogle }) {
+export default function RegisterPage({ loading, handleRegistration, handleLoginWithGoogle, setShowAppLoader }) {
 
     let navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -18,6 +18,10 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
         type: "user"
     });
     const [validEmailFormat, setValidEmailFormat] = useState(true);
+
+    useEffect( () => {
+        setShowAppLoader(false);
+    }, []);
 
     function isValidEmailFormat(email) {
         if (!email) return false;
