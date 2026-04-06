@@ -11,7 +11,7 @@ import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import AppToast from './components/AppToast';
 import UsernameInputDialog from './components/Dialogs/UsernameInputDialog';
-import NewItemPage from './Pages/NewItemPage';
+import ItemManagementPage from './Pages/ItemManagementPage';
 import GamePage from './Pages/GamePage';
 import CreateMetadata from './Pages/CreateMetadata';
 
@@ -192,8 +192,8 @@ function App() {
             <>
               <Route path='/' element={<HomePage user={user} />} />
               <Route path='/game' element={<GamePage user={user} signOut={signOut} />} />
-              {user?.user && <Route path='/admin/new-item' element={<NewItemPage user={user} />} />}
-              {user?.user && <Route path='/admin/modify-metadata' element={<CreateMetadata user={user} />} />}
+              {user?.user && <Route path='/admin/item-management' element={<ItemManagementPage user={user} toastData={toastData} setToastData={setToastData} />} />}
+              {user?.user && <Route path='/admin/metadata-management' element={<CreateMetadata user={user} toastData={toastData} setToastData={setToastData} />} />}
             </>
           }
 
