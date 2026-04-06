@@ -222,7 +222,6 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
     function handleSelectedModify(item) {
 
         setLoading(true);
-        setShowItemsDialog(false);
 
         fetch(`https://squirkle-backend.vercel.app/api/get-item/${item.id}`)
             .then(async (resJSON) => {
