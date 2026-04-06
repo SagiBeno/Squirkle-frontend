@@ -8,18 +8,20 @@ export default function ItemsTable( { items, handleSelectedModify } ) {
         <Flex
             style={{
                 overflow: 'auto',
-                width: '85vw',
+                width: '75vw',
                 padding: '20px'
             }}
         >
             <Table.Root
+            className='adminTable'
                 style={{
                     width: '920px',
-                    margin: 'auto'
+                    margin: 'auto',
+                    boxShadow: '0px 0px 2px 1px #777777'
                 }}
             >
                 <Table.Header>
-                    <Table.Row>
+                    <Table.Row style={{ color: 'white', fontSize: '1.4em', letterSpacing: '2px', background: 'rgba(40, 40, 42, 0.5)' }}>
                         <Table.ColumnHeaderCell
                             style={{
                                 width: '70px',
@@ -57,10 +59,10 @@ export default function ItemsTable( { items, handleSelectedModify } ) {
                                         style={{
                                             height: '100%',
                                             width: '100%',
-                                            alignItems: 'center'
+                                            alignItems: 'center',
                                         }}
                                     >
-                                        <Code>{item.id}</Code>
+                                        <Code color="gray" variant="solid" highContrast style={{ fontSize: '15px' }}>{item.id}</Code>
                                     </Flex>
 
                                 </Table.Cell>
@@ -69,7 +71,9 @@ export default function ItemsTable( { items, handleSelectedModify } ) {
                                         style={{
                                             height: '100%',
                                             width: '100%',
-                                            alignItems: 'center'
+                                            alignItems: 'center',
+                                            color: 'white',
+                                            fontSize: '18px'
                                         }}
                                     >
                                         <Avatar 
@@ -92,7 +96,7 @@ export default function ItemsTable( { items, handleSelectedModify } ) {
                                         }}                                    
                                     >
 
-                                        <IconButton onClick={() => handleSelectedModify(item)} >
+                                        <IconButton className='button activeButton' onClick={() => handleSelectedModify(item)} >
 	                                        <FaEdit width="18" height="18" />
                                         </IconButton>
                                     </Flex>

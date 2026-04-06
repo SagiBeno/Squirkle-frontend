@@ -95,6 +95,18 @@
     animation: toastFadeOut 180ms ease-in;
 }
 
+.adminTable tr:nth-child(odd) {
+    background-color: rgba(88, 88, 93, 0.5);
+}
+
+.adminTable tr:nth-child(even) {
+    background-color: rgba(40, 40, 42, 0.5);
+}
+
+.adminTable tr:hover {
+    background-color: rgba(91, 146, 121, 0.6);
+}
+
 @keyframes toastSlideDown {
     from {
         opacity: 0;
@@ -116,6 +128,24 @@
     to {
         opacity: 0;
         transform: translateX(-50%) translateY(-10px);
+    }
+}
+
+@media screen and (max-width: 660px) {
+    .modifyWrapper {
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .modifyWrapper > .button {
+        margin-top: 10px;
+    }
+
+    .modifyWrapper > .text {
+        transform: none !important;
+        position: relative !important;
+        left: auto !important;
     }
 }
 
