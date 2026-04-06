@@ -1,29 +1,82 @@
-import { Button, Dialog, Flex, Heading, Text } from '@radix-ui/themes'
+import { Button, Dialog, Flex, Heading, Text, TextField } from '@radix-ui/themes'
 import { useEffect, useState } from 'react'
 
 import GameSpinner from '../GameSpinner'
 
 const ITEMS_PER_PAGE = 8
 
+function placeholderFetch(payload) {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({ ok: true, data: payload });
+        }, 700);
+    });
+}
+
+//TODO - create a normal create listing item chooser menu with drowpdown and item details
+
 export default function AuctionHouseDialog({ user }) {
     const [listings, setListings] = useState([]);
+    const [globalListings, setGlobalListings] = useState([]);
+    const [myListings, setMyListings] = useState([]);
+
+    const [activeTab, setActiveTab] = useState('global');
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
+
+    const [isCreateListingOpen, setIsCreateListingOpen] = useState(false);
+    const [isBuyListingOpen, setIsBuyListingOpen] = useState(false);
+    const [selectedListing, setSelectedListing] = useState(null);
+
+    const [createListingForm, setCreateListingForm] = useState({
+        itemName: '',
+        itemImageUrl: '',
+        price: ''
+    });
+
+    const [createLoading, setCreateLoading] = useState(false);
+    const [buyLoading, setBuyLoading] = useState(false);
 
     const totalPages = Math.max(1, Math.ceil(listings.length / ITEMS_PER_PAGE));
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const pagedListings = listings.slice(startIndex, endIndex);
 
+    const userIdentifier = user?.username || user?.name || user?.email || 'You';
+
+    function filterMyListings(sourceListings) {
+        const lowerUserIdentifier = String(userIdentifier).toLowerCase();
+
+        return sourceListings.filter((listing) => {
+            const seller = String(listing?.username || listing?.seller || listing?.email || '').toLowerCase();
+            return seller === lowerUserIdentifier;
+        });
+    }
+
+    function syncListings(nextGlobalListings) {
+        const nextMyListings = filterMyListings(nextGlobalListings);
+
+        setGlobalListings(nextGlobalListings);
+        setMyListings(nextMyListings);
+        setListings(activeTab === 'mine' ? nextMyListings : nextGlobalListings);
+        setCurrentPage(1);
+    }
+
     useEffect(() => {
         function fetchListings() {
             fetch('https://squirkle-backend.vercel.app/api/get-all-listings')
                 .then(response => response.json())
                 .then(data => {
-                    setListings(data.listings);
+                    const fetchedListings = Array.isArray(data.listings) ? data.listings : [];
+                    const nextMyListings = filterMyListings(fetchedListings);
+
+                    setGlobalListings(fetchedListings);
+                    setMyListings(nextMyListings);
+                    setListings(activeTab === 'mine' ? nextMyListings : fetchedListings);
+
                     setCurrentPage(1);
                     setLoading(false);
-                    console.log('Fetched listings:', data.listings);
+                    console.log('Fetched listings:', fetchedListings);
                 })
                 .catch(error => console.error('Error fetching listings:', error));
         }
@@ -31,17 +84,85 @@ export default function AuctionHouseDialog({ user }) {
         fetchListings();
     }, []);
 
+    function handleSelectTab(nextTab) {
+        setActiveTab(nextTab);
+        setListings(nextTab === 'mine' ? myListings : globalListings);
+        setCurrentPage(1);
+    }
+
     function handleOpenListing(listing) {
-        //TODO - open a buying dialog
-        console.log('Open listing:', listing);
+        setSelectedListing(listing);
+        setIsBuyListingOpen(true);
     }
 
     function handleCreateListing() {
-        //TODO - open create listing dialog
+        setIsCreateListingOpen(true);
     }
 
-    function handleMyListings() {
-        //TODO - open my listings dialog
+    function handleCreateFieldChange(fieldName, fieldValue) {
+        setCreateListingForm(prev => ({ ...prev, [fieldName]: fieldValue }));
+    }
+
+    async function handleCreateListingSubmit(event) {
+        event.preventDefault();
+
+        if (!createListingForm.itemName || !createListingForm.price) {
+            return;
+        }
+
+        const newListing = {
+            itemName: createListingForm.itemName,
+            itemImageUrl: createListingForm.itemImageUrl || 'https://placehold.co/128x96?text=Item',
+            price: createListingForm.price,
+            username: userIdentifier
+        };
+
+        setCreateLoading(true);
+
+        try {
+            await placeholderFetch({ action: 'create-listing', listing: newListing });
+            const nextGlobalListings = [newListing, ...globalListings];
+            syncListings(nextGlobalListings);
+            setIsCreateListingOpen(false);
+            setCreateListingForm({ itemName: '', itemImageUrl: '', price: '' });
+        } finally {
+            setCreateLoading(false);
+        }
+    }
+
+    async function handleBuySelectedListing() {
+        if (!selectedListing) {
+            return;
+        }
+
+        setBuyLoading(true);
+
+        try {
+            await placeholderFetch({ action: 'buy-listing', listing: selectedListing });
+            const nextGlobalListings = globalListings.filter((listing, index) => {
+                if (listing === selectedListing) {
+                    return false;
+                }
+
+                const isSameValues =
+                    listing?.itemName === selectedListing?.itemName &&
+                    listing?.price === selectedListing?.price &&
+                    listing?.username === selectedListing?.username;
+
+                if (!isSameValues) {
+                    return true;
+                }
+
+                const selectedIndex = globalListings.findIndex((entry) => entry === selectedListing);
+                return index !== selectedIndex;
+            });
+
+            syncListings(nextGlobalListings);
+            setIsBuyListingOpen(false);
+            setSelectedListing(null);
+        } finally {
+            setBuyLoading(false);
+        }
     }
 
     function goToPreviousPage() {
@@ -58,12 +179,6 @@ export default function AuctionHouseDialog({ user }) {
                 <Dialog.Title style={{ margin: 0, color: "white" }}>AUCTION HOUSE</Dialog.Title>
                 <Flex gap="2">
                     <Button
-                        onClick={handleMyListings}
-                        style={{ cursor: 'pointer', color: 'white' }}
-                    >
-                        My Listings
-                    </Button>
-                    <Button
                         onClick={handleCreateListing}
                         style={{ cursor: 'pointer', color: 'white' }}
                     >
@@ -79,11 +194,30 @@ export default function AuctionHouseDialog({ user }) {
                 gap="3"
                 style={{ backgroundColor: "white", overflow: 'auto' }}
             >
+                <Flex gap="2" justify="center">
+                    <Button
+                        variant={activeTab === 'global' ? 'solid' : 'soft'}
+                        onClick={() => handleSelectTab('global')}
+                        style={{ cursor: 'pointer' }}
+                    >
+                        All Listings
+                    </Button>
+                    <Button
+                        variant={activeTab === 'mine' ? 'solid' : 'soft'}
+                        onClick={() => handleSelectTab('mine')}
+                        style={{ cursor: 'pointer' }}
+                    >
+                        My Listings
+                    </Button>
+                </Flex>
+
                 {loading ? (
                     <GameSpinner />
                 ) : pagedListings.length === 0 ? (
                     <Flex align="center" justify="center" style={{ minHeight: 220 }}>
-                        <Text color="gray" size="4">No listings available yet.</Text>
+                        <Text color="gray" size="4">
+                            {activeTab === 'mine' ? 'You have no active listings yet.' : 'No listings available yet.'}
+                        </Text>
                     </Flex>
                 ) : (
                     <Flex direction="column" style={{ border: '1px solid #d1d5db' }}>
@@ -151,6 +285,113 @@ export default function AuctionHouseDialog({ user }) {
                 </Text>
                 <Button onClick={goToNextPage} disabled={loading || currentPage >= totalPages}>Next</Button>
             </Flex>
+
+            <Dialog.Root open={isCreateListingOpen} onOpenChange={setIsCreateListingOpen}>
+                <Dialog.Content maxWidth="480px">
+                    <Dialog.Title>Create Listing</Dialog.Title>
+                    <Dialog.Description size="2" mb="3">
+                        Placeholder submit is used until backend endpoints are available.
+                    </Dialog.Description>
+
+                    <form onSubmit={handleCreateListingSubmit}>
+                        <Flex direction="column" gap="3">
+                            <Text as="label" size="2">
+                                Item Name
+                                <TextField.Root
+                                    mt="1"
+                                    placeholder="Excalibur"
+                                    value={createListingForm.itemName}
+                                    onChange={(event) => handleCreateFieldChange('itemName', event.target.value)}
+                                    required
+                                />
+                            </Text>
+
+                            <Text as="label" size="2">
+                                Price
+                                <TextField.Root
+                                    mt="1"
+                                    placeholder="1500"
+                                    value={createListingForm.price}
+                                    onChange={(event) => handleCreateFieldChange('price', event.target.value)}
+                                    required
+                                />
+                            </Text>
+
+                            <Text as="label" size="2">
+                                Item Image URL
+                                <TextField.Root
+                                    mt="1"
+                                    placeholder="https://..."
+                                    value={createListingForm.itemImageUrl}
+                                    onChange={(event) => handleCreateFieldChange('itemImageUrl', event.target.value)}
+                                />
+                            </Text>
+                        </Flex>
+
+                        <Flex gap="3" mt="4" justify="end">
+                            <Button type="button" variant="soft" color="gray" onClick={() => setIsCreateListingOpen(false)} disabled={createLoading}>
+                                Cancel
+                            </Button>
+                            <Button type="submit" disabled={createLoading}>
+                                {createLoading ? 'Creating...' : 'Create Listing'}
+                            </Button>
+                        </Flex>
+                    </form>
+                </Dialog.Content>
+            </Dialog.Root>
+
+            <Dialog.Root
+                open={isBuyListingOpen}
+                onOpenChange={(open) => {
+                    setIsBuyListingOpen(open);
+                    if (!open) {
+                        setSelectedListing(null);
+                    }
+                }}
+            >
+                <Dialog.Content maxWidth="520px">
+                    <Dialog.Title>Buy Listing</Dialog.Title>
+                    <Dialog.Description size="2" mb="3">
+                        Placeholder purchase request is used until backend endpoints are available.
+                    </Dialog.Description>
+
+                    {selectedListing ? (
+                        <Flex direction="column" gap="3">
+                            <img
+                                src={selectedListing.itemImageUrl}
+                                alt={selectedListing.itemName}
+                                style={{ width: '100%', height: 180, objectFit: 'cover', borderRadius: 6 }}
+                            />
+
+                            <Flex direction="column" gap="1">
+                                <Heading size="4">{selectedListing.itemName}</Heading>
+                                <Text color="gray" size="2">Seller: {selectedListing.username}</Text>
+                                <Text size="3" style={{ fontWeight: 700 }}>Price: {selectedListing.price}</Text>
+                            </Flex>
+                        </Flex>
+                    ) : (
+                        <Text color="gray">No listing selected.</Text>
+                    )}
+
+                    <Flex gap="3" mt="4" justify="end">
+                        <Button
+                            type="button"
+                            variant="soft"
+                            color="gray"
+                            onClick={() => {
+                                setIsBuyListingOpen(false);
+                                setSelectedListing(null);
+                            }}
+                            disabled={buyLoading}
+                        >
+                            Cancel
+                        </Button>
+                        <Button onClick={handleBuySelectedListing} disabled={buyLoading || !selectedListing}>
+                            {buyLoading ? 'Buying...' : 'Confirm Purchase'}
+                        </Button>
+                    </Flex>
+                </Dialog.Content>
+            </Dialog.Root>
 
         </Dialog.Content>
     )
