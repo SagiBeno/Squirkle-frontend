@@ -98,7 +98,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                 })
                 .catch((error) => {
                     console.warn(errorJSON);
-                    setToastData({ open: true, title: 'Item query status', description: 'An error occurred during the request. Please try again.', isError: true });
+                    setToastData({ open: true, title: 'Item upload status', description: 'An error occurred during the request. Please try again.', isError: true });
                 })
                 .finally(() => setLoading(false));
         }
@@ -126,7 +126,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
             })
             .catch((error) => {
                 console.warn(errorJSON);
-                setToastData({ open: true, title: 'Item query status', description: 'An error occurred during the request. Please try again.', isError: true });
+                setToastData({ open: true, title: 'Image deletion status', description: 'An error occurred during the request. Please try again.', isError: true });
             })
             .finally(() => setLoading(false));
     }
@@ -181,7 +181,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
             })
             .catch((error) => {
                 console.warn(errorJSON);
-                setToastData({ open: true, title: 'Item query status', description: 'An error occurred during the request. Please try again.', isError: true });
+                setToastData({ open: true, title: 'Status of the new item submission', description: 'An error occurred during the request. Please try again.', isError: true });
             })
             .finally(() => setLoading(false));
     }
@@ -390,7 +390,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                 })
                 .catch((error) => {
                     console.warn(errorJSON);
-                    setToastData({ open: true, title: 'Item query status', description: 'An error occurred during the request. Please try again.', isError: true });
+                    setToastData({ open: true, title: 'Deletion status', description: 'An error occurred during the request. Please try again.', isError: true });
                 })
                 .finally(() => setLoading(false));
         }
@@ -427,7 +427,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
             })
             .catch((error) => {
                 console.warn(errorJSON);
-                setToastData({ open: true, title: 'Item query status', description: 'An error occurred during the request. Please try again.', isError: true });
+                setToastData({ open: true, title: 'Status of the amendment', description: 'An error occurred during the request. Please try again.', isError: true });
             })
             .finally(() => setLoading(false));
     }
