@@ -248,10 +248,9 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                 }
             })
             .catch(async (errorJSON) => {
-                const errorRes = await errorJSON.json();
                 console.warn(errorJSON);
                 if (errorRes?.error) {
-                    setToastData({ open: true, title: 'Item query status', description: errorRes.error, isError: true });
+                    setToastData({ open: true, title: 'Item query status', description: 'An error occurred during the request. Please try again.', isError: true });
                 }
             })
             .finally(() => setLoading(false));
