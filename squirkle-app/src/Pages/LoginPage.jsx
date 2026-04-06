@@ -1,13 +1,18 @@
 import { Card, Flex, Box, Text, TextField, Button } from "@radix-ui/themes";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PasswordInput from "../components/PasswordInput";
 import { DisabledLoadingButton, EnterButton, DisabledButton, OrButton, GoogleLoginButton } from "../components/Buttons";
 import Separator from '../components/Separator';
 import { useNavigate } from "react-router-dom";
 
-export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGoogle, loading }) {
+export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGoogle, loading, setShowAppLoader }) {
 
     let navigate = useNavigate();
+
+    useEffect( () => {
+        setShowAppLoader(false);
+    }, []);
+
     const [formData, setFormData] = useState({
         email: '',
         password: ''

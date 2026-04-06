@@ -2,21 +2,22 @@ import { Table, Avatar, Code, Flex, IconButton } from '@radix-ui/themes';
 import { FaEdit } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 
-export default function ItemsTable( { items, handleSelectedModify } ) {
+export default function MetadataTable( { metadata, handleSelectedModify } ) {
 
     return (
         <Flex
             style={{
                 overflow: 'auto',
                 width: '75vw',
-                padding: '20px'
+                padding: '20px',
+                margin: '0 auto'
             }}
         >
             <Table.Root
             className='adminTable'
                 style={{
                     width: '920px',
-                    margin: 'auto',
+                    margin: '0 auto',
                     boxShadow: '0px 0px 2px 1px #777777'
                 }}
             >
@@ -37,7 +38,7 @@ export default function ItemsTable( { items, handleSelectedModify } ) {
                                 width: '100%'
                             }}
                         >
-                            Item's name
+                            Metadata's title
                         </Table.ColumnHeaderCell>
                         <Table.ColumnHeaderCell
                             style={{
@@ -52,8 +53,8 @@ export default function ItemsTable( { items, handleSelectedModify } ) {
 
                 <Table.Body>
                     {
-                        items.map( (item) => (
-                            <Table.Row key={item.id}>
+                        metadata.map( (data, idx) => (
+                            <Table.Row key={data?.id ? data.id : idx}>
                                 <Table.Cell>
                                     <Flex
                                         style={{
@@ -62,30 +63,23 @@ export default function ItemsTable( { items, handleSelectedModify } ) {
                                             alignItems: 'center',
                                         }}
                                     >
-                                        <Code color="gray" variant="solid" highContrast style={{ fontSize: '15px' }}>{item.id}</Code>
+                                        <Code color="gray" variant="solid" highContrast style={{ fontSize: '15px' }}>{data?.id}</Code>
                                     </Flex>
 
                                 </Table.Cell>
                                 <Table.Cell>
                                     <Flex
                                         style={{
-                                            height: '100%',
-                                            width: '100%',
+                                            flexDirection: 'row',
                                             alignItems: 'center',
                                             color: 'white',
+                                            height: '100%',
+                                            width: '100%',
                                             fontSize: '18px'
                                         }}
                                     >
-                                        <Avatar 
-                                            src={item?.imageUrl}
-                                            fallback={item?.name.charAt(0)}
-                                            style={{
-                                                marginRight: '15px'
-                                            }}
-                                        />
-                                        {item.name}
+                                        {data?.title}
                                     </Flex>
-                                    
                                 </Table.Cell>
                                 <Table.Cell>
                                     <Flex
@@ -96,7 +90,7 @@ export default function ItemsTable( { items, handleSelectedModify } ) {
                                         }}                                    
                                     >
 
-                                        <IconButton className='button activeButton' onClick={() => handleSelectedModify(item)} >
+                                        <IconButton className='button activeButton' onClick={() => handleSelectedModify(data)} >
 	                                        <FaEdit width="18" height="18" />
                                         </IconButton>
                                     </Flex>

@@ -2,10 +2,11 @@ import { Box, Flex, Text, Button } from '@radix-ui/themes';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
-export default function HomePage({user}) {
+export default function HomePage({user, setShowAppLoader}) {
     const navigate = useNavigate();
 
     useEffect(() => {
+        setShowAppLoader(false);
         if (user != null)
         {
             navigate("/game")

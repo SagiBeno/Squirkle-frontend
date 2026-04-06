@@ -4,11 +4,12 @@ import { useEffect } from "react";
 import ItemsTable from '../ItemsTable';
 import { HiXMark } from "react-icons/hi2";
 import DialogSpinner from "../DialogSpinner";
+import MetadataTable from "../MetadataTable";
 
-export default function AllItemsDialog({ open, setOpen, handleSelectedModify }) {
+export default function AllMetadataDialog({ open, setOpen, handleSelectedModify }) {
 
-    const [items, setItems] = useState([]);
-    const [filteredItems, setFilteredItems] = useState([]);
+    const [metadata, setMetadata] = useState([]);
+    const [filteredMetadata, setFilteredMetadata] = useState([]);
     const [filterValue, setFilterValue] = useState('');
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -19,12 +20,12 @@ export default function AllItemsDialog({ open, setOpen, handleSelectedModify }) 
 
     function getItems() {
         setLoading(true);
-        fetch('https://squirkle-backend.vercel.app/api/get-all-items')
+        fetch('https://squirkle-backend.vercel.app/api/get-all-metadatas')
             .then(async (resJSON) => {
                 const res = await resJSON.json();
-                if (res?.items) {
-                    setItems(res.items);
-                    setFilteredItems(res.items);
+                if (res?.metadatas) {
+                    setMetadata(res.metadatas);
+                    setFilteredMetadata(res.metadatas);
                 }
             })
             .catch(console.warn)
@@ -33,11 +34,11 @@ export default function AllItemsDialog({ open, setOpen, handleSelectedModify }) 
 
     function searchForItem(value) {
         if (value.trim().length === 0) {
-            setFilteredItems(items);
+            setFilteredMetadata(metadata);
             return;
         }
 
-        setFilteredItems(items.filter((item) => item.id.toLowerCase().includes(value) || item.name.toLowerCase().includes(value)));
+        setFilteredMetadata(metadata.filter((data) => data.id.toLowerCase().includes(value) || data.title.toLowerCase().includes(value) || data.description.toLowerCase().includes(value)));
         return;
     }
 
@@ -62,7 +63,7 @@ export default function AllItemsDialog({ open, setOpen, handleSelectedModify }) 
                             justifyContent: "space-between"
                         }}
                     >
-                        <Text size='6' style={{ margin: '0 auto' }}>All items</Text>
+                        <Text size='6' style={{ margin: '0 auto' }}>All metadata</Text>
                         <IconButton
                             className="button activeButton"
                             onClick={() => setOpen(false)}
@@ -75,7 +76,7 @@ export default function AllItemsDialog({ open, setOpen, handleSelectedModify }) 
                 </Dialog.Title>
 
                 <Dialog.Description>
-                    Search for an item or select one
+                    Search for a metadata or select one
                 </Dialog.Description>
 
                 {
@@ -87,7 +88,7 @@ export default function AllItemsDialog({ open, setOpen, handleSelectedModify }) 
                             <TextField.Root
                                 className="textField"
                                 radius="none"
-                                placeholder="Search for item"
+                                placeholder="Search for metadata"
                                 size="3"
                                 mt="2"
                                 mb="3"
@@ -101,9 +102,9 @@ export default function AllItemsDialog({ open, setOpen, handleSelectedModify }) 
                             />
 
                             {
-                                filteredItems.length > 0
+                                filteredMetadata.length > 0
                                     ?
-                                    <ItemsTable items={filteredItems} handleSelectedModify={handleSelectedModify} />
+                                    <MetadataTable metadata={filteredMetadata} handleSelectedModify={handleSelectedModify} />
                                     :
                                     <Flex style={{ width: '100%', justifyContent: 'center' }}>
                                         <Text size="5">No results found</Text>
