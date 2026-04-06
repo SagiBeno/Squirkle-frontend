@@ -9,7 +9,6 @@ export default function AdminSpinner() {
                         display: flex;
                         justify-content: center;
                         align-items: center;
-                        margin-left: 5px;
                         z-index: 9999;
                         width: 100vw;
                         height: 100vh;

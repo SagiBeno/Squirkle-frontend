@@ -9,7 +9,6 @@ export default function DialogSpinner() {
                         display: flex;
                         justify-content: center;
                         align-items: center;
-                        margin-left: 5px;
                     }
 
                     #dialogSpinner::after {
