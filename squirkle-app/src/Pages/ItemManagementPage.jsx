@@ -10,7 +10,7 @@ import DeleteAlert from '../components/DeleteAlert';
 import AdminTextArea from '../components/AdminTextArea';
 import AdminSpinner from '../components/AdminSpinner';
 
-export default function ItemManagementPage({ user, toastData, setToastData }) {
+export default function ItemManagementPage({ user, toastData, setToastData, setShowAppLoader }) {
 
     const [itemData, setItemData] = useState({
         name: "",
@@ -42,6 +42,10 @@ export default function ItemManagementPage({ user, toastData, setToastData }) {
         itemData.stats?.metadata?.every(data => data.trim().length > 0) &&
         itemData.knockback.length > 0 &&
         itemData.stats.critDamage.length > 0;
+
+    useEffect( () => {
+        setShowAppLoader(false);
+    }, []);
 
     useEffect(() => {
 
