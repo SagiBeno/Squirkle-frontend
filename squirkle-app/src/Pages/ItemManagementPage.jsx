@@ -504,7 +504,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                                     }}
                                 >
                                     <Text size="8" className='text' style={{ fontWeight: 'bold', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>Modify item</Text>
-                                    {segmentedControlValue === 'modifyItem' && <Button className='button activeButton' style={{ position: '' }} onClick={() => setShowItemsDialog(true)}>Select another item</Button>}
+                                    {segmentedControlValue === 'modifyItem' && <Button className='button activeButton' onClick={() => setShowItemsDialog(true)}>Select another item</Button>}
                                 </Flex>
                         }
 
