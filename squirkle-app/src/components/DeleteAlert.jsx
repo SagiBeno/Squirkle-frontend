@@ -40,7 +40,7 @@ export default function DeleteAlert({ open, setOpen, data, itemID, handleDelete,
                         </DataList.Item>
                         <DataList.Item>
                             <DataList.Label minWidth="88px" style={{color: 'white'}}>Name</DataList.Label>
-                            <DataList.Value>{data.name}</DataList.Value>
+                            <DataList.Value>{data.name || data.title}</DataList.Value>
                         </DataList.Item>
                     </DataList.Root>
                 </Flex>
