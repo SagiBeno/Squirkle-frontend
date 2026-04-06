@@ -2,7 +2,7 @@ import { AlertDialog, Button, Flex, DataList, Code } from "@radix-ui/themes";
 import { FaTrash } from "react-icons/fa";
 import { TbCancel } from "react-icons/tb";
 
-export default function DeleteAlert({ open, setOpen, data, itemID, handleDelete }) {
+export default function DeleteAlert({ open, setOpen, data, itemID, handleDelete, description, title }) {
 
     return (
         <AlertDialog.Root open={open} setOpen={setOpen}>
@@ -18,7 +18,7 @@ export default function DeleteAlert({ open, setOpen, data, itemID, handleDelete 
                     boxShadow: '0px 0px 5px 2px gray'
                 }}
             >
-                <AlertDialog.Title>Delete item</AlertDialog.Title>
+                <AlertDialog.Title>{title}</AlertDialog.Title>
                 <AlertDialog.Description size="3">
                     Are you sure you want to delete the following item?
                 </AlertDialog.Description>

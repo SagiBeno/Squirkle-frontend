@@ -841,6 +841,8 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                     data={itemData}
                     itemID={itemData.itemID}
                     handleDelete={handleDeleteItem}
+                    title='Delete item'
+                    description='Are you sure you want to delete the following item?'
                 />
             }
 
