@@ -131,7 +131,7 @@
     }
 }
 
-@media screen and (max-width: 660px) {
+@media screen and (max-width: 830px) {
     .modifyWrapper {
         flex-direction: column !important;
         align-items: center !important;
