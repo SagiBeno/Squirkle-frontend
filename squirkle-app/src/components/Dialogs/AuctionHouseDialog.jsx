@@ -24,6 +24,7 @@ export default function AuctionHouseDialog({ user }) {
                     setListings(data.listings);
                     setCurrentPage(1);
                     setLoading(false);
+                    console.log('Fetched listings:', data.listings);
                 })
                 .catch(error => console.error('Error fetching listings:', error));
         }
@@ -31,8 +32,16 @@ export default function AuctionHouseDialog({ user }) {
         fetchListings();
     }, []);
 
+    function handleOpenListing() {
+        //TODO - open a buying dialog
+    }
+
     function handleCreateListing() {
-        //TODO 
+        //TODO - open create listing dialog
+    }
+
+    function handleMyListings() {
+        //TODO - open my listings dialog
     }
 
     function goToPreviousPage() {
@@ -47,41 +56,54 @@ export default function AuctionHouseDialog({ user }) {
         <Dialog.Content maxWidth="90vw" height="80vh" style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent" }}>
             <Flex align="center" justify="between" px="4" py="3" style={{ backgroundColor: '#1f2937' }}>
                 <Dialog.Title style={{ margin: 0, color: "white" }}>AUCTION HOUSE</Dialog.Title>
-                <Button
-                    onClick={handleCreateListing}
-                    disabled={!user?.user}
-                    style={{ cursor: user?.user ? 'pointer' : 'not-allowed' }}
-                >
-                    Create Listing
-                </Button>
+                <Flex gap="2">
+                    <Button
+                        onClick={handleMyListings}
+                        style={{ cursor: 'pointer', color: 'white' }}
+                    >
+                        My Listings
+                    </Button>
+                    <Button
+                        onClick={handleCreateListing}
+                        style={{ cursor: 'pointer', color: 'white' }}
+                    >
+                        Create Listing
+                    </Button>
+                </Flex>
             </Flex>
 
             <Flex
+                direction="column"
                 height="calc(100% - 114px)"
-                wrap="wrap"
-                gap="3"
                 p="3"
-                style={{ backgroundColor: "white", alignContent: 'flex-start', overflow: 'auto' }}
+                gap="3"
+                style={{ backgroundColor: "white", overflow: 'auto' }}
             >
                 {loading ? (
                     <GameSpinner />
+                ) : pagedListings.length === 0 ? (
+                    <Flex align="center" justify="center" style={{ minHeight: 220 }}>
+                        <Text color="gray" size="4">No listings available yet.</Text>
+                    </Flex>
                 ) : (
-                    pagedListings.map((listing, index) => (
-                        <Card key={`${listing?.itemName ?? 'listing'}-${startIndex + index}`} size="2" style={{ width: 260 }}>
-                            <Flex direction="column" gap="2">
-                                <Heading size="4">{listing.itemName}</Heading>
-                                <Text color="gray">Price: {listing.price}</Text>
+                    <Flex wrap="wrap" gap="3" style={{ alignContent: 'flex-start' }}>
+                        {pagedListings.map((listing, index) => (
+                            <Card key={`${listing?.itemName ?? 'listing'}-${startIndex + index}`} size="2" style={{ width: 260 }}>
+                                <Flex direction="column" gap="2">
+                                    <Heading size="4">{listing.itemName}</Heading>
+                                    <Text color="gray">Price: {listing.price}</Text>
 
-                                <img
-                                    src={listing.itemImageUrl}
-                                    alt={listing.itemName}
-                                    style={{ width: '100%', height: 140, objectFit: 'cover', borderRadius: 6 }}
-                                />
+                                    <img
+                                        src={listing.itemImageUrl}
+                                        alt={listing.itemName}
+                                        style={{ width: '100%', height: 140, objectFit: 'cover', borderRadius: 6 }}
+                                    />
 
-                                <Text>Seller: {listing.username}</Text>
-                            </Flex>
-                        </Card>
-                    ))
+                                    <Text>Seller: {listing.username}</Text>
+                                </Flex>
+                            </Card>
+                        ))}
+                    </Flex>
                 )}
             </Flex>
 
