@@ -43,7 +43,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
         itemData.knockback.length > 0 &&
         itemData.stats.critDamage.length > 0;
 
-    useEffect( () => {
+    useEffect(() => {
         setShowAppLoader(false);
     }, []);
 
@@ -96,12 +96,9 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                         setToastData({ open: true, title: 'Image upload status', description: res.error, isError: true });
                     }
                 })
-                .catch(async (errorJSON) => {
-                    const errorRes = await errorJSON.json();
+                .catch((error) => {
                     console.warn(errorJSON);
-                    if (errorRes?.error) {
-                        setToastData({ open: true, title: 'Image upload status', description: errorRes.error, isError: true });
-                    }
+                    setToastData({ open: true, title: 'Item query status', description: 'An error occurred during the request. Please try again.', isError: true });
                 })
                 .finally(() => setLoading(false));
         }
@@ -127,12 +124,9 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                     setToastData({ open: true, title: 'Image deletion status', description: res.message, isError: false });
                 }
             })
-            .catch(async (errorJSON) => {
-                const errorRes = await errorJSON.json();
+            .catch((error) => {
                 console.warn(errorJSON);
-                if (errorRes?.error) {
-                    setToastData({ open: true, title: 'Image deletion status', description: errorRes.error, isError: true });
-                }
+                setToastData({ open: true, title: 'Item query status', description: 'An error occurred during the request. Please try again.', isError: true });
             })
             .finally(() => setLoading(false));
     }
@@ -185,12 +179,9 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                     })
                 }
             })
-            .catch(async (errorJSON) => {
-                const errorRes = await errorJSON.json();
+            .catch((error) => {
                 console.warn(errorJSON);
-                if (errorRes?.error) {
-                    setToastData({ open: true, title: 'Status of the new item submission', description: errorRes.error, isError: true });
-                }
+                setToastData({ open: true, title: 'Item query status', description: 'An error occurred during the request. Please try again.', isError: true });
             })
             .finally(() => setLoading(false));
     }
@@ -247,11 +238,9 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                     setToastData({ open: true, title: 'Item query status', description: res.error, isError: true });
                 }
             })
-            .catch(async (errorJSON) => {
+            .catch((error) => {
                 console.warn(errorJSON);
-                if (errorRes?.error) {
-                    setToastData({ open: true, title: 'Item query status', description: 'An error occurred during the request. Please try again.', isError: true });
-                }
+                setToastData({ open: true, title: 'Item query status', description: 'An error occurred during the request. Please try again.', isError: true });
             })
             .finally(() => setLoading(false));
     }
@@ -399,12 +388,9 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                         setToastData({ open: true, title: 'Deletion status', description: res.message, isError: false });
                     }
                 })
-                .catch(async (errorJSON) => {
-                    const errorRes = await errorJSON.json();
+                .catch((error) => {
                     console.warn(errorJSON);
-                    if (errorRes?.error) {
-                        setToastData({ open: true, title: 'Deletion status', description: errorRes.error, isError: true });
-                    }
+                    setToastData({ open: true, title: 'Item query status', description: 'An error occurred during the request. Please try again.', isError: true });
                 })
                 .finally(() => setLoading(false));
         }
@@ -439,12 +425,9 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
 
                 if (resJSON.status === 200) setSegmentedControlValue('newItem');
             })
-            .catch(async (errorJSON) => {
-                const errorRes = await errorJSON.json();
+            .catch((error) => {
                 console.warn(errorJSON);
-                if (errorRes?.error) {
-                    setToastData({ open: true, title: 'Status of the amendment', description: errorRes.error, isError: true });
-                }
+                setToastData({ open: true, title: 'Item query status', description: 'An error occurred during the request. Please try again.', isError: true });
             })
             .finally(() => setLoading(false));
     }
