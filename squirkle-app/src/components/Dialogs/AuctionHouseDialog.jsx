@@ -1,6 +1,5 @@
-import { Button, Card, Dialog, Flex, Heading, Text } from '@radix-ui/themes'
+import { Button, Dialog, Flex, Heading, Text } from '@radix-ui/themes'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 import GameSpinner from '../GameSpinner'
 
@@ -32,8 +31,9 @@ export default function AuctionHouseDialog({ user }) {
         fetchListings();
     }, []);
 
-    function handleOpenListing() {
+    function handleOpenListing(listing) {
         //TODO - open a buying dialog
+        console.log('Open listing:', listing);
     }
 
     function handleCreateListing() {
@@ -86,22 +86,59 @@ export default function AuctionHouseDialog({ user }) {
                         <Text color="gray" size="4">No listings available yet.</Text>
                     </Flex>
                 ) : (
-                    <Flex wrap="wrap" gap="3" style={{ alignContent: 'flex-start' }}>
-                        {pagedListings.map((listing, index) => (
-                            <Card key={`${listing?.itemName ?? 'listing'}-${startIndex + index}`} size="2" style={{ width: 260 }}>
-                                <Flex direction="column" gap="2">
-                                    <Heading size="4">{listing.itemName}</Heading>
-                                    <Text color="gray">Price: {listing.price}</Text>
+                    <Flex direction="column" style={{ border: '1px solid #d1d5db' }}>
+                        <Flex
+                            px="3"
+                            py="2"
+                            align="center"
+                            justify="between"
+                            style={{ backgroundColor: '#f3f4f6', borderBottom: '1px solid #d1d5db', fontWeight: 600 }}
+                        >
+                            <Text size="2" style={{ width: '75%' }}>Item</Text>
+                            <Text size="2" style={{ width: '25%', textAlign: 'right' }}>Price</Text>
+                        </Flex>
 
+                        {pagedListings.map((listing, index) => (
+                            <Flex
+                                key={`${listing?.itemName ?? 'listing'}-${startIndex + index}`}
+                                px="3"
+                                py="2"
+                                align="center"
+                                justify="between"
+                                onClick={() => handleOpenListing(listing)}
+                                role="button"
+                                tabIndex={0}
+                                onKeyDown={(event) => {
+                                    if (event.key === 'Enter' || event.key === ' ') {
+                                        event.preventDefault();
+                                        handleOpenListing(listing);
+                                    }
+                                }}
+                                style={{
+                                    borderBottom: index === pagedListings.length - 1 ? 'none' : '1px solid #e5e7eb',
+                                    backgroundColor: index % 2 === 0 ? '#ffffff' : '#f9fafb',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                <Flex align="center" gap="3" style={{ width: '75%', minWidth: 0 }}>
                                     <img
                                         src={listing.itemImageUrl}
                                         alt={listing.itemName}
-                                        style={{ width: '100%', height: 140, objectFit: 'cover', borderRadius: 6 }}
+                                        style={{ width: 64, height: 48, objectFit: 'cover', borderRadius: 4, flexShrink: 0 }}
                                     />
 
-                                    <Text>Seller: {listing.username}</Text>
+                                    <Flex direction="column" style={{ minWidth: 0 }}>
+                                        <Heading size="3" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                            {listing.itemName}
+                                        </Heading>
+                                        <Text size="2" color="gray" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                            Seller: {listing.username}
+                                        </Text>
+                                    </Flex>
                                 </Flex>
-                            </Card>
+
+                                <Text style={{ width: '25%', textAlign: 'right', fontWeight: 600 }}>{listing.price}</Text>
+                            </Flex>
                         ))}
                     </Flex>
                 )}
