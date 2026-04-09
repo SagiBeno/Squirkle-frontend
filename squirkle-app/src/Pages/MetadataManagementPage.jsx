@@ -11,6 +11,7 @@ import DeleteAlert from "../components/DeleteAlert";
 export default function MetadataManagementPage({ user, setShowAppLoader, toastData, setToastData }) {
 
     const [metadata, setMetadata] = useState({
+        id: '',
         title: '',
         description: '',
         backgroundColor: '#FFFFFF',
@@ -72,10 +73,8 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
         if (user?.user.uid) {
             setLoading(true);
             const userId = user.user.uid;
-            const metadataID = metadata.title.trim().toUpperCase().replace(' ', '_');
             const reqBody = {
                 userId: userId,
-                id: metadataID,
                 ...metadata,
                 title: metadata.title.trim(),
                 description: metadata.description.trim()
@@ -304,6 +303,19 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
                                     justifyContent: 'center'
                                 }}
                             >
+                                <AdminTextField
+                                    title="Metadata ID"
+                                    placeholder="META_DATA"
+                                    name="metadataID"
+                                    id="metadataID"
+                                    value={metadata.id}
+                                    onChange={(e) => {
+                                        let value = e.target.value;
+                                        value = value.toUpperCase();
+                                        updateMetadata('id', value);
+                                    }}
+                                />
+
                                 <AdminTextField
                                     title="Metadata's title"
                                     placeholder="Metadata's title"
