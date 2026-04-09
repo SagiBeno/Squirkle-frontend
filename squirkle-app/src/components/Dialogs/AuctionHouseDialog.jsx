@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import GameSpinner from '../GameSpinner';
 import ItemDetailsDialog from './ItemDetailsDialog';
 import CreateListingDialog from './CreateListingDialog';
+import CreateInspectionDialog from './CreateInspectionDialog';
+import BuyListingDialog from './BuyListingDialog';
 
 const ITEMS_PER_PAGE = 8
 
@@ -304,7 +306,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
 
         <>
             <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: 'auto' }}>
-                <Dialog.Title style={{ marginTop: 15, color: 'white' }}>AUCTION HOUSE</Dialog.Title>
+                <Dialog.Title style={{ marginTop: 15, color: 'white', textTransform: 'uppercase' }}>Auction house</Dialog.Title>
 
                 <Flex
                     direction="column"
@@ -458,22 +460,6 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
                         }
                     />
                 </Dialog.Root>
-
-                <Dialog.Root open={isCreateInspectOpen} onOpenChange={setIsCreateInspectOpen}>
-                    <ItemDetailsDialog
-                        itemData={selectedCreateItem}
-                        rightPanelExtra={
-                            selectedCreateItem ? (
-                                <Flex direction="column" gap="2" mt="2" style={{ width: '100%' }}>
-                                    <Text size="2" color="gray">Selected for listing</Text>
-                                    <Text size="2" color="gray">Type: {selectedCreateItem.type}</Text>
-                                    <Heading size="4">Set Price: {createListingForm.price || '-'}</Heading>
-                                </Flex>
-                            ) : null
-                        }
-                    />
-                </Dialog.Root>
-
             </Dialog.Content>
 
             {
@@ -490,6 +476,39 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
                     handleCreateFieldChange={handleCreateFieldChange}
                     createLoading={createLoading}
                     handleCreateListingSubmit={handleCreateListingSubmit}
+                />
+            }
+
+            {
+                isCreateInspectOpen && 
+                <CreateInspectionDialog
+                    open={isCreateInspectOpen}
+                    setOpen={setIsCreateInspectOpen}
+                    itemData={selectedCreateItem}
+                    createListingForm={createListingForm}
+                />
+            }
+
+            {
+                isBuyListingOpen &&
+                <BuyListingDialog 
+                    open={isBuyListingOpen}
+                    onOpenChange={(open) => {
+                        setIsBuyListingOpen(open);
+                        if (!open) {
+                            setSelectedListing(null);
+                            setSelectedListingBuyable(true);
+                            setSelectedListingItemData(null);
+                            setSelectedListingLoading(false);
+                        }
+                    }}
+                    selectedListingItemData={selectedListingItemData}
+                    selectedListing={selectedListing}
+                    setSelectedListingBuyable={setSelectedListingBuyable}
+                    selectedListingBuyable={selectedListingBuyable}
+                    handleBuySelectedListing={handleBuySelectedListing}
+                    buyLoading={buyLoading}
+                    selectedListingLoading={selectedListingLoading}
                 />
             }
 
