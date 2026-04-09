@@ -29,27 +29,26 @@ export default function GamePage({ user, signOut, setShowAppLoader }) {
         setCoins(user.coinCount)
     }, [user])
 
-    function RenderCurrentDialog()
-    {
-        switch(dialogState) {
+    function RenderCurrentDialog() {
+        switch (dialogState) {
             case AREA_SELECTOR_STATE:
-                return <AreaSelectorDialog/>
+                return <AreaSelectorDialog />
             case INVENTORY_STATE:
-                return <InventoryDialog/>
+                return <InventoryDialog />
             case AUCTION_HOUSE_STATE:
-                return <AuctionHouseDialog/>
+                return <AuctionHouseDialog user={user} />
         }
 
         return null
     }
 
-    const [ isGameLoaded, setIsGameLoaded ] = useState(false)
-    const [ isLoading, setIsLoading ] = useState(false)
-    const [ filePaths, setFilePaths ] = useState({})
-    const [ coins, setCoins ] = useState(0)
-    
+    const [isGameLoaded, setIsGameLoaded] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const [filePaths, setFilePaths] = useState({})
+    const [coins, setCoins] = useState(0)
+
     const gameContext = {
-        isGameLoaded, setIsGameLoaded, 
+        isGameLoaded, setIsGameLoaded,
         isLoading, setIsLoading,
         filePaths, setFilePaths,
         coins: coins,
@@ -59,13 +58,13 @@ export default function GamePage({ user, signOut, setShowAppLoader }) {
     return (
         <Dialog.Root>
             <GameContext.Provider value={gameContext}>
-                <Navbar user={user} signOut={signOut} setDialogState={setDialogState}/>
+                <Navbar user={user} signOut={signOut} setDialogState={setDialogState} />
                 <Flex className='mainContainer'>
 
                     <Box className='navbarSpacer' />
 
-                    <Flex className='contentContainer'>   
-                        <GameLoader user={user}/>
+                    <Flex className='contentContainer'>
+                        <GameLoader user={user} />
                     </Flex>
                 </Flex>
 

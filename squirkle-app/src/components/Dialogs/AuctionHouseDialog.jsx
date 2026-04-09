@@ -5,15 +5,18 @@ import GameSpinner from '../GameSpinner'
 
 const ITEMS_PER_PAGE = 8
 
-function placeholderFetch(payload) {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({ ok: true, data: payload });
-        }, 700);
-    });
-}
+const API_BASE_URL = 'https://squirkle-backend.vercel.app/api'
 
-//TODO - create a normal create listing item chooser menu with drowpdown and item details
+async function fetchJsonOrThrow(url, options) {
+    const response = await fetch(url, options);
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+        throw new Error(data?.error || 'Request failed');
+    }
+
+    return data;
+}
 
 export default function AuctionHouseDialog({ user }) {
     const [listings, setListings] = useState([]);
@@ -29,10 +32,12 @@ export default function AuctionHouseDialog({ user }) {
     const [selectedListing, setSelectedListing] = useState(null);
 
     const [createListingForm, setCreateListingForm] = useState({
-        itemName: '',
-        itemImageUrl: '',
+        itemId: '',
+        userItemId: '',
         price: ''
     });
+    const [createCandidates, setCreateCandidates] = useState([]);
+    const [createCandidatesLoading, setCreateCandidatesLoading] = useState(false);
 
     const [createLoading, setCreateLoading] = useState(false);
     const [buyLoading, setBuyLoading] = useState(false);
@@ -43,14 +48,37 @@ export default function AuctionHouseDialog({ user }) {
     const pagedListings = listings.slice(startIndex, endIndex);
 
     const userIdentifier = user?.username || user?.name || user?.email || 'You';
+    const userId = user?.user?.uid || user?.uid || user?.user?.user?.uid || null;
+
+    const selectedCreateItem = createCandidates.find((item) => item.userItemId === createListingForm.userItemId) || null;
+
+    async function fetchListings() {
+        try {
+            const data = await fetchJsonOrThrow(`${API_BASE_URL}/get-all-listings`);
+            const fetchedListings = Array.isArray(data.listings) ? data.listings : [];
+            const nextMyListings = filterMyListings(fetchedListings);
+
+            setGlobalListings(fetchedListings);
+            setMyListings(nextMyListings);
+            setListings(activeTab === 'mine' ? nextMyListings : fetchedListings);
+            setCurrentPage(1);
+        } catch (error) {
+            console.error('Error fetching listings:', error);
+            setGlobalListings([]);
+            setMyListings([]);
+            setListings([]);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     function filterMyListings(sourceListings) {
-        const lowerUserIdentifier = String(userIdentifier).toLowerCase();
+        if (userId) {
+            return sourceListings.filter((listing) => String(listing?.userId || '').trim() === String(userId).trim());
+        }
 
-        return sourceListings.filter((listing) => {
-            const seller = String(listing?.username || listing?.seller || listing?.email || '').toLowerCase();
-            return seller === lowerUserIdentifier;
-        });
+        const lowerUserIdentifier = String(userIdentifier).toLowerCase();
+        return sourceListings.filter((listing) => String(listing?.username || '').toLowerCase() === lowerUserIdentifier);
     }
 
     function syncListings(nextGlobalListings) {
@@ -63,26 +91,8 @@ export default function AuctionHouseDialog({ user }) {
     }
 
     useEffect(() => {
-        function fetchListings() {
-            fetch('https://squirkle-backend.vercel.app/api/get-all-listings')
-                .then(response => response.json())
-                .then(data => {
-                    const fetchedListings = Array.isArray(data.listings) ? data.listings : [];
-                    const nextMyListings = filterMyListings(fetchedListings);
-
-                    setGlobalListings(fetchedListings);
-                    setMyListings(nextMyListings);
-                    setListings(activeTab === 'mine' ? nextMyListings : fetchedListings);
-
-                    setCurrentPage(1);
-                    setLoading(false);
-                    console.log('Fetched listings:', fetchedListings);
-                })
-                .catch(error => console.error('Error fetching listings:', error));
-        }
-
         fetchListings();
-    }, []);
+    }, [userId]);
 
     function handleSelectTab(nextTab) {
         setActiveTab(nextTab);
@@ -95,36 +105,87 @@ export default function AuctionHouseDialog({ user }) {
         setIsBuyListingOpen(true);
     }
 
-    function handleCreateListing() {
+    async function handleCreateListing() {
+        if (!userId) {
+            return;
+        }
+
         setIsCreateListingOpen(true);
+        setCreateCandidatesLoading(true);
+
+        try {
+            const [inventoryData, listedIdsData] = await Promise.all([
+                fetchJsonOrThrow(`${API_BASE_URL}/get-inventory/${encodeURIComponent(userId)}`),
+                fetchJsonOrThrow(`${API_BASE_URL}/get-listed-user-item-ids/${encodeURIComponent(userId)}`),
+            ]);
+
+            const listedIds = new Set((listedIdsData?.userItemIds || []).map((id) => String(id).trim()));
+            const inventoryItems = Array.isArray(inventoryData?.items) ? inventoryData.items : [];
+
+            const availableItems = inventoryItems.filter((item) => !listedIds.has(String(item?.userItemId || '').trim()));
+            setCreateCandidates(availableItems);
+
+            if (availableItems.length > 0) {
+                setCreateListingForm((prev) => ({
+                    ...prev,
+                    itemId: availableItems[0].itemId,
+                    userItemId: availableItems[0].userItemId,
+                    price: prev.price,
+                }));
+            } else {
+                setCreateListingForm((prev) => ({ ...prev, itemId: '', userItemId: '' }));
+            }
+        } catch (error) {
+            console.error('Failed to fetch create listing candidates:', error);
+            setCreateCandidates([]);
+            setCreateListingForm((prev) => ({ ...prev, itemId: '', userItemId: '' }));
+        } finally {
+            setCreateCandidatesLoading(false);
+        }
     }
 
     function handleCreateFieldChange(fieldName, fieldValue) {
+        if (fieldName === 'userItemId') {
+            const selectedItem = createCandidates.find((candidate) => candidate.userItemId === fieldValue);
+            setCreateListingForm((prev) => ({
+                ...prev,
+                userItemId: fieldValue,
+                itemId: selectedItem?.itemId || '',
+            }));
+            return;
+        }
+
         setCreateListingForm(prev => ({ ...prev, [fieldName]: fieldValue }));
     }
 
     async function handleCreateListingSubmit(event) {
         event.preventDefault();
 
-        if (!createListingForm.itemName || !createListingForm.price) {
+        if (!userId || !createListingForm.itemId || !createListingForm.userItemId || !createListingForm.price) {
             return;
         }
-
-        const newListing = {
-            itemName: createListingForm.itemName,
-            itemImageUrl: createListingForm.itemImageUrl || 'https://placehold.co/128x96?text=Item',
-            price: createListingForm.price,
-            username: userIdentifier
-        };
 
         setCreateLoading(true);
 
         try {
-            await placeholderFetch({ action: 'create-listing', listing: newListing });
-            const nextGlobalListings = [newListing, ...globalListings];
-            syncListings(nextGlobalListings);
+            await fetchJsonOrThrow(`${API_BASE_URL}/create-listing`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId,
+                    itemId: createListingForm.itemId,
+                    userItemId: createListingForm.userItemId,
+                    price: Number(createListingForm.price),
+                }),
+            });
+
+            setLoading(true);
+            await fetchListings();
             setIsCreateListingOpen(false);
-            setCreateListingForm({ itemName: '', itemImageUrl: '', price: '' });
+            setCreateListingForm({ itemId: '', userItemId: '', price: '' });
+            setCreateCandidates([]);
+        } catch (error) {
+            console.error('Failed to create listing:', error);
         } finally {
             setCreateLoading(false);
         }
@@ -135,31 +196,25 @@ export default function AuctionHouseDialog({ user }) {
             return;
         }
 
+        if (!userId) {
+            return;
+        }
+
         setBuyLoading(true);
 
         try {
-            await placeholderFetch({ action: 'buy-listing', listing: selectedListing });
-            const nextGlobalListings = globalListings.filter((listing, index) => {
-                if (listing === selectedListing) {
-                    return false;
-                }
-
-                const isSameValues =
-                    listing?.itemName === selectedListing?.itemName &&
-                    listing?.price === selectedListing?.price &&
-                    listing?.username === selectedListing?.username;
-
-                if (!isSameValues) {
-                    return true;
-                }
-
-                const selectedIndex = globalListings.findIndex((entry) => entry === selectedListing);
-                return index !== selectedIndex;
+            await fetchJsonOrThrow(`${API_BASE_URL}/buy-listing/${encodeURIComponent(selectedListing.id)}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId }),
             });
 
-            syncListings(nextGlobalListings);
+            setLoading(true);
+            await fetchListings();
             setIsBuyListingOpen(false);
             setSelectedListing(null);
+        } catch (error) {
+            console.error('Failed to buy listing:', error);
         } finally {
             setBuyLoading(false);
         }
@@ -290,20 +345,30 @@ export default function AuctionHouseDialog({ user }) {
                 <Dialog.Content maxWidth="480px">
                     <Dialog.Title>Create Listing</Dialog.Title>
                     <Dialog.Description size="2" mb="3">
-                        Placeholder submit is used until backend endpoints are available.
+                        Select one of your inventory items and set a price.
                     </Dialog.Description>
 
                     <form onSubmit={handleCreateListingSubmit}>
                         <Flex direction="column" gap="3">
                             <Text as="label" size="2">
-                                Item Name
-                                <TextField.Root
-                                    mt="1"
-                                    placeholder="Excalibur"
-                                    value={createListingForm.itemName}
-                                    onChange={(event) => handleCreateFieldChange('itemName', event.target.value)}
+                                Inventory Item
+                                <select
+                                    style={{ marginTop: 4, width: '100%', height: 36, borderRadius: 6, border: '1px solid #d1d5db', padding: '0 8px' }}
+                                    value={createListingForm.userItemId}
+                                    onChange={(event) => handleCreateFieldChange('userItemId', event.target.value)}
+                                    disabled={createCandidatesLoading || createCandidates.length === 0}
                                     required
-                                />
+                                >
+                                    {createCandidates.length === 0 ? (
+                                        <option value="">No available inventory items</option>
+                                    ) : (
+                                        createCandidates.map((item) => (
+                                            <option key={item.userItemId} value={item.userItemId}>
+                                                {item.name} ({item.type})
+                                            </option>
+                                        ))
+                                    )}
+                                </select>
                             </Text>
 
                             <Text as="label" size="2">
@@ -317,22 +382,27 @@ export default function AuctionHouseDialog({ user }) {
                                 />
                             </Text>
 
-                            <Text as="label" size="2">
-                                Item Image URL
-                                <TextField.Root
-                                    mt="1"
-                                    placeholder="https://..."
-                                    value={createListingForm.itemImageUrl}
-                                    onChange={(event) => handleCreateFieldChange('itemImageUrl', event.target.value)}
-                                />
-                            </Text>
+                            {selectedCreateItem && (
+                                <Flex direction="column" gap="2" style={{ backgroundColor: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 6, padding: 10 }}>
+                                    <img
+                                        src={selectedCreateItem.imageUrl}
+                                        alt={selectedCreateItem.name}
+                                        style={{ width: '100%', height: 150, objectFit: 'cover', borderRadius: 6 }}
+                                    />
+                                    <Heading size="3">{selectedCreateItem.name}</Heading>
+                                    <Text size="2" color="gray">Type: {selectedCreateItem.type}</Text>
+                                    {selectedCreateItem.description && (
+                                        <Text size="2" color="gray">{selectedCreateItem.description}</Text>
+                                    )}
+                                </Flex>
+                            )}
                         </Flex>
 
                         <Flex gap="3" mt="4" justify="end">
                             <Button type="button" variant="soft" color="gray" onClick={() => setIsCreateListingOpen(false)} disabled={createLoading}>
                                 Cancel
                             </Button>
-                            <Button type="submit" disabled={createLoading}>
+                            <Button type="submit" disabled={createLoading || createCandidatesLoading || createCandidates.length === 0}>
                                 {createLoading ? 'Creating...' : 'Create Listing'}
                             </Button>
                         </Flex>
@@ -352,7 +422,7 @@ export default function AuctionHouseDialog({ user }) {
                 <Dialog.Content maxWidth="520px">
                     <Dialog.Title>Buy Listing</Dialog.Title>
                     <Dialog.Description size="2" mb="3">
-                        Placeholder purchase request is used until backend endpoints are available.
+                        Confirm purchase to buy this listing from the market.
                     </Dialog.Description>
 
                     {selectedListing ? (
