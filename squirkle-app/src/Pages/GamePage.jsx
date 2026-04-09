@@ -13,7 +13,7 @@ export const AREA_SELECTOR_STATE = 1
 export const INVENTORY_STATE = 2
 export const AUCTION_HOUSE_STATE = 3
 
-export default function GamePage({ user, signOut, setShowAppLoader }) {
+export default function GamePage({ user, signOut, setShowAppLoader, toastData, setToastData }) {
 
     const [dialogState, setDialogState] = useState(GAME_STATE)
 
@@ -36,7 +36,7 @@ export default function GamePage({ user, signOut, setShowAppLoader }) {
             case INVENTORY_STATE:
                 return <InventoryDialog user={user}/>
             case AUCTION_HOUSE_STATE:
-                return <AuctionHouseDialog user={user} />
+                return <AuctionHouseDialog user={user} toastData={toastData} setToastData={setToastData} />
         }
 
         return null

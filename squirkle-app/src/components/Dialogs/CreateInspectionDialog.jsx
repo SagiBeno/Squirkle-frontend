@@ -3,7 +3,7 @@ import { Dialog, Flex, Text, Heading } from "@radix-ui/themes";
 
 export default function CreateInspectionDialog( { open, setOpen, selectedCreateItem, createListingForm } ) {
     return (
-        <Dialog.Root open={isCreateInspectOpen} onOpenChange={setIsCreateInspectOpen}>
+        <Dialog.Root open={open} setOpen={setOpen}>
             <ItemDetailsDialog
                 itemData={selectedCreateItem}
                 rightPanelExtra={
