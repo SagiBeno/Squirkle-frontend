@@ -1,4 +1,4 @@
-import { Blockquote, Box, Dialog, Flex } from '@radix-ui/themes'
+import { Blockquote, Box, Button, Dialog, Flex } from '@radix-ui/themes'
 import React from 'react'
 import ItemStatBlock from '../ItemStatBlock'
 import { CgPushChevronRight } from "react-icons/cg";
@@ -9,6 +9,7 @@ import { GiPunch } from "react-icons/gi";
 import MetadataBlock from '../MetadataBlock';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { EquipWeapon } from '../../GameHandler';
 
 export default function ItemDetailsDialog({ itemData }) {
 
@@ -28,6 +29,16 @@ export default function ItemDetailsDialog({ itemData }) {
         setMetadatas(result)
     }
 
+    async function TryEquipItem() 
+    {
+        EquipWeapon(itemData);
+    }
+
+    async function TrySellItem() 
+    {
+
+    }
+
     useEffect(() => {
         GetMetadatas()
     }, [ itemData ])
@@ -44,8 +55,30 @@ export default function ItemDetailsDialog({ itemData }) {
                     </Blockquote>
 
                     {
-                        metadatas?.map((x, i) => <MetadataBlock meta={x} key={i}/>)
+                        metadatas?.map((x, i) => <MetadataBlock meta={x.metadata} key={i}/>)
                     }
+
+                    <Flex gap="1">
+                        <Button
+                            className={`button ${true ? 'activeButton' : 'inactiveButton'}`}
+                            disabled={!true}
+                            radius='none'
+                            size='3'
+                            onClick={TryEquipItem}
+                        >
+                            Equip Item
+                        </Button>
+
+                        <Button
+                            className={`button ${true ? 'activeButton' : 'inactiveButton'}`}
+                            disabled={!true}
+                            radius='none'
+                            size='3'
+                            onClick={TrySellItem}
+                        >
+                            Sell item
+                        </Button>
+                    </Flex>
 
                 </Flex>
 
