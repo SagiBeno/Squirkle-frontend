@@ -35,7 +35,7 @@ export default function GamePage({ user, signOut, setShowAppLoader }) {
             case AREA_SELECTOR_STATE:
                 return <AreaSelectorDialog/>
             case INVENTORY_STATE:
-                return <InventoryDialog/>
+                return <InventoryDialog user={user}/>
             case AUCTION_HOUSE_STATE:
                 return <AuctionHouseDialog/>
         }
