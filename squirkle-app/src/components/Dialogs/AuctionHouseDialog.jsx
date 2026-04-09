@@ -435,14 +435,24 @@ export default function AuctionHouseDialog({ user }) {
 
                             <Text as="label" size="2">
                                 Price
-                                <TextField.Root
-                                    mt="1"
-                                    placeholder="1500"
-                                    value={createListingForm.price}
-                                    onChange={(event) => handleCreateFieldChange('price', event.target.value)}
-                                    required
-                                />
+                                
                             </Text>
+                            <TextField.Root
+                                mt="1"
+                                placeholder="1500"
+                                value={createListingForm.price}
+                                onChange={(e) => {
+                                    const value = Number(e.target.value);
+
+                                    if (isNaN(value)) return;
+                                    if (value < 1) return;
+                                    setCreateListingForm(prev => ({
+                                        ...prev,
+                                        price: value
+                                    }));
+                                    return;
+                                }}
+                            />
 
                             <Button
                                 type="button"
