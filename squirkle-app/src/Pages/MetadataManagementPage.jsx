@@ -402,7 +402,7 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
                                     </Button>
 
                                     <Button
-                                        className='button activeButton'
+                                        className={`button ${isValid ? 'activeButton' : 'inactiveButton'}`}
                                         radius='none'
                                         size='3'
                                         style={{
