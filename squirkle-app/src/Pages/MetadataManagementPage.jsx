@@ -184,8 +184,6 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
             ...metadata
         };
 
-        console.log(reqBody)
-
         fetch(`https://squirkle-backend.vercel.app/api/update-metadata/${metadata.id}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
@@ -416,7 +414,7 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
                                     </Button>
 
                                     <Button
-                                        className='button activeButton'
+                                        className={`button ${isValid ? 'activeButton' : 'inactiveButton'}`}
                                         radius='none'
                                         size='3'
                                         style={{

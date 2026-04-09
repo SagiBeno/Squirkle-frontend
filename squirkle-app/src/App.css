@@ -107,6 +107,14 @@
     background-color: rgba(91, 146, 121, 0.6);
 }
 
+.rt-ScrollAreaThumb {
+    background-color: darkgray !important;
+}
+
+.rt-ScrollAreaScrollbar {
+    background-color: black !important;
+}
+
 @keyframes toastSlideDown {
     from {
         opacity: 0;

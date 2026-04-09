@@ -15,10 +15,10 @@ export default function AllMetadataDialog({ open, setOpen, handleSelectedModify 
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getItems();
+        getMetadata();
     }, []);
 
-    function getItems() {
+    function getMetadata() {
         setLoading(true);
         fetch('https://squirkle-backend.vercel.app/api/get-all-metadatas')
             .then(async (resJSON) => {
