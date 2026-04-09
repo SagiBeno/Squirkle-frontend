@@ -31,7 +31,7 @@ export default function GameLoader({user}) {
         {
             let localDate = GetDateFromString(localVersion.buildDate)
 
-            if (localDate < externalDate) gameFiles = await DownloadLatest(externalVersion, x => UnzipGame(x))
+            if (localDate.getTime() < externalDate.getTime()) gameFiles = await DownloadLatest(externalVersion, x => UnzipGame(x))
             else gameFiles = await LoadGameLocally(x => UnzipGame(x))
         }
     }
