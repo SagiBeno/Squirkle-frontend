@@ -23,23 +23,21 @@ export default function ItemDetailsDialog({ itemData }) {
         {
             let json = await (await fetch("https://squirkle-backend.vercel.app/api/get-metadata/" + itemData.stats.metadata[i])).json()
             result.push(json)
-
-            console.log(json)
         }
         
-        setMetadatas(json)
+        setMetadatas(result)
     }
 
     useEffect(() => {
         GetMetadatas()
-    }, [])
+    }, [ itemData ])
 
     return (
         <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: "auto" }}>
             <Dialog.Title style={{marginTop: 5, marginBottom: -10, backgroundColor: "white", width: "fit-content", padding: 10, borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>ITEM DETAILS - { itemData == null ? "ITEM_NAME" : itemData.name }</Dialog.Title>
 
             <Flex style={{backgroundColor: "white", height: "calc(100% - 40px)"}}>
-                <Flex direction="column" flexGrow="1" style={{padding: 10}}>
+                <Flex direction="column" gap="3" flexGrow="1" style={{padding: 20}}>
 
                     <Blockquote style={{marginTop: 10}}>
                         {itemData == null ? "Lorem ipsum, dolor sit amet consectetur adipisicing elit as da sda. Lorem ipsum, dolor sit amet consectetur adipisicing elit as da sda." : itemData.description}
