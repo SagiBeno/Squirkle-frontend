@@ -24,9 +24,24 @@ export async function InitializeGame(user)
     if (user == null) return
 
     await SetGameTime()
-    sendMessage(JSBridge, "GameInitialize", JSON.stringify({
-        userId: user.user.uid
-    }))
+    
+    const equippedItems = await (await fetch(`https://squirkle-backend.vercel.app/api/get-equipped-items/${user.user.uid}`)).json()
+    const equippedItemData = {}
+
+    for (let i = 0; i < equippedItems.items.length; i++) 
+    {
+        const item = await (await fetch(`https://squirkle-backend.vercel.app/api/get-item/${equippedItems.items[i].baseItemId}`)).json()
+        equippedItemData[item.item.type] = item.item
+    }
+
+    const initData = JSON.stringify({
+        userId: user.user.uid,
+        equippedItems: equippedItemData
+    })
+
+    console.log(initData)
+
+    sendMessage(JSBridge, "GameInitialize", initData)
 }
 
 export async function SetGameTime()
