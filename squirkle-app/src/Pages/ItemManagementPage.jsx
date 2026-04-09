@@ -9,7 +9,8 @@ import AllItemsDialog from '../components/Dialogs/AllItemsDialog';
 import DeleteAlert from '../components/DeleteAlert';
 import AdminTextArea from '../components/AdminTextArea';
 import AdminSpinner from '../components/AdminSpinner';
-import CheckboxCardsForNewItem from '../components/CheckboxCardsForNewItem';
+import CheckboxCardsForItemPage from '../components/CheckboxCardsForItemPage';
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
 export default function ItemManagementPage({ user, toastData, setToastData, setShowAppLoader }) {
 
@@ -35,6 +36,8 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
     const [loading, setLoading] = useState(false);
     const [allMetadata, setAllMetadata] = useState([]);
+    const [filteredMetadata, setFilteredMetadata] = useState([]);
+    const [metadataFilter, setMetadataFilter] = useState([]);
 
     const isValid =
         itemData.name.trim().length > 0 &&
@@ -54,7 +57,10 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
         fetch('https://squirkle-backend.vercel.app/api/get-all-metadatas')
             .then(async (resJSON) => {
                 const res = await resJSON.json();
-                if (res?.metadatas) setAllMetadata(res.metadatas);
+                if (res?.metadatas) {
+                    setAllMetadata(res.metadatas);
+                    setFilteredMetadata(res.metadatas);
+                }
             })
             .catch(console.warn)
             .finally(() => setLoading(false));
@@ -319,7 +325,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
     }
 
     function addMetadata(value) {
-        setItemData( prev => ({
+        setItemData(prev => ({
             ...prev,
             stats: {
                 ...prev.stats,
@@ -332,11 +338,11 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
     }
 
     function removeMetadata(value) {
-        setItemData( prev => ({
+        setItemData(prev => ({
             ...prev,
             stats: {
                 ...prev.stats,
-                metadata: prev.stats.metadata.filter( data => data !== value )
+                metadata: prev.stats.metadata.filter(data => data !== value)
             }
         }));
     }
@@ -425,6 +431,14 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                 setToastData({ open: true, title: 'Status of the amendment', description: 'An error occurred during the request. Please try again.', isError: true });
             })
             .finally(() => setLoading(false));
+    }
+
+    function searchForMetadata(value) {
+
+        if (value.length === 0) return setFilteredMetadata(allMetadata);
+
+        setFilteredMetadata(allMetadata.filter((data) => data?.id.toLowerCase().includes(value) || data?.title.toLowerCase().includes(value) || data?.backgroundColor.toLowerCase().includes(value) || data?.textColor.toLowerCase().includes(value)));
+        return;
     }
 
     return (
@@ -580,16 +594,37 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                                     </Flex>
 
                                     {
-                                        segmentedControlValue === 'newItem' && allMetadata.length > 0 &&
-                                        <ScrollArea type="always" scrollbars="vertical" style={{ maxHeight: '200px', marginBottom: '10px' }}>
-                                            <Flex
-                                                style={{
-                                                    flexDirection: 'column',
-                                                }}
-                                            >
-                                                <CheckboxCardsForNewItem allMetadata={allMetadata} addMetadata={addMetadata} removeMetadata={removeMetadata} />
+                                        allMetadata.length > 0 &&
+                                        <AdminTextField
+                                            title=""
+                                            placeholder="Search"
+                                            name='searchForMetadata'
+                                            id='searchForMetadata'
+                                            value={metadataFilter}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                setMetadataFilter(value);
+                                                searchForMetadata(value);
+                                            }}
+                                        />
+                                    }
+
+                                    {
+                                        filteredMetadata.length > 0 ?
+                                            <ScrollArea type="auto" scrollbars="vertical" style={{ maxHeight: '250px', marginBottom: '10px' }} className='customScrollArea'>
+                                                <CheckboxCardsForItemPage value={itemData.stats.metadata} allMetadata={filteredMetadata} addMetadata={addMetadata} removeMetadata={removeMetadata} />
+                                            </ScrollArea>
+                                            :
+                                            <Flex style={{
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                color: 'orange',
+                                                gap: 4
+                                            }}>
+                                                <ExclamationTriangleIcon />
+                                                <Text size='4'>No results found</Text>
                                             </Flex>
-                                        </ScrollArea>
+                                            
                                     }
 
                                 </Box>

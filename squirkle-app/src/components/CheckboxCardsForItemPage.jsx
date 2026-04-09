@@ -1,15 +1,28 @@
 import { CheckboxCards, Code, Text, Flex, } from '@radix-ui/themes';
 
-export default function CheckboxCardsForNewItem( { allMetadata, addMetadata, removeMetadata } ) {
+export default function CheckboxCardsForItemPage({ allMetadata, addMetadata, removeMetadata, value }) {
     return (
-        <CheckboxCards.Root size="1" color="gray">
+
+        <CheckboxCards.Root
+            size="1"
+            value={value}
+            color='gray'
+            highContrast
+            columns
+            style={{
+                justifyContent: 'stretch',
+                paddingRight: '20px',
+                gap: 5
+            }}
+        >
             {
                 allMetadata.map((metadata) => (
+
                     <CheckboxCards.Item
                         value={metadata.id}
                         style={{
-                            background: 'gray',
-                            width: '90%'
+                            background: metadata.backgroundColor,
+                            width: '100%',
                         }}
                         onClick={(e) => {
                             const checked = e.target.dataset.state !== 'checked';
@@ -19,12 +32,14 @@ export default function CheckboxCardsForNewItem( { allMetadata, addMetadata, rem
                         }}
                         key={metadata.id}
                     >
-                        <Flex direction="column" width="100%">
-                            <Code color="gray" variant="solid" highContrast style={{ fontSize: '15px', textAlign: 'center', marginBottom: '10px' }}>{metadata.id}</Code>
-                            <Text style={{ color: 'black' }}>{metadata.title}</Text>
+                        <Flex direction="column" style={{ width: '100%' }}>
+                            <Code color="gray" variant="solid" highContrast style={{ fontSize: '15px' }}>{metadata.id}</Code>
                         </Flex>
                     </CheckboxCards.Item>
+
+
                 ))
+
             }
         </CheckboxCards.Root>
     )
