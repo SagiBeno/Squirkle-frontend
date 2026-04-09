@@ -10,6 +10,7 @@ export function InitializeGameHandler(_sendMessage)
 
 export function EquipWeapon(weapon)
 {
+    console.log(`Equipping weapon: ${JSON.stringify(weapon)}`)
     sendMessage(JSBridge, "SetPlayerWeapon", JSON.stringify(weapon))
 }
 
