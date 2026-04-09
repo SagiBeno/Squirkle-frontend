@@ -1,4 +1,4 @@
-import { Box, Flex, Card, Text, TextField, TextArea, Table, IconButton, Button, Select, SegmentedControl } from '@radix-ui/themes';
+import { Box, Flex, Card, Text, TextField, TextArea, Table, IconButton, Button, Select, SegmentedControl, ScrollArea } from '@radix-ui/themes';
 import Navbar from '../components/Navbar';
 import { useCallback, useState, useEffect } from 'react';
 import Dropzone, { useDropzone } from "react-dropzone";
@@ -9,6 +9,7 @@ import AllItemsDialog from '../components/Dialogs/AllItemsDialog';
 import DeleteAlert from '../components/DeleteAlert';
 import AdminTextArea from '../components/AdminTextArea';
 import AdminSpinner from '../components/AdminSpinner';
+import CheckboxCardsForNewItem from '../components/CheckboxCardsForNewItem';
 
 export default function ItemManagementPage({ user, toastData, setToastData, setShowAppLoader }) {
 
@@ -33,19 +34,31 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
     const [showItemsDialog, setShowItemsDialog] = useState(false);
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [allMetadata, setAllMetadata] = useState([]);
 
     const isValid =
         itemData.name.trim().length > 0 &&
         itemData.type.trim().length > 0 &&
         itemData.description.trim().length > 0 &&
         itemData.imageUrl.length > 0 &&
-        itemData.stats?.metadata?.every(data => data.trim().length > 0) &&
         itemData.knockback.length > 0 &&
         itemData.stats.critDamage.length > 0;
 
     useEffect(() => {
         setShowAppLoader(false);
+        getMetadata();
     }, []);
+
+    function getMetadata() {
+        setLoading(true);
+        fetch('https://squirkle-backend.vercel.app/api/get-all-metadatas')
+            .then(async (resJSON) => {
+                const res = await resJSON.json();
+                if (res?.metadatas) setAllMetadata(res.metadatas);
+            })
+            .catch(console.warn)
+            .finally(() => setLoading(false));
+    }
 
     useEffect(() => {
 
@@ -305,45 +318,27 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
         }
     }
 
-    function addMetadata() {
-        setItemData(prev => ({
+    function addMetadata(value) {
+        setItemData( prev => ({
             ...prev,
             stats: {
                 ...prev.stats,
-                metadata: [...prev.stats.metadata, '']
+                metadata: [
+                    ...prev.stats.metadata,
+                    value
+                ]
             }
         }));
     }
 
-    function updateMetadata(index, value) {
-        setItemData(prev => {
-            const newMetadata = [...prev.stats.metadata];
-            newMetadata[index] = value;
-
-            return {
-                ...prev,
-                stats: {
-                    ...prev.stats,
-                    metadata: newMetadata
-                }
+    function removeMetadata(value) {
+        setItemData( prev => ({
+            ...prev,
+            stats: {
+                ...prev.stats,
+                metadata: prev.stats.metadata.filter( data => data !== value )
             }
-        });
-    }
-
-    function removeMetadata(index) {
-
-        setItemData(prev => {
-            const newMetadata = [...prev.stats.metadata];
-            newMetadata.splice(index, 1);
-
-            return {
-                ...prev,
-                stats: {
-                    ...prev.stats,
-                    metadata: newMetadata
-                }
-            }
-        });
+        }));
     }
 
     function handleDeleteItem() {
@@ -581,53 +576,22 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
 
                                         }}
                                     >
-                                        <Text size='4'>
-                                            Item's metadata
-                                        </Text>
-                                        <IconButton
-                                            className="button activeButton"
-                                            onClick={addMetadata}
-                                        >
-                                            <PlusIcon />
-                                        </IconButton>
+                                        <Text size='4'>Item's metadata</Text>
                                     </Flex>
 
                                     {
-                                        itemData.stats.metadata?.map((data, idx) => (
+                                        segmentedControlValue === 'newItem' && allMetadata.length > 0 &&
+                                        <ScrollArea type="always" scrollbars="vertical" style={{ maxHeight: '200px', marginBottom: '10px' }}>
                                             <Flex
                                                 style={{
-                                                    flexDirection: 'row',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'space-between',
-                                                    marginBottom: '15px'
+                                                    flexDirection: 'column',
                                                 }}
-                                                key={idx}
                                             >
-                                                <TextField.Root
-                                                    className='textField'
-                                                    radius="none"
-                                                    size="3"
-                                                    mb="1"
-                                                    value={data}
-                                                    required
-                                                    onChange={(e) => updateMetadata(idx, e.target.value.trim())}
-
-                                                    placeholder='Matedata'
-                                                    style={{
-                                                        width: '100%',
-                                                        marginRight: '5px',
-                                                    }}
-                                                />
-
-                                                <IconButton
-                                                    className="button activeButton"
-                                                    onClick={() => removeMetadata(idx)}
-                                                >
-                                                    <MinusIcon />
-                                                </IconButton>
+                                                <CheckboxCardsForNewItem allMetadata={allMetadata} addMetadata={addMetadata} removeMetadata={removeMetadata} />
                                             </Flex>
-                                        ))
+                                        </ScrollArea>
                                     }
+
                                 </Box>
 
                                 <Text
@@ -787,7 +751,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                                     </Button>
 
                                     <Button
-                                        className='button activeButton'
+                                        className={`button ${isValid ? 'activeButton' : 'inactiveButton'}`}
                                         radius='none'
                                         size='3'
                                         style={{
