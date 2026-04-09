@@ -84,7 +84,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                             required
                             onChange={(e) => {
                                 if (e.target.value.includes(' ')) return;
-                                else setFormData({ ...formData, username: e.target.value })
+                                else setFormData(prev => ({ ...prev, username: e.target.value }));
                             }}
                             style={{
                                 marginBottom: '12px'
@@ -104,7 +104,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                             onChange={(e) => {
                                 if (e.target.value.includes(' ')) return;
                                 else {
-                                    setFormData({ ...formData, email: e.target.value })
+                                    setFormData(prev => ({ ...prev, email: e.target.value }));
                                     setValidEmailFormat(isValidEmailFormat(e.target.value));
                                 }
                             }}
@@ -150,7 +150,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                             value={formData.password}
                             onChange={(e) => {
                                 if (e.target.value.includes(' ')) return;
-                                else setFormData({ ...formData, password: e.target.value })
+                                else setFormData(prev => ({ ...prev, password: e.target.value }));
                             }}
                             
                         />
@@ -161,7 +161,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                             value={formData.confirmPassword}
                             onChange={(e) => {
                                 if (e.target.value.includes(' ')) return;
-                                else setFormData({ ...formData, confirmPassword: e.target.value })
+                                else setFormData(prev => ({ ...prev, confirmPassword: e.target.value }));
                             }}
 
                         />

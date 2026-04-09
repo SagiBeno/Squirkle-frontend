@@ -54,7 +54,7 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
                                 required
                                 onChange={(e) => {
                                     if (e.target.value.includes(' ')) return;
-                                    else setFormData({ ...formData, email: e.target.value })
+                                    else setFormData(prev => ({ ...prev, email: e.target.value }));
                                 }}
                                 style={{
                                     marginBottom: '12px',
@@ -69,7 +69,7 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
                                 value={formData.password}
                                 onChange={(e) => {
                                     if (e.target.value.includes(' ')) return;
-                                    else setFormData({ ...formData, password: e.target.value })
+                                    else setFormData(prev => ({ ...prev, password: e.target.value }))
                                 }}
                             />
                         </div>
