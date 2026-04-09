@@ -6,6 +6,7 @@ import ItemDetailsDialog from './ItemDetailsDialog';
 import CreateListingDialog from './CreateListingDialog';
 import CreateInspectionDialog from './CreateInspectionDialog';
 import BuyListingDialog from './BuyListingDialog';
+import UserListing from '../ListingsComponents/UserListings';
 
 const ITEMS_PER_PAGE = 8
 
@@ -34,8 +35,8 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
             value: 'mine'
         },
         {
-            name: 'Prevoius listing',
-            value: 'prevoius'
+            name: 'Previous listing',
+            value: 'previous'
         },
         {
             name: 'Create listing',
@@ -130,7 +131,23 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
         setGlobalListings(nextGlobalListings);
         setMyListings(nextMyListings);
         setListings(activeTab === 'mine' ? nextMyListings : nextGlobalListings);
+
         setCurrentPage(1);
+    }
+
+    function getUserListings() {
+        if (!userId) return;
+
+        setLoading(true);
+
+        fetch(`${API_BASE_URL}/get-user-listings/${userId}`)
+            .then(async (resJSON) => {
+                const res = await resJSON.json();
+                console.log(res)
+                if (res?.listings) setMyListings(res.listings);
+            })
+            .catch(console.warn)
+            .finally(() => setLoading(false));
     }
 
     useEffect(() => {
@@ -140,7 +157,10 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
     function handleSelectButton(value) {
         setActiveTab(value);
 
-        if (value === 'createListing') setIsCreateListingOpen(true);
+        if (value === 'createListing') handleCreateListing(true);
+        if (value === 'mine') getUserListings();
+        else if (value === 'previous') setListings(previousListings);
+        else setListings(globalListings);
 
         setCurrentPage(1);
     }
@@ -231,13 +251,11 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
     }
 
     async function handleCreateListingSubmit(event) {
-        event.preventDefault();
 
         if (!userId || !createListingForm.itemId || !createListingForm.userItemId || !createListingForm.price) {
             return;
         }
 
-    
         setCreateLoading(true);
         const reqBody = {
             userId: userId,
@@ -246,21 +264,21 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
 
         fetch(`${API_BASE_URL}/create-listing`, {
             method: 'POST',
-            headers: {"Content-Type" : "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(reqBody)
         })
-            .then( async (resJSON) => {
+            .then(async (resJSON) => {
                 const res = await resJSON.json();
                 if (resJSON.status === 201) {
-                    setToastData({open: true, title: 'Creating a successful listing', description: 'the listing has benn successfully created', isError: false});
+                    setToastData({ open: true, title: 'Creating a successful listing', description: 'the listing has benn successfully created', isError: false });
                     setIsCreateListingOpen(false);
                     setCreateListingForm({ itemId: '', userItemId: '', price: '' });
                     setCreateCandidates([]);
-                } else setToastData({open: true, title: 'Failed to create listing', description: res.error, isError: true});
+                } else setToastData({ open: true, title: 'Failed to create listing', description: res.error, isError: true });
             })
             .catch((error) => {
                 console.warn('Failed to create listing:', error);
-                setToastData({open: true, title: 'Failed to create listing', description: 'An error occured while creating the listing. Please try again.', isError: true});
+                setToastData({ open: true, title: 'Failed to create listing', description: 'An error occured while creating the listing. Please try again.', isError: true });
             })
             .finally(() => setCreateLoading(false));
     }
@@ -344,85 +362,77 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
                         }
                     </Flex>
 
-                    <Flex direction="column" style={{ flexGrow: 1 }}>
-                        {loading ? (
-                            <GameSpinner />
-                        ) : pagedListings.length === 0 ? (
-                            <Flex align="center" justify="center" style={{ minHeight: 220, flexGrow: 1 }}>
-                                <Text style={{ color: 'white' }} size="4">
-                                    {activeTab === 'mine'
-                                        ? 'You have no active listings yet.'
-                                        : activeTab === 'previous'
-                                            ? 'No previous listings available yet.'
-                                            : 'No listings available yet.'}
-                                </Text>
-                            </Flex>
-                        ) : (
-                            <Flex direction="column" style={{ border: '1px solid #d1d5db', backgroundColor: 'white' }}>
-                                <Flex
-                                    px="3"
-                                    py="2"
-                                    align="center"
-                                    justify="between"
-                                    style={{ backgroundColor: '#f3f4f6', borderBottom: '1px solid #d1d5db', fontWeight: 600 }}
-                                >
-                                    <Text size="2" style={{ width: '75%' }}>Item</Text>
-                                    <Text size="2" style={{ width: '25%', textAlign: 'right' }}>Price</Text>
+                    {
+                        activeTab === 'mine' &&
+                        <Flex direction="column" style={{ flexGrow: 1 }}>
+                            {loading ? (
+                                <GameSpinner />
+                            ) : myListings.length === 0 ? (
+                                <Flex align="center" justify="center" style={{ minHeight: 220, flexGrow: 1 }}>
+                                    <Text style={{ color: 'white' }} size="4">
+                                        'You have no active listings yet.'
+                                    </Text>
                                 </Flex>
-
-                                {pagedListings.map((listing, index) => (
-                                    <Flex
-                                        key={`${listing?.itemName ?? 'listing'}-${startIndex + index}`}
-                                        px="3"
-                                        py="2"
-                                        align="center"
-                                        justify="between"
-                                        onClick={() => handleOpenListing(listing)}
-                                        role="button"
-                                        tabIndex={0}
-                                        onKeyDown={(event) => {
-                                            if (event.key === 'Enter' || event.key === ' ') {
-                                                event.preventDefault();
-                                                handleOpenListing(listing);
-                                            }
-                                        }}
-                                        style={{
-                                            borderBottom: index === pagedListings.length - 1 ? 'none' : '1px solid #e5e7eb',
-                                            backgroundColor: index % 2 === 0 ? '#ffffff' : '#f9fafb',
-                                            cursor: 'pointer',
-                                            opacity: activeTab === 'previous' ? 0.8 : 1
-                                        }}
-                                    >
-                                        <Flex align="center" gap="3" style={{ width: '75%', minWidth: 0 }}>
-                                            <img
-                                                src={listing.itemImageUrl}
-                                                alt={listing.itemName}
-                                                style={{ width: 64, height: 48, objectFit: 'cover', borderRadius: 4, flexShrink: 0 }}
-                                            />
-
-                                            <Flex direction="column" style={{ minWidth: 0 }}>
-                                                <Heading size="3" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                                    {listing.itemName}
-                                                </Heading>
-                                                <Text size="2" color="gray" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                                    Seller: {listing.username}
-                                                </Text>
-                                            </Flex>
+                            ) : (
+                                <>
+                                    <Flex direction="column" style={{ borderRadius: '12px', boxShadow: '0px 0px 5px 1px #cacaca', backgroundColor: '#212529', color: 'white' }}>
+                                        <Flex
+                                            px="3"
+                                            py="2"
+                                            align="center"
+                                            justify="between"
+                                            style={{
+                                                fontWeight: 'bold',
+                                                fontSize: '18px'
+                                            }}
+                                        >
+                                            <Text style={{ width: '75%' }}>Active listing(s)</Text>
+                                            <Text style={{ width: '25%', textAlign: 'right' }}>Price</Text>
                                         </Flex>
-
-                                        <Text style={{ width: '25%', textAlign: 'right', fontWeight: 600 }}>{listing.price}</Text>
+                                        
+                                        <Flex style={{ padding: '10px', flexDirection: 'column', gap: 4 }}>
+                                            {
+                                                myListings.filter((listing) => listing.active).map((listing, index) => <UserListing key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} />)
+                                            }
+                                        </Flex>
                                     </Flex>
-                                ))}
+
+                                    <Flex direction="column" style={{ borderRadius: '12px', boxShadow: '0px 0px 5px 1px #cacaca', backgroundColor: '#212529', color: 'white', marginTop: '15px' }}>
+                                        <Flex
+                                            px="3"
+                                            py="2"
+                                            align="center"
+                                            justify="between"
+                                            style={{
+                                                fontWeight: 'bold',
+                                                fontSize: '18px'
+                                            }}
+                                        >
+                                            <Text style={{ width: '75%' }}>Inactive listing(s)</Text>
+                                            <Text style={{ width: '25%', textAlign: 'right' }}>Price</Text>
+                                        </Flex>
+                                        
+                                        <Flex style={{ padding: '10px', flexDirection: 'column', gap: 4 }}>
+                                            {
+                                                myListings.filter((listing) => !listing.active).map((listing, index) => <UserListing key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} />)
+                                            }
+                                        </Flex>
+                                        
+
+                                    </Flex>
+                                </>
+                            )}
+
+
+                            <Flex align="center" justify="between" py="1" mt="auto">
+                                <Button onClick={goToPreviousPage} disabled={loading || currentPage === 1}>Previous</Button>
+                                <Text>
+                                    Page {currentPage} / {totalPages}
+                                </Text>
+                                <Button onClick={goToNextPage} disabled={loading || currentPage >= totalPages}>Next</Button>
                             </Flex>
-                        )}
-                    </Flex>
-                    <Flex align="center" justify="between" py="1" mt="auto">
-                        <Button onClick={goToPreviousPage} disabled={loading || currentPage === 1}>Previous</Button>
-                        <Text>
-                            Page {currentPage} / {totalPages}
-                        </Text>
-                        <Button onClick={goToNextPage} disabled={loading || currentPage >= totalPages}>Next</Button>
-                    </Flex>
+                        </Flex>
+                    }
                 </Flex>
             </Dialog.Content>
 
@@ -431,7 +441,6 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
                 <CreateListingDialog
                     open={isCreateListingOpen}
                     setOpen={setIsCreateListingOpen}
-                    onSubmit={handleCreateListingSubmit}
                     createCandidates={createCandidates}
                     createCandidatesLoading={createCandidatesLoading}
                     createListingForm={createListingForm}
@@ -440,11 +449,12 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
                     handleCreateFieldChange={handleCreateFieldChange}
                     createLoading={createLoading}
                     handleCreateListingSubmit={handleCreateListingSubmit}
+                    setIsCreateInspectOpen={setIsCreateInspectOpen}
                 />
             }
 
             {
-                isCreateInspectOpen && 
+                isCreateInspectOpen &&
                 <CreateInspectionDialog
                     open={isCreateInspectOpen}
                     setOpen={setIsCreateInspectOpen}
@@ -455,7 +465,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
 
             {
                 isBuyListingOpen &&
-                <BuyListingDialog 
+                <BuyListingDialog
                     open={isBuyListingOpen}
                     onOpenChange={(open) => {
                         setIsBuyListingOpen(open);

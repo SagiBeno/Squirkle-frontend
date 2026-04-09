@@ -2,7 +2,7 @@ import { Dialog, Flex, Text, TextField, Button, Select, Spinner, Popover, Box } 
 import { TbCancel } from "react-icons/tb";
 import { IoCheckmark } from "react-icons/io5";
 
-export default function CreateListingDialog({ open, setOpen, onSubmit, createCandidates, createCandidatesLoading, createListingForm, setCreateListingForm, selectedCreateItem, createLoading, handleCreateFieldChange, handleCreateListingSubmit }) {
+export default function CreateListingDialog({ open, setOpen, createCandidates, createCandidatesLoading, setIsCreateInspectOpen, createListingForm, setCreateListingForm, selectedCreateItem, createLoading, handleCreateFieldChange, handleCreateListingSubmit }) {
 
     return (
         <Dialog.Root
@@ -34,7 +34,7 @@ export default function CreateListingDialog({ open, setOpen, onSubmit, createCan
                             <Text style={{ textAlign: 'center', color: 'orange' }} size="4">No available inventory items</Text>
                             :
                             <Select.Root
-                                style={{ marginTop: 4, width: '100%', height: 36, borderRadius: 6, border: '1px solid #d1d5db', padding: '0 8px' }}
+
                                 name='selectItem'
                                 id='selectItem'
                                 value={createListingForm.userItemId}
@@ -42,7 +42,14 @@ export default function CreateListingDialog({ open, setOpen, onSubmit, createCan
                                 disabled={createCandidatesLoading || createCandidates.length === 0}
                             >
                                 <Select.Trigger />
-                                <Select.Content>
+                                <Select.Content
+                                    color='gold'
+                                    style={{
+                                        borderRadius: 0,
+                                        background: '#bababa',
+                                        border: '3px solid #d5d5d5',
+                                    }}
+                                >
                                     {
                                         createCandidates.map((item) => <Select.Item value={item.userItemId} key={item.userItemId}>{`${item.name} (${item.type})`}</Select.Item>)
                                     }
@@ -57,19 +64,8 @@ export default function CreateListingDialog({ open, setOpen, onSubmit, createCan
                         className="textField"
                         placeholder="1500"
                         value={createListingForm.price}
-                        onChange={(e) => {
-                            console.log(e.target.value)
-                            const value = Number(e.target.value);
-
-                            if (isNaN(value)) return;
-                            setCreateListingForm(prev => ({
-                                ...prev,
-                                price: value
-                            }));
-                            return;
-                        }}
                         onKeyDown={(e) => {
-                            
+
                             let value = createListingForm.price.toString();
 
                             if (!isNaN(e.key)) {
@@ -88,8 +84,8 @@ export default function CreateListingDialog({ open, setOpen, onSubmit, createCan
                                     price: Number(value)
                                 }));
                                 return
-                            } 
-                           
+                            }
+
                             return;
                         }}
                     />
@@ -114,8 +110,8 @@ export default function CreateListingDialog({ open, setOpen, onSubmit, createCan
                         <TbCancel /> Cancel
                     </Button>
                     <Button
-                        className={`button ${createLoading || createCandidatesLoading || createCandidates.length === 0 ? 'inactiveButton' : 'activeButton'}`}
-                        disabled={createLoading || createCandidatesLoading || createCandidates.length === 0 || createListingForm.price < 1}
+                        className={`button ${createLoading || createCandidatesLoading || createCandidates.length === 0 || Number(createListingForm.price) < 1 ? 'inactiveButton' : 'activeButton'}`}
+                        disabled={createLoading || createCandidatesLoading || createCandidates.length === 0 || Number(createListingForm.price) < 1}
                         onClick={() => handleCreateListingSubmit()}
                     >
                         {
