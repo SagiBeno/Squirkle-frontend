@@ -6,7 +6,7 @@ import ItemDetailsDialog from './ItemDetailsDialog';
 import CreateListingDialog from './CreateListingDialog';
 import CreateInspectionDialog from './CreateInspectionDialog';
 import BuyListingDialog from './BuyListingDialog';
-import UserListing from '../ListingsComponents/UserListings';
+import ListingsComponentsForUser from '../ListingsComponents/ListingsContainerForUser';
 
 const ITEMS_PER_PAGE = 8
 
@@ -28,15 +28,15 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
     const [buttonsValue, setButtonsValue] = useState([
         {
             name: 'All listing',
-            value: 'global'
+            value: 'globalListings'
         },
         {
             name: 'My listing',
-            value: 'mine'
+            value: 'userListings'
         },
         {
             name: 'Previous listing',
-            value: 'previous'
+            value: 'previousListings'
         },
         {
             name: 'Create listing',
@@ -45,7 +45,8 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
     ]);
     const [listings, setListings] = useState([]);
     const [globalListings, setGlobalListings] = useState([]);
-    const [myListings, setMyListings] = useState([]);
+    const [userActiveListings, setUserActiveListing] = useState([]);
+    const [userInactiveListings, setUserInactiveListing] = useState([]);
     const [previousListings, setPreviousListings] = useState([]);
 
     const [activeTab, setActiveTab] = useState('global');
@@ -93,7 +94,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
             const nextMyListings = filterMyListings(fetchedListings);
 
             setGlobalListings(fetchedListings);
-            setMyListings(nextMyListings);
+
             setPreviousListings(fetchedPreviousListings);
 
             if (activeTab === 'mine') {
@@ -143,8 +144,12 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
         fetch(`${API_BASE_URL}/get-user-listings/${userId}`)
             .then(async (resJSON) => {
                 const res = await resJSON.json();
-                console.log(res)
-                if (res?.listings) setMyListings(res.listings);
+                if (res?.listings) {
+                    const activeListings = res.listings.filter((listing) => listing.active);
+                    const inactiveListings = res.listings.filter((listing) => !listing.active);
+                    setUserActiveListing(activeListings);
+                    setUserInactiveListing(inactiveListings);
+                }
             })
             .catch(console.warn)
             .finally(() => setLoading(false));
@@ -158,8 +163,8 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
         setActiveTab(value);
 
         if (value === 'createListing') handleCreateListing(true);
-        if (value === 'mine') getUserListings();
-        else if (value === 'previous') setListings(previousListings);
+        if (value === 'userListings') getUserListings();
+        else if (value === 'previousListings') setListings(previousListings);
         else setListings(globalListings);
 
         setCurrentPage(1);
@@ -339,7 +344,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
                             justifyContent: 'center',
                             alignItems: 'center',
                             flexWrap: 'wrap',
-                            gap: 4
+                            gap: 4,
                         }}
                     >
 
@@ -363,75 +368,13 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
                     </Flex>
 
                     {
-                        activeTab === 'mine' &&
-                        <Flex direction="column" style={{ flexGrow: 1 }}>
-                            {loading ? (
-                                <GameSpinner />
-                            ) : myListings.length === 0 ? (
-                                <Flex align="center" justify="center" style={{ minHeight: 220, flexGrow: 1 }}>
-                                    <Text style={{ color: 'white' }} size="4">
-                                        'You have no active listings yet.'
-                                    </Text>
-                                </Flex>
-                            ) : (
-                                <>
-                                    <Flex direction="column" style={{ borderRadius: '12px', boxShadow: '0px 0px 5px 1px #cacaca', backgroundColor: '#212529', color: 'white' }}>
-                                        <Flex
-                                            px="3"
-                                            py="2"
-                                            align="center"
-                                            justify="between"
-                                            style={{
-                                                fontWeight: 'bold',
-                                                fontSize: '18px'
-                                            }}
-                                        >
-                                            <Text style={{ width: '75%' }}>Active listing(s)</Text>
-                                            <Text style={{ width: '25%', textAlign: 'right' }}>Price</Text>
-                                        </Flex>
-                                        
-                                        <Flex style={{ padding: '10px', flexDirection: 'column', gap: 4 }}>
-                                            {
-                                                myListings.filter((listing) => listing.active).map((listing, index) => <UserListing key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} />)
-                                            }
-                                        </Flex>
-                                    </Flex>
-
-                                    <Flex direction="column" style={{ borderRadius: '12px', boxShadow: '0px 0px 5px 1px #cacaca', backgroundColor: '#212529', color: 'white', marginTop: '15px' }}>
-                                        <Flex
-                                            px="3"
-                                            py="2"
-                                            align="center"
-                                            justify="between"
-                                            style={{
-                                                fontWeight: 'bold',
-                                                fontSize: '18px'
-                                            }}
-                                        >
-                                            <Text style={{ width: '75%' }}>Inactive listing(s)</Text>
-                                            <Text style={{ width: '25%', textAlign: 'right' }}>Price</Text>
-                                        </Flex>
-                                        
-                                        <Flex style={{ padding: '10px', flexDirection: 'column', gap: 4 }}>
-                                            {
-                                                myListings.filter((listing) => !listing.active).map((listing, index) => <UserListing key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} />)
-                                            }
-                                        </Flex>
-                                        
-
-                                    </Flex>
-                                </>
-                            )}
-
-
-                            <Flex align="center" justify="between" py="1" mt="auto">
-                                <Button onClick={goToPreviousPage} disabled={loading || currentPage === 1}>Previous</Button>
-                                <Text>
-                                    Page {currentPage} / {totalPages}
-                                </Text>
-                                <Button onClick={goToNextPage} disabled={loading || currentPage >= totalPages}>Next</Button>
-                            </Flex>
-                        </Flex>
+                        loading ? <GameSpinner />
+                        :
+                        (activeTab === 'userListings') ? <ListingsComponentsForUser activeListings={userActiveListings} inactiveListings={userInactiveListings} handleOpenListing={handleOpenListing}  />
+                        :
+                        (activeTab === 'previousListings') ? <Text>Prveious</Text>
+                        :
+                        (activeTab === 'globalListings') && <Text>globalListings</Text>
                     }
                 </Flex>
             </Dialog.Content>

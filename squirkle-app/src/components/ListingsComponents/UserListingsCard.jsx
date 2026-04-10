@@ -1,7 +1,7 @@
 import { Card, Flex, Heading, Text } from "@radix-ui/themes";
 import { GiTwoCoins } from "react-icons/gi";
 
-export default function UserListing({ listing, idx, handleOpenListing }) {
+export default function UserListingCard({ listing, idx, handleOpenListing }) {
 
     return (
 
@@ -28,7 +28,8 @@ export default function UserListing({ listing, idx, handleOpenListing }) {
                     style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                        gap: 4
+                        gap: 4,
+                        flexWrap: 'wrap'
                     }}
                 >
                     <img
@@ -37,7 +38,7 @@ export default function UserListing({ listing, idx, handleOpenListing }) {
                         style={{ width: 64, height: 48, objectFit: 'cover', borderRadius: 4, flexShrink: 0, boxShadow: '0px 0px 3px 0px black' }}
                     />
 
-                    <Flex direction="column" style={{ minWidth: 0 , gap: 4}}>
+                    <Flex direction="column" style={{ gap: 4}}>
                         <Heading size="3" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {listing.itemName}
                         </Heading>
