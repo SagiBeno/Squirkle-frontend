@@ -7,6 +7,7 @@ import CreateListingDialog from './CreateListingDialog';
 import CreateInspectionDialog from './CreateInspectionDialog';
 import BuyListingDialog from './BuyListingDialog';
 import ListingsComponentsForUser from '../ListingsComponents/ListingsContainerForUser';
+import ListingsContainerForGlobalActive from '../ListingsComponents/ListingsContainerForGlobalActive';
 
 const ITEMS_PER_PAGE = 8
 
@@ -45,6 +46,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
     ]);
     const [listings, setListings] = useState([]);
     const [globalListings, setGlobalListings] = useState([]);
+    const [globalActiveListings, setGlobalActiveListings] = useState([]);
     const [userActiveListings, setUserActiveListing] = useState([]);
     const [userInactiveListings, setUserInactiveListing] = useState([]);
     const [previousListings, setPreviousListings] = useState([]);
@@ -81,6 +83,14 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
     const userId = user?.user?.uid || user?.uid || user?.user?.user?.uid || null;
 
     const selectedCreateItem = createCandidates.find((item) => item.userItemId === createListingForm.userItemId) || null;
+
+    useEffect(() => {
+        fetchListings();
+    }, [userId]);
+
+    useEffect(() => {
+        handleSelectButton('userListings');
+    }, []);
 
     async function fetchListings() {
         try {
@@ -155,17 +165,27 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
             .finally(() => setLoading(false));
     }
 
-    useEffect(() => {
-        fetchListings();
-    }, [userId]);
+    function getGlobalActiveListings() {
+        if (!userId) return;
+
+        setLoading(true);
+
+        fetch(`${API_BASE_URL}/get-all-active-listings`)
+            .then(async (resJSON) => {
+                const res = await resJSON.json();
+                if (res?.listings) setGlobalActiveListings(res.listings);
+            })
+            .catch(console.warn)
+            .finally(() => setLoading(false));
+    }
 
     function handleSelectButton(value) {
         setActiveTab(value);
 
         if (value === 'createListing') handleCreateListing(true);
         if (value === 'userListings') getUserListings();
-        else if (value === 'previousListings') setListings(previousListings);
-        else setListings(globalListings);
+        if (value === 'previousListings') setListings(previousListings);
+        if (value === 'globalListings') getGlobalActiveListings();
 
         setCurrentPage(1);
     }
@@ -200,6 +220,20 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
         } finally {
             setSelectedListingLoading(false);
         }
+    }
+
+    function handleCreateFieldChange(fieldName, fieldValue) {
+        if (fieldName === 'userItemId') {
+            const selectedItem = createCandidates.find((candidate) => candidate.userItemId === fieldValue);
+            setCreateListingForm((prev) => ({
+                ...prev,
+                userItemId: fieldValue,
+                itemId: selectedItem?.itemId || '',
+            }));
+            return;
+        }
+
+        setCreateListingForm(prev => ({ ...prev, [fieldName]: fieldValue }));
     }
 
     async function handleCreateListing() {
@@ -241,21 +275,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
         }
     }
 
-    function handleCreateFieldChange(fieldName, fieldValue) {
-        if (fieldName === 'userItemId') {
-            const selectedItem = createCandidates.find((candidate) => candidate.userItemId === fieldValue);
-            setCreateListingForm((prev) => ({
-                ...prev,
-                userItemId: fieldValue,
-                itemId: selectedItem?.itemId || '',
-            }));
-            return;
-        }
-
-        setCreateListingForm(prev => ({ ...prev, [fieldName]: fieldValue }));
-    }
-
-    async function handleCreateListingSubmit(event) {
+    function handleCreateListingSubmit() {
 
         if (!userId || !createListingForm.itemId || !createListingForm.userItemId || !createListingForm.price) {
             return;
@@ -275,7 +295,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
             .then(async (resJSON) => {
                 const res = await resJSON.json();
                 if (resJSON.status === 201) {
-                    setToastData({ open: true, title: 'Creating a successful listing', description: 'the listing has benn successfully created', isError: false });
+                    setToastData({ open: true, title: 'Creating a successful listing', description: 'The listing has benn successfully created', isError: false });
                     setIsCreateListingOpen(false);
                     setCreateListingForm({ itemId: '', userItemId: '', price: '' });
                     setCreateCandidates([]);
@@ -359,6 +379,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
                                         cursor: 'pointer',
                                         opacity: activeTab === button.value ? '1' : '0.5'
                                     }}
+                                    color='gray'
                                     className='button activeButton'
                                 >
                                     {button.name}
@@ -368,13 +389,22 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
                     </Flex>
 
                     {
-                        loading ? <GameSpinner />
-                        :
-                        (activeTab === 'userListings') ? <ListingsComponentsForUser activeListings={userActiveListings} inactiveListings={userInactiveListings} handleOpenListing={handleOpenListing}  />
-                        :
-                        (activeTab === 'previousListings') ? <Text>Prveious</Text>
-                        :
-                        (activeTab === 'globalListings') && <Text>globalListings</Text>
+                        loading ?
+                            <Flex
+                                style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    padding: '10px'
+                                }}
+                            >
+                                <GameSpinner />
+                            </Flex>
+                            :
+                            (activeTab === 'userListings') ? <ListingsComponentsForUser activeListings={userActiveListings} inactiveListings={userInactiveListings} handleOpenListing={handleOpenListing} />
+                                :
+                                (activeTab === 'globalListings') ? <ListingsContainerForGlobalActive activeListings={globalActiveListings} handleOpenListing={handleOpenListing} />
+                                    :
+                                    (activeTab === 'previousListings') && <Text>globalListings</Text>
                     }
                 </Flex>
             </Dialog.Content>
