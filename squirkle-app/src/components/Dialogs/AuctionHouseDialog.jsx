@@ -8,6 +8,7 @@ import CreateInspectionDialog from './CreateInspectionDialog';
 import BuyListingDialog from './BuyListingDialog';
 import ListingsComponentsForUser from '../ListingsComponents/ListingsContainerForUser';
 import ListingsContainerForGlobalActive from '../ListingsComponents/ListingsContainerForGlobalActive';
+import ListingsContainerForGlobalInactive from '../ListingsComponents/ListingsContainerForGlobalInactive';
 
 const ITEMS_PER_PAGE = 8
 
@@ -166,14 +167,32 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
     }
 
     function getGlobalActiveListings() {
-        if (!userId) return;
 
         setLoading(true);
 
         fetch(`${API_BASE_URL}/get-all-active-listings`)
             .then(async (resJSON) => {
                 const res = await resJSON.json();
-                if (res?.listings) setGlobalActiveListings(res.listings);
+                if (res?.listings) {
+                    const listings = res.listings.filter((listing) => listing.userId !== userId);
+                    setGlobalActiveListings(listings);
+                }
+            })
+            .catch(console.warn)
+            .finally(() => setLoading(false));
+    }
+
+    function getPreviousListings() {
+
+        setLoading(true);
+
+        fetch(`${API_BASE_URL}/get-all-inactive-listings`)
+            .then(async (resJSON) => {
+                const res = await resJSON.json();
+                if (res?.listings) {
+                    const listings = res.listings.filter((listing) => listing.userId !== userId);
+                    setPreviousListings(listings);
+                }
             })
             .catch(console.warn)
             .finally(() => setLoading(false));
@@ -184,7 +203,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
 
         if (value === 'createListing') handleCreateListing(true);
         if (value === 'userListings') getUserListings();
-        if (value === 'previousListings') setListings(previousListings);
+        if (value === 'previousListings') getPreviousListings();
         if (value === 'globalListings') getGlobalActiveListings();
 
         setCurrentPage(1);
@@ -404,7 +423,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
                                 :
                                 (activeTab === 'globalListings') ? <ListingsContainerForGlobalActive activeListings={globalActiveListings} handleOpenListing={handleOpenListing} />
                                     :
-                                    (activeTab === 'previousListings') && <Text>globalListings</Text>
+                                    (activeTab === 'previousListings') && <ListingsContainerForGlobalInactive inactiveListings={previousListings} handleOpenListing={handleOpenListing} />
                     }
                 </Flex>
             </Dialog.Content>

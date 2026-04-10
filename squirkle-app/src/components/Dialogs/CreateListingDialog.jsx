@@ -64,6 +64,7 @@ export default function CreateListingDialog({ open, setOpen, createCandidates, c
                         className="textField"
                         placeholder="1500"
                         value={createListingForm.price}
+                        onChange={() => {}}
                         onKeyDown={(e) => {
 
                             let value = createListingForm.price.toString();
