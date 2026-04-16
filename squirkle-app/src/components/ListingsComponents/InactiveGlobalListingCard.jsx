@@ -51,8 +51,8 @@ export default function InactiveGlobalListingCard({ listing, idx, handleOpenList
                 </Flex>
 
                 <Flex style={{ alignItems: 'center', gap: 4, color: 'rgb(255, 233, 35)', background: 'rgba(0, 0, 0, 0.59)', padding: '5px' }}>
-                    <Text style={{ fontSize: '20px', fontWeight: 'bold', }}>{listing.price} </Text>
                     <GiTwoCoins size={30} />
+                    <Text style={{ fontSize: '20px', fontWeight: 'bold', }}>{listing.price} </Text>
                 </Flex>
 
             </Flex>

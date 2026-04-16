@@ -52,13 +52,14 @@ export default function UserListingCard({ listing, idx, handleOpenListing, handl
 
                 <Flex style={{ alignItems: 'center', gap: 4, flexWrap: 'wrap', justifyContent: 'end' }}>
 
+                    <Flex style={{ alignItems: 'center', gap: 4, color: 'rgb(255, 233, 35)', background: 'rgba(0, 0, 0, 0.59)', padding: '5px', height: '35px' }}>
+                        <GiTwoCoins size={30} />
+                        <Text style={{ fontSize: '20px', fontWeight: 'bold', }}>{listing.price}</Text>
+                    </Flex>
+
                     {
                         listing.active && <IconButton radius="none" style={{ cursor: 'pointer', height: '35px', width: "35px" }} color='tomato' variant="solid" onClick={() => handleDeleteListing(listing)}><FaTrash /></IconButton>
                     }
-                    <Flex style={{ alignItems: 'center', gap: 4, color: 'rgb(255, 233, 35)', background: 'rgba(0, 0, 0, 0.59)', padding: '5px', height: '35px' }}>
-                        <Text style={{ fontSize: '20px', fontWeight: 'bold', }}>{listing.price} </Text>
-                        <GiTwoCoins size={30} />
-                    </Flex>
 
                 </Flex>
             </Flex>
