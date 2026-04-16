@@ -32,7 +32,7 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
     function RenderCurrentDialog() {
         switch (dialogState) {
             case AREA_SELECTOR_STATE:
-                return <AreaSelectorDialog />
+                return <AreaSelectorDialog user={user}/>
             case INVENTORY_STATE:
                 return <InventoryDialog user={user}/>
             case AUCTION_HOUSE_STATE:

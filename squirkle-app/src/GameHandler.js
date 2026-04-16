@@ -16,7 +16,7 @@ export function EquipWeapon(weapon)
 
 export function LoadArea(areaID)
 {
-    sendMessage(JSBridge, "LoadArea", areaID)
+    sendMessage(JSBridge, "LoadArea", Number(areaID))
 }
 
 export async function InitializeGame(user)

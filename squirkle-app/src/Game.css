@@ -11,11 +11,25 @@
     scroll-snap-align: start;
 }
 
-.gameAreaPanel:hover
+.gameAreaPanel:hover.purchased
 {
     z-index: 1;
     filter: grayscale(0);
+}
+
+.gameAreaPanelTitle, .gameAreaLock
+{
+    transition: all 0.1s;
+}
+
+.gameAreaPanel:hover.purchased .gameAreaPanelTitle
+{
     padding-left: 15px;
+}
+
+.gameAreaPanel:hover .gameAreaLock
+{
+    transform: rotateZ(2deg) scale(1.1);
 }
 
 .itemSlot
