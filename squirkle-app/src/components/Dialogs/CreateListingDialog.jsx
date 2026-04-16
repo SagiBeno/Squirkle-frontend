@@ -1,6 +1,7 @@
 import { Dialog, Flex, Text, TextField, Button, Select, Spinner, Popover, Box } from "@radix-ui/themes";
 import { TbCancel } from "react-icons/tb";
 import { IoCheckmark } from "react-icons/io5";
+import GameSpinner from "../GameSpinner";
 
 export default function CreateListingDialog({ open, setOpen, createCandidates, createCandidatesLoading, setIsCreateInspectOpen, createListingForm, setCreateListingForm, selectedCreateItem, createLoading, handleCreateFieldChange, handleCreateListingSubmit }) {
 
@@ -30,7 +31,10 @@ export default function CreateListingDialog({ open, setOpen, createCandidates, c
                     <Text as="label" size="4" htmlFor="selectItem" style={{ cursor: 'pointer' }}>Inventory Item</Text>
 
                     {
-                        createCandidates.length === 0 ?
+                        createCandidates.length === 0 && createCandidatesLoading ?
+                            <GameSpinner />
+                            :
+                            createCandidates.length === 0 && !createCandidatesLoading ?
                             <Text style={{ textAlign: 'center', color: 'orange' }} size="4">No available inventory items</Text>
                             :
                             <Select.Root
