@@ -1,7 +1,8 @@
-import { Card, Flex, Heading, Text } from "@radix-ui/themes";
+import { Card, Flex, Heading, Text, IconButton } from "@radix-ui/themes";
 import { GiTwoCoins } from "react-icons/gi";
+import { FaTrash } from "react-icons/fa";
 
-export default function UserListingCard({ listing, idx, handleOpenListing }) {
+export default function UserListingCard({ listing, idx, handleOpenListing, handleDeleteListing }) {
 
     return (
 
@@ -10,10 +11,7 @@ export default function UserListingCard({ listing, idx, handleOpenListing }) {
                 background: idx % 2 === 0 ? '#787878' : '#272626',
                 color: 'black',
                 borderRadius: '12px',
-                cursor: 'pointer'
             }}
-
-            onClick={() => handleOpenListing(listing)}
         >
 
             <Flex
@@ -35,10 +33,11 @@ export default function UserListingCard({ listing, idx, handleOpenListing }) {
                     <img
                         src={listing.itemImageUrl}
                         alt={listing.itemName}
-                        style={{ width: 64, height: 48, objectFit: 'cover', borderRadius: 4, flexShrink: 0, boxShadow: '0px 0px 3px 0px black' }}
+                        style={{ cursor: 'pointer', width: 64, height: 48, objectFit: 'cover', borderRadius: 4, flexShrink: 0, boxShadow: '0px 0px 3px 0px black' }}
+                        onClick={() => handleOpenListing(listing)}
                     />
 
-                    <Flex direction="column" style={{ gap: 4}}>
+                    <Flex direction="column" style={{ gap: 4 }}>
                         <Heading size="3" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {listing.itemName}
                         </Heading>
@@ -49,9 +48,17 @@ export default function UserListingCard({ listing, idx, handleOpenListing }) {
                     </Flex>
                 </Flex>
 
-                <Flex style={{ alignItems: 'center', gap: 4, color: 'rgb(255, 233, 35)', background: 'rgba(0, 0, 0, 0.59)', borderRadius: '12px', padding: '5px' }}>
-                    <Text style={{ fontSize: '20px', fontWeight: 'bold', }}>{listing.price} </Text>
-                    <GiTwoCoins size={30} />
+
+                <Flex style={{ alignItems: 'center', gap: 4, flexWrap: 'wrap', justifyContent: 'end' }}>
+
+                    {
+                        listing.active && <IconButton style={{ cursor: 'pointer' }} color='tomato' variant="solid" onClick={() => handleDeleteListing(listing)}><FaTrash /></IconButton>
+                    }
+                    <Flex style={{ alignItems: 'center', gap: 4, color: 'rgb(255, 233, 35)', background: 'rgba(0, 0, 0, 0.59)', borderRadius: '12px', padding: '5px' }}>
+                        <Text style={{ fontSize: '20px', fontWeight: 'bold', }}>{listing.price} </Text>
+                        <GiTwoCoins size={30} />
+                    </Flex>
+
                 </Flex>
 
 

@@ -10,8 +10,6 @@ import ListingsComponentsForUser from '../ListingsComponents/ListingsContainerFo
 import ListingsContainerForGlobalActive from '../ListingsComponents/ListingsContainerForGlobalActive';
 import ListingsContainerForGlobalInactive from '../ListingsComponents/ListingsContainerForGlobalInactive';
 
-const ITEMS_PER_PAGE = 8
-
 const API_BASE_URL = 'https://squirkle-backend.vercel.app/api'
 
 async function fetchJsonOrThrow(url, options) {
@@ -52,7 +50,6 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
     const [previousListings, setPreviousListings] = useState([]);
     const [activeTab, setActiveTab] = useState('');
     const [loading, setLoading] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
     const [isCreateListingOpen, setIsCreateListingOpen] = useState(false);
     const [isCreateInspectOpen, setIsCreateInspectOpen] = useState(false);
     const [isBuyListingOpen, setIsBuyListingOpen] = useState(false);
@@ -105,6 +102,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
                 const res = await resJSON.json();
                 if (res?.listings) {
                     const listings = res.listings.filter((listing) => listing.userId !== userId);
+                    console.log(res)
                     setGlobalActiveListings(listings);
                 }
             })
@@ -136,7 +134,6 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
         if (value === 'previousListings') getPreviousListings();
         if (value === 'globalListings') getGlobalActiveListings();
 
-        setCurrentPage(1);
     }
 
     function handleOpenListing(listing) {
@@ -247,6 +244,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
                     setIsCreateListingOpen(false);
                     setCreateListingForm({ itemId: '', userItemId: '', price: '' });
                     setCreateCandidates([]);
+                    handleSelectButton('userListings');
                 } else setToastData({ open: true, title: 'Failed to create listing', description: res.error, isError: true });
             })
             .catch((error) => {
@@ -256,14 +254,8 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
             .finally(() => setCreateLoading(false));
     }
 
-    async function handleBuySelectedListing() {
-        if (!selectedListing) {
-            return;
-        }
-
-        if (!userId) {
-            return;
-        }
+    function handleBuySelectedListing() {
+        if (!selectedListing || !userId) return;
 
         setBuyLoading(true);
 
@@ -272,8 +264,20 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify( { userId: userId } )
         })
-            .then(async (resJSON))
-            .catch(console.warn)
+            .then(async (resJSON) => {
+                const res = await resJSON.json();
+
+                if (resJSON.status === 200) {
+                    setToastData({ open: true, title: 'The puchase was successful', description: res.message, isError: false });
+                    handleSelectButton('globalListings');
+                }
+
+                else setToastData({ open: true, title: 'The puchase was failed', description: res.error, isError: true });
+            })
+            .catch(error => {
+                console.warn(error);
+                setToastData({ open: true, title: 'The puchase was failed', description: 'Error buying listing', isError: true });
+            })
             .finally(() => setBuyLoading(false));
     }
 
@@ -309,7 +313,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
                                     onClick={(e) => handleSelectButton(e.target.value)}
                                     style={{
                                         cursor: 'pointer',
-                                        opacity: activeTab === button.value ? '1' : '0.5'
+                                        opacity: activeTab === button.value ? '1' : '0.7'
                                     }}
                                     color='gray'
                                     className='button activeButton'
@@ -332,7 +336,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
                                 <GameSpinner />
                             </Flex>
                             :
-                            (activeTab === 'userListings') ? <ListingsComponentsForUser activeListings={userActiveListings} inactiveListings={userInactiveListings} handleOpenListing={handleOpenListing} />
+                            (activeTab === 'userListings') ? <ListingsComponentsForUser getUserListings={getUserListings} activeListings={userActiveListings} inactiveListings={userInactiveListings} handleOpenListing={handleOpenListing} userId={userId} setToastData={setToastData} baseUrl={API_BASE_URL} />
                                 :
                                 (activeTab === 'globalListings') ? <ListingsContainerForGlobalActive activeListings={globalActiveListings} handleOpenListing={handleOpenListing} />
                                     :
