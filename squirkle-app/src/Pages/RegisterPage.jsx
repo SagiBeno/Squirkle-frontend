@@ -238,7 +238,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                                 <DisabledButton text={'Registration'} />
                         }
 
-                        <GoogleLoginButton text={'Login with Google account'} onClick={handleLoginWithGoogle} />
+                        <GoogleLoginButton text={'Login with Google'} onClick={handleLoginWithGoogle} />
                         <Separator text={'or'} />
                         <Box style={{ textAlign: 'center' }}>
                             <Text size="3">Do you have an account?</Text>

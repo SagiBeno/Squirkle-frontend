@@ -90,7 +90,7 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
                     </Box>
 
 
-                    <GoogleLoginButton text={'Login with Google account'} onClick={handleLoginWithGoogle} />
+                    <GoogleLoginButton text={'Login with Google'} onClick={handleLoginWithGoogle} />
                     <Separator text={'or'} />
                     <Box style={{ textAlign: 'center' }}>
                         <Text size="3">Do not have an account?</Text>
