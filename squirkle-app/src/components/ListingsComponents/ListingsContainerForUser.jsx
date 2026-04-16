@@ -3,7 +3,7 @@ import UserListingCard from "./UserListingsCard";
 import { useState } from "react";
 import DeleteListingAlert from "./DeleteListingAlert";
 
-export default function ListingsComponentsForUser({ baseUrl, userId, setToastData, activeListings, inactiveListings, handleOpenListing, handleConfirmDeleteListing }) {
+export default function ListingsComponentsForUser({ getUserListings, baseUrl, userId, setToastData, activeListings, inactiveListings, handleOpenListing, handleConfirmDeleteListing }) {
 
     const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
     const [selectedListing, setSelectedListing] = useState({});
@@ -18,7 +18,7 @@ export default function ListingsComponentsForUser({ baseUrl, userId, setToastDat
         if (!userId || !listing.id) return;
         setLoading(true);
         
-        fetch(`${baseUrl}/api/delete-listing/${listing.id}`, {
+        fetch(`${baseUrl}/delete-listing/${listing.id}`, {
             method: 'DELETE',
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({ userId: userId })
@@ -26,9 +26,10 @@ export default function ListingsComponentsForUser({ baseUrl, userId, setToastDat
             .then(async (resJSON) => {
                 const res = await resJSON.json();
 
-                if (resJSON === 200) {
+                if (resJSON.status === 200) {
                     setToastData({ open: true, title: 'Deletion successful', description: res.message, isError: false });
                     setOpenDeleteAlert(false);
+                    getUserListings();
                 }
 
                 else setToastData({ open: true, title: 'Failed to delete', description: res.error, isError: true });
