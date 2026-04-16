@@ -54,15 +54,14 @@ export default function ListingsComponentsForUser({ getUserListings, baseUrl, us
                     </Flex>
                     :
                     <>
-                        <Flex direction="column" style={{ borderRadius: '12px', backgroundColor: '#646465', color: 'white' }}>
+                        <Flex direction="column" style={{ backgroundColor: '#646465', color: 'white', marginBottom: '5px' }}>
                             <Flex
-                                px="3"
-                                py="2"
                                 align="center"
                                 justify="between"
                                 style={{
                                     fontWeight: 'bold',
                                     fontSize: '18px',
+                                    padding: '10px',
                                 }}
                             >
                                 <Text style={{ width: '75%' }}>Active listing(s)</Text>
@@ -74,12 +73,10 @@ export default function ListingsComponentsForUser({ getUserListings, baseUrl, us
                             scrollbars="vertical"
                             style={{
                                 minHeight: '220px',
-                                borderRadius: '12px',
-                                paddingRight: '20px',
-                                marginBottom: '20px'
+                                padding: '0px 20px',
                             }}
                         >
-                            <Flex style={{ padding: '10px', flexDirection: 'column', gap: 4 }}>
+                            <Flex style={{ flexDirection: 'column', gap: 4 }}>
                                 {
                                     activeListings.map((listing, index) => <UserListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
                                 }
@@ -93,15 +90,14 @@ export default function ListingsComponentsForUser({ getUserListings, baseUrl, us
                 inactiveListings.length !== 0
                 &&
                 <>
-                    <Flex direction="column" style={{ borderRadius: '12px', backgroundColor: '#646465', color: 'white', }}>
+                    <Flex direction="column" style={{ backgroundColor: '#646465', color: 'white', marginBottom: '5px' }}>
                         <Flex
-                            px="3"
-                            py="2"
                             align="center"
                             justify="between"
                             style={{
                                 fontWeight: 'bold',
                                 fontSize: '18px',
+                                padding: '10px'
                             }}
                         >
                             <Text style={{ width: '75%' }}>Inactive listing(s)</Text>
@@ -113,11 +109,10 @@ export default function ListingsComponentsForUser({ getUserListings, baseUrl, us
                         scrollbars="vertical"
                         style={{
                             minHeight: '220px',
-                            borderRadius: '12px',
-                            paddingRight: '20px',
+                            padding: '0px 20px',
                         }}
                     >
-                        <Flex style={{ padding: '10px', flexDirection: 'column', gap: 4 }}>
+                        <Flex style={{ flexDirection: 'column', gap: 4 }}>
                             {
                                 inactiveListings.map((listing, index) => <UserListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
                             }

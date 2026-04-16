@@ -14,7 +14,7 @@ export default function ListingsContainerForGlobalActive({ activeListings, handl
                     </Flex>
                     :
                     <>
-                        <Flex direction="column" style={{ borderRadius: '12px', backgroundColor: '#646465', color: 'white' }}>
+                        <Flex direction="column" style={{ backgroundColor: '#646465', color: 'white' }}>
                             <Flex
                                 px="3"
                                 py="2"

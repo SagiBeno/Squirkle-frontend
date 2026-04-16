@@ -1,5 +1,5 @@
 import { ScrollArea, Flex, Text } from "@radix-ui/themes";
-import InctiveGlobalListingCard from "./ActiveGlobalListingCard";
+import InactiveGlobalListingCard from "./ActiveGlobalListingCard";
 
 export default function ListingsContainerForGlobalInactive({ inactiveListings, handleOpenListing }) {
 
@@ -14,7 +14,7 @@ export default function ListingsContainerForGlobalInactive({ inactiveListings, h
                     </Flex>
                     :
                     <>
-                        <Flex direction="column" style={{ borderRadius: '12px', backgroundColor: '#646465', color: 'white' }}>
+                        <Flex direction="column" style={{ backgroundColor: '#646465', color: 'white' }}>
                             <Flex
                                 px="3"
                                 py="2"
@@ -41,7 +41,7 @@ export default function ListingsContainerForGlobalInactive({ inactiveListings, h
                         >
                             <Flex style={{ padding: '10px', flexDirection: 'column', gap: 4 }}>
                                 {
-                                    inactiveListings.map((listing, index) => <InctiveGlobalListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} />)
+                                    inactiveListings.map((listing, index) => <InactiveGlobalListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} />)
                                 }
                             </Flex>
                         </ScrollArea>
