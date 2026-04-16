@@ -1,16 +1,17 @@
-import { Card, Flex, Heading, Text } from "@radix-ui/themes";
+import { Flex, Heading, Text } from "@radix-ui/themes";
 import { GiTwoCoins } from "react-icons/gi";
 
 export default function ActiveGlobalListingCard({ listing, idx, handleOpenListing }) {
 
     return (
 
-        <Card
+        <Flex
             style={{
-                background: idx % 2 === 0 ? '#787878' : '#272626',
+                background: idx % 2 === 0 ? '#aeaeae' : '#d8d8d8',
                 color: 'black',
-                borderRadius: '12px',
-                cursor: 'pointer'
+                boxShadow: 'none',
+                flexDirection: 'column',
+                padding: '10px'
             }}
 
             onClick={() => handleOpenListing(listing)}
@@ -35,7 +36,7 @@ export default function ActiveGlobalListingCard({ listing, idx, handleOpenListin
                     <img
                         src={listing.itemImageUrl}
                         alt={listing.itemName}
-                        style={{ width: 64, height: 48, objectFit: 'cover', borderRadius: 4, flexShrink: 0, boxShadow: '0px 0px 3px 0px black' }}
+                        style={{ width: 64, height: 48, objectFit: 'cover', flexShrink: 0, }}
                     />
 
                     <Flex direction="column" style={{ gap: 4}}>
@@ -49,16 +50,12 @@ export default function ActiveGlobalListingCard({ listing, idx, handleOpenListin
                     </Flex>
                 </Flex>
 
-                <Flex style={{ alignItems: 'center', gap: 4, color: 'rgb(255, 233, 35)', background: 'rgba(0, 0, 0, 0.59)', borderRadius: '12px', padding: '5px' }}>
-                    <Text style={{ fontSize: '20px', fontWeight: 'bold', }}>{listing.price} </Text>
+                <Flex style={{ alignItems: 'center', gap: 4, color: 'rgb(255, 233, 35)', background: 'rgba(0, 0, 0, 0.59)', padding: '5px' }}>
                     <GiTwoCoins size={30} />
+                    <Text style={{ fontSize: '20px', fontWeight: 'bold', }}>{listing.price} </Text>
                 </Flex>
-
-
-
             </Flex>
-
-        </Card>
+        </Flex>
 
     )
 }

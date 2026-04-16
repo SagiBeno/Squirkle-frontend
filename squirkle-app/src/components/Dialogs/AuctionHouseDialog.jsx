@@ -27,15 +27,15 @@ async function fetchJsonOrThrow(url, options) {
 export default function AuctionHouseDialog({ user, toastData, setToastData }) {
     const [buttonsValue, setButtonsValue] = useState([
         {
-            name: 'All listing',
+            name: 'All listings',
             value: 'globalListings'
         },
         {
-            name: 'My listing',
+            name: 'My listings',
             value: 'userListings'
         },
         {
-            name: 'Previous listing',
+            name: 'Previous listings',
             value: 'previousListings'
         },
         {
@@ -284,14 +284,12 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
     return (
 
         <>
-            <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: 'auto' }}>
+            <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 10, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: 'auto' }}>
                 <Dialog.Title style={{ marginTop: 15, color: 'white', textTransform: 'uppercase' }}>Auction house</Dialog.Title>
 
                 <Flex
                     direction="column"
                     height="calc(100% - 52px)"
-                    p="3"
-                    gap="3"
                     style={{ backgroundColor: 'transparent' }}
                 >
                     <Flex
@@ -301,6 +299,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
                             alignItems: 'center',
                             flexWrap: 'wrap',
                             gap: 4,
+                            marginBottom: '10px'
                         }}
                     >
 

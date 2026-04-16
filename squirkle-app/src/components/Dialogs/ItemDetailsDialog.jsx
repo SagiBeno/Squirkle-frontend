@@ -31,14 +31,9 @@ export default function ItemDetailsDialog({ itemData, rightPanelExtra = null }) 
         setMetadatas(result)
     }
 
-    async function TryEquipItem() 
+    function TryEquipItem() 
     {
         EquipWeapon(itemData);
-    }
-
-    async function TrySellItem() 
-    {
-
     }
 
     useEffect(() => {
@@ -71,16 +66,13 @@ export default function ItemDetailsDialog({ itemData, rightPanelExtra = null }) 
                             Equip Item
                         </Button>
 
-                        <Button
-                            className={`button ${true ? 'activeButton' : 'inactiveButton'}`}
-                            disabled={!true}
-                            radius='none'
-                            size='3'
-                            onClick={TrySellItem}
-                        >
-                            Sell item
-                        </Button>
+                        
                     </Flex>
+                    
+                    <Flex style={{ marginTop: '30px' }}>
+                        {rightPanelExtra}
+                    </Flex>
+                    
 
                 </Flex>
 
@@ -91,7 +83,6 @@ export default function ItemDetailsDialog({ itemData, rightPanelExtra = null }) 
                         {itemData == null ? "ITEM_NAME" : itemData.name}
                     </Dialog.Description>
 
-                    {rightPanelExtra}
 
                     <Flex justify="center" style={{ borderRadius: 10, overflow: "hidden" }}>
                         <ItemStatBlock

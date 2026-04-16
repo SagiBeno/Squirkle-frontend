@@ -14,7 +14,7 @@ export default function ListingsContainerForGlobalActive({ activeListings, handl
                     </Flex>
                     :
                     <>
-                        <Flex direction="column" style={{ borderRadius: '12px', backgroundColor: '#646465', color: 'white' }}>
+                        <Flex direction="column" style={{ backgroundColor: '#646465', color: 'white' }}>
                             <Flex
                                 px="3"
                                 py="2"
@@ -26,7 +26,6 @@ export default function ListingsContainerForGlobalActive({ activeListings, handl
                                 }}
                             >
                                 <Text style={{ width: '75%' }}>Active listing(s)</Text>
-                                <Text style={{ width: '25%', textAlign: 'right' }}>Price</Text>
                             </Flex>
                         </Flex>
                         <ScrollArea
