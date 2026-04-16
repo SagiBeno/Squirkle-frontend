@@ -26,7 +26,6 @@ export default function ListingsContainerForGlobalInactive({ inactiveListings, h
                                 }}
                             >
                                 <Text style={{ width: '75%' }}>Active listing(s)</Text>
-                                <Text style={{ width: '25%', textAlign: 'right' }}>Price</Text>
                             </Flex>
                         </Flex>
                         <ScrollArea

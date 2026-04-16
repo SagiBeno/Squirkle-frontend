@@ -65,7 +65,6 @@ export default function ListingsComponentsForUser({ getUserListings, baseUrl, us
                                 }}
                             >
                                 <Text style={{ width: '75%' }}>Active listing(s)</Text>
-                                <Text style={{ width: '25%', textAlign: 'right' }}>Price</Text>
                             </Flex>
                         </Flex>
                         <ScrollArea
@@ -101,7 +100,6 @@ export default function ListingsComponentsForUser({ getUserListings, baseUrl, us
                             }}
                         >
                             <Text style={{ width: '75%' }}>Inactive listing(s)</Text>
-                            <Text style={{ width: '25%', textAlign: 'right' }}>Price</Text>
                         </Flex>
                     </Flex>
                     <ScrollArea
