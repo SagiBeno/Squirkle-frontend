@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react';
 import GameSpinner from '../GameSpinner';
 import ItemDetailsDialog from './ItemDetailsDialog';
 import CreateListingDialog from './CreateListingDialog';
-import CreateInspectionDialog from './CreateInspectionDialog';
-import BuyListingDialog from './BuyListingDialog';
 import ListingsComponentsForUser from '../ListingsComponents/ListingsContainerForUser';
 import ListingsContainerForGlobalActive from '../ListingsComponents/ListingsContainerForGlobalActive';
 import ListingsContainerForGlobalInactive from '../ListingsComponents/ListingsContainerForGlobalInactive';
@@ -153,7 +151,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
         setIsBuyListingOpen(true);
 
         fetch(`${API_BASE_URL}/get-item/${listing.itemId}`)
-            .then( async (resJSON) => {
+            .then(async (resJSON) => {
                 const res = await resJSON.json();
                 if (res?.item) setSelectedListingItemData(res.item);
                 else {
@@ -164,7 +162,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
                 console.warn(error);
                 setToastData({ open: true, title: 'Error retrieving the item.', description: 'An error occurred while retrieving the item. Please try again.', isError: true });
             })
-            .finally( () => setSelectedListingLoading(false) );
+            .finally(() => setSelectedListingLoading(false));
     }
 
     function handleCreateFieldChange(fieldName, fieldValue) {
@@ -261,8 +259,8 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
 
         fetch(`${API_BASE_URL}/buy-listing/${selectedListing.id}`, {
             method: 'POST',
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify( { userId: userId } )
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId: userId })
         })
             .then(async (resJSON) => {
                 const res = await resJSON.json();
@@ -363,17 +361,18 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
 
             {
                 isCreateInspectOpen &&
-                <CreateInspectionDialog
-                    open={isCreateInspectOpen}
-                    setOpen={setIsCreateInspectOpen}
-                    itemData={selectedCreateItem}
-                    createListingForm={createListingForm}
-                />
+                <Dialog.Root open={isCreateInspectOpen} onOpenChange={setIsCreateInspectOpen}>
+                    <ItemDetailsDialog
+                        itemData={selectedCreateItem}
+                        parentDialog="CreateInspection"
+                        createListingForm={createListingForm}
+                    />
+                </Dialog.Root>
             }
 
             {
                 isBuyListingOpen &&
-                <BuyListingDialog
+                <Dialog.Root
                     open={isBuyListingOpen}
                     onOpenChange={(open) => {
                         setIsBuyListingOpen(open);
@@ -384,14 +383,17 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
                             setSelectedListingLoading(false);
                         }
                     }}
-                    selectedListingItemData={selectedListingItemData}
-                    selectedListing={selectedListing}
-                    setSelectedListingBuyable={setSelectedListingBuyable}
-                    selectedListingBuyable={selectedListingBuyable}
-                    handleBuySelectedListing={handleBuySelectedListing}
-                    buyLoading={buyLoading}
-                    selectedListingLoading={selectedListingLoading}
-                />
+                >
+                    <ItemDetailsDialog
+                        itemData={selectedListingItemData}
+                        parentDialog="BuyListing"
+                        selectedListing={selectedListing}
+                        selectedListingBuyable={selectedListingBuyable}
+                        handleBuySelectedListing={handleBuySelectedListing}
+                        buyLoading={buyLoading}
+                        selectedListingLoading={selectedListingLoading}
+                    />
+                </Dialog.Root>
             }
 
         </>

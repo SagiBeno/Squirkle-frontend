@@ -1,8 +1,7 @@
-import { Blockquote, Box, Button, Dialog, Flex } from '@radix-ui/themes'
-import React from 'react'
+import { Blockquote, Button, Dialog, Flex, Heading, Spinner, Text } from '@radix-ui/themes'
 import ItemStatBlock from '../ItemStatBlock'
 import { CgPushChevronRight } from "react-icons/cg";
-import { FaCircle, FaSquare } from "react-icons/fa";
+import { FaCircle, FaShoppingCart, FaSquare } from "react-icons/fa";
 import { RiTriangleFill } from "react-icons/ri";
 import { TbSquarePercentage } from "react-icons/tb";
 import { GiPunch } from "react-icons/gi";
@@ -11,7 +10,17 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { EquipWeapon } from '../../GameHandler';
 
-export default function ItemDetailsDialog({ itemData, rightPanelExtra = null }) {
+export default function ItemDetailsDialog({
+    itemData,
+    rightPanelExtra = null,
+    parentDialog,
+    createListingForm = null,
+    selectedListing = null,
+    selectedListingBuyable = false,
+    handleBuySelectedListing = null,
+    buyLoading = false,
+    selectedListingLoading = false,
+}) {
 
     const [metadatas, setMetadatas] = useState(null)
     const itemStats = itemData?.stats || null;
@@ -31,13 +40,13 @@ export default function ItemDetailsDialog({ itemData, rightPanelExtra = null }) 
         setMetadatas(result)
     }
 
-    function TryEquipItem() 
-    {
+    function TryEquipItem() {
         EquipWeapon(itemData);
     }
 
     useEffect(() => {
         GetMetadatas()
+        console.log("parentDialog: ", parentDialog)
     }, [itemData])
 
     return (
@@ -52,27 +61,67 @@ export default function ItemDetailsDialog({ itemData, rightPanelExtra = null }) 
                     </Blockquote>
 
                     {
-                        metadatas?.map((x, i) => <MetadataBlock meta={x.metadata} key={i}/>)
+                        metadatas?.map((x, i) => <MetadataBlock meta={x.metadata} key={i} />)
                     }
 
-                    <Flex gap="1">
-                        <Button
-                            className={`button ${true ? 'activeButton' : 'inactiveButton'}`}
-                            disabled={!true}
-                            radius='none'
-                            size='3'
-                            onClick={TryEquipItem}
-                        >
-                            Equip Item
-                        </Button>
+                    <Flex gap="1" align="center" justify="start" style={{ marginTop: "auto" }}>
+                        {
+                            parentDialog == "Inventory" ?
 
-                        
+                                <Button
+                                    className={`button ${true ? 'activeButton' : 'inactiveButton'}`}
+                                    disabled={!true}
+                                    radius='none'
+                                    size='3'
+                                    onClick={TryEquipItem}
+                                >
+                                    Equip Item
+                                </Button>
+                                :
+                                null
+                        }
+
+
                     </Flex>
-                    
+
                     <Flex style={{ marginTop: '30px' }}>
-                        {rightPanelExtra}
+                        {
+                            parentDialog == "BuyListing" ?
+                                (selectedListing ? (
+                                    <Flex direction="column" gap="2" mt="2" style={{ width: '100%' }}>
+                                        <Text size="2" color="gray">Seller: {selectedListing.username}</Text>
+                                        <Heading size="4">Price: {selectedListing.price}</Heading>
+                                        {selectedListingBuyable ? (
+                                            <Button
+                                                onClick={handleBuySelectedListing}
+                                                disabled={buyLoading || selectedListingLoading || !selectedListing}
+                                                style={{ width: '100%' }}
+                                            >
+                                                {
+                                                    buyLoading
+                                                        ?
+                                                        <Flex style={{ alignItems: 'center', gap: 2 }}><Spinner /> <Text>Buying...</Text></Flex>
+                                                        :
+                                                        <Flex style={{ alignItems: 'center', gap: 2 }}><FaShoppingCart /> <Text>Buy Item</Text></Flex>
+                                                }
+                                            </Button>
+                                        ) : (
+                                            <Text size="2" color="gray">This listing is inactive and can only be inspected.</Text>
+                                        )}
+                                    </Flex>
+                                ) : null)
+                                : parentDialog == "CreateInspection" ?
+                                    (itemData ? (
+                                        <Flex direction="column" gap="2" mt="2" style={{ width: '100%' }}>
+                                            <Text size="2" color="gray">Selected for listing</Text>
+                                            <Text size="2" color="gray">Type: {itemData.type}</Text>
+                                            <Heading size="4">Set Price: {createListingForm?.price || '-'}</Heading>
+                                        </Flex>
+                                    ) : null)
+                                    : rightPanelExtra
+                        }
                     </Flex>
-                    
+
 
                 </Flex>
 
