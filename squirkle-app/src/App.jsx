@@ -61,6 +61,10 @@ function App() {
   }
 
   useEffect(() => {
+    if (user?.user?.uid) getPermissions(user.user.uid);
+  }, [user?.user?.uid])
+
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         const userId = currentUser?.uid;
@@ -79,6 +83,35 @@ function App() {
     });
     return unsubscribe
   }, [auth, loggedIn]);
+
+  function getPermissions(userId) {
+    setLoading(true);
+    fetch(`https://squirkle-backend.vercel.app/api/get-permissions/${userId}`)
+      .then(async (resJSON) => {
+        const res = await resJSON.json();
+
+        if (resJSON.status === 200) {
+          if (res?.isAdmin) {
+            setUser(prev => ({
+              ...prev,
+              isAdmin: res.isAdmin
+            }));
+          } else {
+            setUser(prev => ({
+              ...prev,
+              isAdmin: false
+            }));
+          }
+        } else {
+          setUser(prev => ({
+            ...prev,
+            isAdmin: false
+          }));
+        }
+      })
+      .catch(console.warn)
+      .finally(() => setLoading(false));
+  }
 
   async function getUsername(userId) {
     const resultJSON = await fetch(`https://squirkle-backend.vercel.app/api/get-username/${userId}`);

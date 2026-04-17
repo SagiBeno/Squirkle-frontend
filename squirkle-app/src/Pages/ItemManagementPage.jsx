@@ -11,6 +11,7 @@ import DeleteAlert from '../components/DeleteAlert';
 import AdminSpinner from '../components/Spinners/AdminSpinner';
 import CheckboxCardsForItemPage from '../components/Cards/CheckboxCardsForItemPage';
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import NavbarForAdmin from '../components/Navbars/NavbarForAdmin';
 
 export default function ItemManagementPage({ user, toastData, setToastData, setShowAppLoader }) {
 
@@ -445,6 +446,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
         <>
             <Flex className='mainContainer'>
 
+                <NavbarForAdmin user={user} />
                 <Box className='navbarSpacer' />
 
                 <Flex className='contentContainer'>
@@ -802,7 +804,6 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
 
                     </Flex>
                 </Flex>
-                <Box style={{ minHeight: "10px" }} />
             </Flex>
             {
                 showItemsDialog === true &&
