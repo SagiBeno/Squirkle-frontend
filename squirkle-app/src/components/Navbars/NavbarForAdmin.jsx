@@ -62,6 +62,9 @@ export default function NavbarForAdmin({ user, signOut }) {
                         <Button className="squirkleButton" onClick={() => navigate('/admin/metadata-management')} style={{ padding: 10, height: '50px', backgroundColor: '#eba62a' }}>
                             <Text weight="bold">Metadata management</Text>
                         </Button>
+                        <Button className="squirkleButton" onClick={() => navigate('/game')} style={{ padding: 5, backgroundColor: '#eba62a' }}>
+                            <Text weight="bold">Game</Text>
+                        </Button>
                         <Button className="squirkleButton" onClick={signOut} style={{ padding: 5, backgroundColor: "#ee3c3c", }}>
                             <Text weight="bold">Logout</Text>
                         </Button>
