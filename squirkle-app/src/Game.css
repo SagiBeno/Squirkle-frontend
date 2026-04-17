@@ -11,9 +11,12 @@
     scroll-snap-align: start;
 }
 
-.gameAreaPanel:hover.purchased
-{
+.gameAreaPanel:hover {
+    filter: grayscale(0);
     z-index: 1;
+}
+
+.gameAreaPanel.purchased {
     filter: grayscale(0);
 }
 
