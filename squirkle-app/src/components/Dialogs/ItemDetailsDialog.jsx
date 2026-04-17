@@ -1,11 +1,11 @@
 import { Blockquote, Button, Dialog, Flex, Heading, Spinner, Text } from '@radix-ui/themes'
-import ItemStatBlock from '../ItemStatBlock'
+import ItemStatBlock from '../GameComponents/ItemStatBlock'
 import { CgPushChevronRight } from "react-icons/cg";
 import { FaCircle, FaShoppingCart, FaSquare } from "react-icons/fa";
 import { RiTriangleFill } from "react-icons/ri";
 import { TbSquarePercentage } from "react-icons/tb";
 import { GiPunch } from "react-icons/gi";
-import MetadataBlock from '../MetadataBlock';
+import MetadataBlock from '../Cards/MetadataBlock';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { EquipWeapon } from '../../GameHandler';

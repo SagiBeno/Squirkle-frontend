@@ -2,7 +2,7 @@ import { Flex, Text, Heading } from '@radix-ui/themes'
 import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
-import GameSpinner from './GameSpinner'
+import GameSpinner from '../Spinners/GameSpinner'
 
 export default function MetadataBlock({ meta }) {
 

@@ -1,9 +1,9 @@
 import React from 'react'
-import "../Game.css"
+import "../../Game.css";
 import { Tooltip, TooltipArrow, TooltipContent, TooltipPortal, TooltipProvider, TooltipTrigger } from '@radix-ui/react-tooltip'
 import { Dialog, Flex, Text } from '@radix-ui/themes'
 import { useState } from 'react'
-import ItemDetailsDialog from './Dialogs/ItemDetailsDialog'
+import ItemDetailsDialog from '../Dialogs/ItemDetailsDialog'
 
 export default function ItemSlot({ itemData, onClick }) {
 

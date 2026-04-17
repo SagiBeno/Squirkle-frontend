@@ -5,7 +5,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import HomePage from './Pages/HomePage';
 import LoginPage from './Pages/LoginPage';
 import RegisterPage from './Pages/RegisterPage';
-import Navbar from './components/Navbar';
+import Navbar from './components/Navbars/Navbar';
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import AppToast from './components/AppToast';
@@ -13,7 +13,7 @@ import UsernameInputDialog from './components/Dialogs/UsernameInputDialog';
 import ItemManagementPage from './Pages/ItemManagementPage';
 import GamePage from './Pages/GamePage';
 import MetadataManagementPage from './Pages/MetadataManagementPage';
-import AppLoader from './components/AppLoader';
+import AppLoader from './components/Spinners/AppLoader';
 
 function App() {
   const firebaseApp = initializeApp({
@@ -61,6 +61,10 @@ function App() {
   }
 
   useEffect(() => {
+    if (user?.user?.uid) getPermissions(user.user.uid);
+  }, [user?.user?.uid])
+
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         const userId = currentUser?.uid;
@@ -74,11 +78,40 @@ function App() {
             const userWithCoinCount = await withCoinCount({ user: currentUser, username: username });
             setUser(userWithCoinCount);
           }
-        } //else navigate('/');
-      } //else navigate('/login');
+        } else navigate('/');
+      } else navigate('/login');
     });
     return unsubscribe
   }, [auth, loggedIn]);
+
+  function getPermissions(userId) {
+    setLoading(true);
+    fetch(`https://squirkle-backend.vercel.app/api/get-permissions/${userId}`)
+      .then(async (resJSON) => {
+        const res = await resJSON.json();
+
+        if (resJSON.status === 200) {
+          if (res?.isAdmin) {
+            setUser(prev => ({
+              ...prev,
+              isAdmin: res.isAdmin
+            }));
+          } else {
+            setUser(prev => ({
+              ...prev,
+              isAdmin: false
+            }));
+          }
+        } else {
+          setUser(prev => ({
+            ...prev,
+            isAdmin: false
+          }));
+        }
+      })
+      .catch(console.warn)
+      .finally(() => setLoading(false));
+  }
 
   async function getUsername(userId) {
     const resultJSON = await fetch(`https://squirkle-backend.vercel.app/api/get-username/${userId}`);
@@ -126,8 +159,9 @@ function App() {
   }
 
   function signOut() {
-    auth.signOut()
-    setUser(null)
+    auth.signOut();
+    setUser(null);
+    navigate('/');
   }
 
   async function existingUsername(username) {
@@ -193,8 +227,8 @@ function App() {
             <>
               <Route path='/' element={<HomePage user={user} setShowAppLoader={setShowAppLoader} />} />
               <Route path='/game' element={<GamePage user={user} signOut={signOut} setShowAppLoader={setShowAppLoader} toastData={toastData} setToastData={setToastData} />} />
-              {user?.user && <Route path='/admin/item-management' element={<ItemManagementPage user={user} toastData={toastData} setToastData={setToastData} setShowAppLoader={setShowAppLoader} />} />}
-              {user?.user && <Route path='/admin/metadata-management' element={<MetadataManagementPage user={user} toastData={toastData} setToastData={setToastData} setShowAppLoader={setShowAppLoader} />} />}
+              {user?.isAdmin && <Route path='/admin/item-management' element={<ItemManagementPage user={user} toastData={toastData} setToastData={setToastData} setShowAppLoader={setShowAppLoader} signOut={signOut} />} />}
+              {user?.isAdmin && <Route path='/admin/metadata-management' element={<MetadataManagementPage user={user} toastData={toastData} setToastData={setToastData} setShowAppLoader={setShowAppLoader} signOut={signOut} />} />}
             </>
           }
 

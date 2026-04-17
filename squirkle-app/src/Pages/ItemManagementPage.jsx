@@ -1,18 +1,19 @@
 import { Box, Flex, Card, Text, TextField, TextArea, Table, IconButton, Button, Select, SegmentedControl, ScrollArea } from '@radix-ui/themes';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/Navbars/Navbar';
 import { useCallback, useState, useEffect } from 'react';
 import Dropzone, { useDropzone } from "react-dropzone";
 import { PlusIcon, MinusIcon } from '@radix-ui/react-icons';
-import AdminTextField from '../components/AdminTextField';
+import AdminTextField from '../components/Inputs/AdminTextField';
+import AdminTextArea from '../components/Inputs/AdminTextArea';
 import { MdDelete } from "react-icons/md";
 import AllItemsDialog from '../components/Dialogs/AllItemsDialog';
 import DeleteAlert from '../components/DeleteAlert';
-import AdminTextArea from '../components/AdminTextArea';
-import AdminSpinner from '../components/AdminSpinner';
-import CheckboxCardsForItemPage from '../components/CheckboxCardsForItemPage';
+import AdminSpinner from '../components/Spinners/AdminSpinner';
+import CheckboxCardsForItemPage from '../components/Cards/CheckboxCardsForItemPage';
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import NavbarForAdmin from '../components/Navbars/NavbarForAdmin';
 
-export default function ItemManagementPage({ user, toastData, setToastData, setShowAppLoader }) {
+export default function ItemManagementPage({ user, toastData, setToastData, setShowAppLoader, signOut }) {
 
     const [itemData, setItemData] = useState({
         name: "",
@@ -445,7 +446,8 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
         <>
             <Flex className='mainContainer'>
 
-                <Box className='navbarSpacer' />
+                <NavbarForAdmin user={user} signOut={signOut} />
+                <Box className='navbarSpacer'/>
 
                 <Flex className='contentContainer'>
                     <Flex
@@ -802,7 +804,6 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
 
                     </Flex>
                 </Flex>
-                <Box style={{ minHeight: "10px" }} />
             </Flex>
             {
                 showItemsDialog === true &&

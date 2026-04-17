@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Unity, useUnityContext } from "react-unity-webgl";
 import { Button, Box, Flex, Text } from "@radix-ui/themes"
-import { InitializeGame, InitializeGameHandler, SetGameTime } from "../GameHandler.js"
-import * as GameEvents from "../GameEvents.js"
+import { InitializeGame, InitializeGameHandler, SetGameTime } from "../../GameHandler.js"
+import * as GameEvents from "../../GameEvents.js"
 import { useContext } from 'react';
 import { GameContext } from './GameContext.jsx';
 

@@ -1,12 +1,12 @@
 import { Box, Dialog, Flex } from '@radix-ui/themes';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/Navbars/Navbar';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AreaSelectorDialog from '../components/Dialogs/AreaSelectorDialog';
 import InventoryDialog from '../components/Dialogs/InventoryDialog';
 import AuctionHouseDialog from '../components/Dialogs/AuctionHouseDialog';
-import { GameContext } from '../components/GameContext';
-import GameLoader from "../components/GameLoader"
+import { GameContext } from '../components/GameComponents/GameContext';
+import GameLoader from '../components/GameComponents/GameLoader'
 
 export const GAME_STATE = 0
 export const AREA_SELECTOR_STATE = 1

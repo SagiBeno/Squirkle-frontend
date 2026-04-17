@@ -2,7 +2,7 @@ import { Box, Flex, Text, Button } from '@radix-ui/themes';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { cardData } from '../HomePageCardData';
-import HomePageCard from '../components/HomePageCard';
+import HomePageCard from '../components/Cards/HomePageCard';
 import { FaPlay } from "react-icons/fa";
 
 export default function HomePage({user, setShowAppLoader}) {

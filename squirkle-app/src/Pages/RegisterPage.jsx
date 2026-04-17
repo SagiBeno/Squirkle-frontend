@@ -1,6 +1,6 @@
 import { Card, Flex, Box, Text, TextField, Button } from "@radix-ui/themes";
 import { useState, useEffect } from "react";
-import PasswordInput from "../components/PasswordInput";
+import PasswordInput from "../components/Inputs/PasswordInput";
 import { DisabledLoadingButton, EnterButton, DisabledButton, OrButton, GoogleLoginButton } from "../components/Buttons";
 import Separator from '../components/Separator';
 import { useNavigate } from "react-router-dom";
