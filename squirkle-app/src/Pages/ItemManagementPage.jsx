@@ -13,7 +13,7 @@ import CheckboxCardsForItemPage from '../components/Cards/CheckboxCardsForItemPa
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import NavbarForAdmin from '../components/Navbars/NavbarForAdmin';
 
-export default function ItemManagementPage({ user, toastData, setToastData, setShowAppLoader }) {
+export default function ItemManagementPage({ user, toastData, setToastData, setShowAppLoader, signOut }) {
 
     const [itemData, setItemData] = useState({
         name: "",
@@ -446,8 +446,8 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
         <>
             <Flex className='mainContainer'>
 
-                <NavbarForAdmin user={user} />
-                <Box className='navbarSpacer' />
+                <NavbarForAdmin user={user} signOut={signOut} />
+                <Box className='navbarSpacer'/>
 
                 <Flex className='contentContainer'>
                     <Flex

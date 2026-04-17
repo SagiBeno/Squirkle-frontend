@@ -7,8 +7,9 @@ import MetadataBlock from "../components/Cards/MetadataBlock";
 import AdminSpinner from '../components/Spinners/AdminSpinner';
 import AllMetadataDialog from "../components/Dialogs/AllMetadataDialog";
 import DeleteAlert from "../components/DeleteAlert";
+import NavbarForAdmin from "../components/Navbars/NavbarForAdmin";
 
-export default function MetadataManagementPage({ user, setShowAppLoader, toastData, setToastData }) {
+export default function MetadataManagementPage({ user, setShowAppLoader, toastData, setToastData, signOut }) {
 
     const [metadata, setMetadata] = useState({
         id: '',
@@ -216,6 +217,7 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
         <>
             <Flex className='mainContainer'>
 
+                <NavbarForAdmin user={user} signOut={signOut} />
                 <Box className='navbarSpacer' />
 
                 <Flex className='contentContainer'>

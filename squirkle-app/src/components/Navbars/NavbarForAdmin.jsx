@@ -11,7 +11,9 @@ import NavbarMobileDropdown from "./NavbarMobileDropdown";
 import CoinCounter from "../GameComponents/CoinCounter";
 import { useNavigate } from "react-router-dom";
 
-export default function NavbarForAdmin( { user } ) {
+export default function NavbarForAdmin({ user, signOut }) {
+
+    const navigate = useNavigate();
 
     return (
         <Flex
@@ -24,28 +26,50 @@ export default function NavbarForAdmin( { user } ) {
                 fontFamily: "'Fredoka', sans-serif",
                 zIndex: 999,
                 alignItems: 'center',
-                justifyContent: 'end'
+                justifyContent: 'space-between',
             }}
-        >   
-            <Text size="4" style={{ color: "white" }}>{user.username}</Text>
+        >
 
-            <DropdownMenu.Root>
-                <DropdownNavbarButton icon={<RiMenuFill size={20} />} />
+            <Flex 
+                style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'start',
+                    marginLeft: '15px'
+                }}
+            >
+                <Text size="4" style={{ color: "white", textTransform: 'uppercase', fontWeight: '500', letterSpacing: '2px' }}>Admin</Text>
+            </Flex>
 
-                <DropdownMenu.Content className="squirkleDropdown" style={{ width: 150, marginTop: -12, marginRight: -20, backgroundColor: "transparent" }}>
-                    
-                    <Button className="squirkleButton" onClick={() => navigate('/admin/item-management')} style={{ padding: 10, height: '50px', backgroundColor: '#eba62a' }}>
-                        <Text weight="bold">Item management</Text>
-                    </Button>
-                    <Button className="squirkleButton" onClick={() => navigate('/admin/metadata-management')} style={{ padding: 10, height: '50px', backgroundColor: '#eba62a' }}>
-                        <Text weight="bold">Metadata management</Text>
-                    </Button>
-                    <Button className="squirkleButton" onClick={() => {}} style={{ padding: 5, backgroundColor: "#ee3c3c", }}>
-                        <Text weight="bold">Logout</Text>
-                    </Button>
+            <Flex
+                style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'end',
+                    gap: 15
+                }}
+            >
+                <Text size="4" style={{ color: "white" }}>{user.username}</Text>
 
-                </DropdownMenu.Content>
-            </DropdownMenu.Root>
+                <DropdownMenu.Root>
+                    <DropdownNavbarButton icon={<RiMenuFill size={20} />} />
+
+                    <DropdownMenu.Content className="squirkleDropdown" style={{ width: 150, marginTop: -12, marginRight: -20, backgroundColor: "transparent" }}>
+
+                        <Button className="squirkleButton" onClick={() => navigate('/admin/item-management')} style={{ padding: 10, height: '50px', backgroundColor: '#eba62a' }}>
+                            <Text weight="bold">Item management</Text>
+                        </Button>
+                        <Button className="squirkleButton" onClick={() => navigate('/admin/metadata-management')} style={{ padding: 10, height: '50px', backgroundColor: '#eba62a' }}>
+                            <Text weight="bold">Metadata management</Text>
+                        </Button>
+                        <Button className="squirkleButton" onClick={signOut} style={{ padding: 5, backgroundColor: "#ee3c3c", }}>
+                            <Text weight="bold">Logout</Text>
+                        </Button>
+
+                    </DropdownMenu.Content>
+                </DropdownMenu.Root>
+            </Flex>
+
         </Flex>
     )
 

@@ -78,8 +78,8 @@ function App() {
             const userWithCoinCount = await withCoinCount({ user: currentUser, username: username });
             setUser(userWithCoinCount);
           }
-        } //else navigate('/');
-      } //else navigate('/login');
+        } else navigate('/');
+      } else navigate('/login');
     });
     return unsubscribe
   }, [auth, loggedIn]);
@@ -159,8 +159,9 @@ function App() {
   }
 
   function signOut() {
-    auth.signOut()
-    setUser(null)
+    auth.signOut();
+    setUser(null);
+    navigate('/');
   }
 
   async function existingUsername(username) {
@@ -226,8 +227,8 @@ function App() {
             <>
               <Route path='/' element={<HomePage user={user} setShowAppLoader={setShowAppLoader} />} />
               <Route path='/game' element={<GamePage user={user} signOut={signOut} setShowAppLoader={setShowAppLoader} toastData={toastData} setToastData={setToastData} />} />
-              {user?.isAdmin && <Route path='/admin/item-management' element={<ItemManagementPage user={user} toastData={toastData} setToastData={setToastData} setShowAppLoader={setShowAppLoader} />} />}
-              {user?.isAdmin && <Route path='/admin/metadata-management' element={<MetadataManagementPage user={user} toastData={toastData} setToastData={setToastData} setShowAppLoader={setShowAppLoader} />} />}
+              {user?.isAdmin && <Route path='/admin/item-management' element={<ItemManagementPage user={user} toastData={toastData} setToastData={setToastData} setShowAppLoader={setShowAppLoader} signOut={signOut} />} />}
+              {user?.isAdmin && <Route path='/admin/metadata-management' element={<MetadataManagementPage user={user} toastData={toastData} setToastData={setToastData} setShowAppLoader={setShowAppLoader} signOut={signOut} />} />}
             </>
           }
 

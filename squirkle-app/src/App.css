@@ -11,7 +11,7 @@
     background-size: 50vh;
 
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
 }
 
 .contentContainer {
@@ -21,6 +21,7 @@
     align-items: center;
     justify-content: center;
     font-family: "Fredoka", sans-serif !important;
+    overflow-y: auto;
 }
 
 .textField, .textArea {
