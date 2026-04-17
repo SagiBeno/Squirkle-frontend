@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { Flex, Box, SegmentedControl, Text, Button } from '@radix-ui/themes';
-import AdminTextField from "../components/AdminTextField";
-import AdminTextArea from "../components/AdminTextArea";
+import AdminTextField from "../components/Inputs/AdminTextField";
+import AdminTextArea from "../components/Inputs/AdminTextArea";
 import Sketch from '@uiw/react-color-sketch';
-import MetadataBlock from "../components/MetadataBlock";
-import AdminSpinner from '../components/AdminSpinner';
+import MetadataBlock from "../components/Cards/MetadataBlock";
+import AdminSpinner from '../components/Spinners/AdminSpinner';
 import AllMetadataDialog from "../components/Dialogs/AllMetadataDialog";
 import DeleteAlert from "../components/DeleteAlert";
 
@@ -15,7 +15,7 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
         title: '',
         description: '',
         backgroundColor: '#FFFFFF',
-        textColor: '#000000'
+        textColor: '#000000',
     });
 
     const [loading, setLoading] = useState(false);
@@ -52,6 +52,7 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
 
         else {
             setMetadata({
+                id: '',
                 title: '',
                 description: '',
                 backgroundColor: '#FFFFFF',
@@ -97,6 +98,7 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
 
                     if (resJSON.status === 201) {
                         setMetadata({
+                            id: '',
                             title: '',
                             description: '',
                             backgroundColor: '#FFFFFF',
@@ -152,6 +154,7 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
 
                     if (resJSON.status === 200) {
                         setMetadata({
+                            id: '',
                             title: '',
                             description: '',
                             backgroundColor: '#FFFFFF',
@@ -308,8 +311,10 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
                                     id="metadataID"
                                     value={metadata.id}
                                     onChange={(e) => {
+                                        console.log(metadata.id);
                                         let value = e.target.value;
                                         value = value.toUpperCase();
+                                        if (value.includes(' ')) value = value.replace(' ', '_');
                                         updateMetadata('id', value);
                                     }}
                                 />

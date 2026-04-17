@@ -1,7 +1,7 @@
 import { Dialog, Flex, Text, TextField, Button, Select, Spinner, Popover, Box } from "@radix-ui/themes";
 import { TbCancel } from "react-icons/tb";
 import { IoCheckmark } from "react-icons/io5";
-import GameSpinner from "../GameSpinner";
+import GameSpinner from "../Spinners/GameSpinner";
 
 export default function CreateListingDialog({ open, setOpen, createCandidates, createCandidatesLoading, setIsCreateInspectOpen, createListingForm, setCreateListingForm, selectedCreateItem, createLoading, handleCreateFieldChange, handleCreateListingSubmit }) {
 

@@ -1,10 +1,10 @@
 import { Flex, Box, Text, Dialog, IconButton, TextField } from "@radix-ui/themes"
 import { useState } from "react";
 import { useEffect } from "react";
-import ItemsTable from '../ItemsTable';
+import ItemsTable from '../AdminComponents/ItemsTable';
 import { HiXMark } from "react-icons/hi2";
-import DialogSpinner from "../DialogSpinner";
-import MetadataTable from "../MetadataTable";
+import DialogSpinner from '../Spinners/DialogSpinner';
+import MetadataTable from "../AdminComponents/MetadataTable";
 
 export default function AllMetadataDialog({ open, setOpen, handleSelectedModify }) {
 

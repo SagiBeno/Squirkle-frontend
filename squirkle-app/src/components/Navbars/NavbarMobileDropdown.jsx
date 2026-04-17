@@ -4,8 +4,8 @@ import { FaMap } from 'react-icons/fa'
 import { IoGameController } from 'react-icons/io5'
 import { MdBackpack } from 'react-icons/md'
 import { RiAuctionFill, RiMenuFill } from 'react-icons/ri'
-import { AREA_SELECTOR_STATE, AUCTION_HOUSE_STATE, INVENTORY_STATE } from '../Pages/GamePage'
-import { DropdownNavbarButton } from './Buttons'
+import { AREA_SELECTOR_STATE, AUCTION_HOUSE_STATE, INVENTORY_STATE } from '../../Pages/GamePage'
+import { DropdownNavbarButton } from '../Buttons'
 
 export default function NavbarMobileDropdown({setDialogState, user, signOut, iconSize}) {
     return (

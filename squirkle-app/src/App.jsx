@@ -5,7 +5,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import HomePage from './Pages/HomePage';
 import LoginPage from './Pages/LoginPage';
 import RegisterPage from './Pages/RegisterPage';
-import Navbar from './components/Navbar';
+import Navbar from './components/Navbars/Navbar';
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import AppToast from './components/AppToast';
@@ -13,7 +13,7 @@ import UsernameInputDialog from './components/Dialogs/UsernameInputDialog';
 import ItemManagementPage from './Pages/ItemManagementPage';
 import GamePage from './Pages/GamePage';
 import MetadataManagementPage from './Pages/MetadataManagementPage';
-import AppLoader from './components/AppLoader';
+import AppLoader from './components/Spinners/AppLoader';
 
 function App() {
   const firebaseApp = initializeApp({

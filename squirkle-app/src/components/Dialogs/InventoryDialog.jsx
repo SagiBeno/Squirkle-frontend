@@ -1,7 +1,7 @@
 import { Box, Dialog, Flex } from '@radix-ui/themes'
 import React from 'react'
-import ItemSlot from '../ItemSlot'
-import ItemDetailsDialog from './ItemDetailsDialog'
+import ItemSlot from '../GameComponents/ItemSlot'
+import ItemDetailsDialog from '../Dialogs/ItemDetailsDialog'
 import { useState } from 'react'
 import { useEffect } from 'react'
 

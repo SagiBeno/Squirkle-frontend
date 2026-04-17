@@ -1,7 +1,7 @@
 import { Button, Dialog, Flex, Heading, Text, TextField, Tabs } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
 
-import GameSpinner from '../GameSpinner';
+import GameSpinner from '../Spinners/GameSpinner';
 import ItemDetailsDialog from './ItemDetailsDialog';
 import CreateListingDialog from './CreateListingDialog';
 import ListingsComponentsForUser from '../ListingsComponents/ListingsContainerForUser';

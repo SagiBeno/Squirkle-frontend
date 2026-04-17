@@ -1,5 +1,5 @@
 import { Dialog, Flex } from '@radix-ui/themes'
-import GameAreaPanel from '../GameAreaPanel'
+import GameAreaPanel from '../GameComponents/GameAreaPanel'
 import { useState } from 'react'
 import { useEffect } from 'react'
 

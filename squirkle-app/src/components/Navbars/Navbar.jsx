@@ -1,14 +1,14 @@
 import { Button, Dialog, DropdownMenu, Flex, Text } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
-import { DropdownNavbarButton, NavbarButton } from "./Buttons";
+import { DropdownNavbarButton, NavbarButton } from "../Buttons";
 import { FaMap } from "react-icons/fa";
 import { MdBackpack } from "react-icons/md";
 import { IoGameController } from "react-icons/io5";
 import { GiTwoCoins } from "react-icons/gi";
 import { RiAuctionFill, RiMenuFill } from "react-icons/ri";
-import { AREA_SELECTOR_STATE, AUCTION_HOUSE_STATE, GAME_STATE, INVENTORY_STATE } from "../Pages/GamePage";
+import { AREA_SELECTOR_STATE, AUCTION_HOUSE_STATE, GAME_STATE, INVENTORY_STATE } from "../../Pages/GamePage";
 import NavbarMobileDropdown from "./NavbarMobileDropdown";
-import CoinCounter from "./CoinCounter";
+import CoinCounter from "../GameComponents/CoinCounter";
 
 export default function Navbar({ user, signOut, setDialogState }) {
     const [isMobile, setIsMobile] = useState(false)

@@ -6,7 +6,7 @@ import JSZip from 'jszip'
 import { useContext } from 'react'
 import { GameContext } from './GameContext'
 import { Flex, Spinner, Text } from '@radix-ui/themes'
-import GameSpinner from './GameSpinner'
+import GameSpinner from '../Spinners/GameSpinner'
 
 export default function GameLoader({user}) {
 

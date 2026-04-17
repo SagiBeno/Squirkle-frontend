@@ -1,13 +1,13 @@
 import { Dialog, Flex, Text } from '@radix-ui/themes'
-import "../Game.css"
-import { LoadArea } from '../GameHandler.js'
+import "../../Game.css";
+import { LoadArea } from '../../GameHandler.js'
 import { FaLock } from "react-icons/fa6";
 import { FaUnlock } from "react-icons/fa6";
 import { GiTwoCoins } from 'react-icons/gi';
 import { useState } from 'react';
 import { useContext } from 'react';
 import { GameContext } from "./GameContext.jsx"
-import { OnPlayerGiveCoins } from '../GameEvents.js';
+import { OnPlayerGiveCoins } from '../../GameEvents.js';
 
 export default function GameAreaPanel({ areaData, purchasedAreas, user, refresh }) {
 
