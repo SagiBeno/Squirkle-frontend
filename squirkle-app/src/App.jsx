@@ -79,7 +79,7 @@ function App() {
             setUser(userWithCoinCount);
           }
         } else navigate('/');
-      } else navigate('/login');
+      } else navigate('/');
     });
     return unsubscribe
   }, [auth, loggedIn]);

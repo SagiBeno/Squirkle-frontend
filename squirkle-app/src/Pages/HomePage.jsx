@@ -10,11 +10,7 @@ export default function HomePage({user, setShowAppLoader}) {
 
     useEffect(() => {
         setShowAppLoader(false);
-        if (user != null)
-        {
-            navigate("/game")
-        }
-    }, [user])
+    }, [])
 
     return (
         <Flex className='mainContainer'>
@@ -41,7 +37,11 @@ export default function HomePage({user, setShowAppLoader}) {
                         }}
                     >
                         <Button
-                            onClick={() => navigate("/login")}
+                            onClick={() => {
+                                console.log(user)
+                                if (user !== null) navigate('/game');
+                                else navigate("/login")
+                            }}
                             className='activeButton'
                             style={{
                                 padding: '30px',
