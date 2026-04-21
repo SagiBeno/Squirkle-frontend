@@ -1,7 +1,7 @@
 import { Button, Dialog, Flex, Heading, Text, TextField, IconButton } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
 import { HiXMark } from "react-icons/hi2";
-import GameSpinner from '../Spinners/GameSpinner';
+import DialogSpinner from '../Spinners/DialogSpinner';
 import ItemDetailsDialog from './ItemDetailsDialog';
 import CreateListingDialog from './CreateListingDialog';
 import ListingsComponentsForUser from '../ListingsComponents/ListingsContainerForUser';
@@ -24,7 +24,7 @@ async function fetchJsonOrThrow(url, options) {
     return data;
 }
 
-export default function AuctionHouseDialog({ user, toastData, setToastData, setOpen }) {
+export default function AuctionHouseDialog({ user, toastData, setToastData, setOpen, setDialogState }) {
     const [buttonsValue, setButtonsValue] = useState([
         {
             name: 'All listings',
@@ -292,7 +292,10 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
                         <Text size='6' style={{ margin: '0 auto' }}>Auction house</Text>
                         <IconButton
                             className="button activeButton"
-                            onClick={() => setOpen(false)}
+                            onClick={() => {
+                                setDialogState(null);
+                                setOpen(false);
+                            }}
                         >
                             <HiXMark />
                         </IconButton>
@@ -344,7 +347,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
                                     padding: '10px'
                                 }}
                             >
-                                <GameSpinner />
+                                <DialogSpinner />
                             </Flex>
                             :
                             (activeTab === 'userListings') ? <ListingsComponentsForUser getUserListings={getUserListings} activeListings={userActiveListings} inactiveListings={userInactiveListings} handleOpenListing={handleOpenListing} userId={userId} setToastData={setToastData} baseUrl={API_BASE_URL} />
@@ -381,6 +384,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
                         itemData={selectedCreateItem}
                         parentDialog="CreateInspection"
                         createListingForm={createListingForm}
+                        setOpen={setIsCreateInspectOpen}
                     />
                 </Dialog.Root>
             }
@@ -400,6 +404,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
                     }}
                 >
                     <ItemDetailsDialog
+                        setOpen={setIsBuyListingOpen}
                         itemData={selectedListingItemData}
                         parentDialog="BuyListing"
                         selectedListing={selectedListing}

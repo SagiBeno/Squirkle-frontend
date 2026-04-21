@@ -10,6 +10,9 @@ import { AREA_SELECTOR_STATE, AUCTION_HOUSE_STATE, GAME_STATE, INVENTORY_STATE }
 import NavbarMobileDropdown from "./NavbarMobileDropdown";
 import CoinCounter from "../GameComponents/CoinCounter";
 import { useNavigate } from "react-router-dom";
+import { FiLogOut } from "react-icons/fi";
+import { MdManageAccounts } from "react-icons/md";
+import { GrGamepad } from "react-icons/gr";
 
 export default function NavbarForAdmin({ user, signOut }) {
 
@@ -54,19 +57,19 @@ export default function NavbarForAdmin({ user, signOut }) {
                 <DropdownMenu.Root>
                     <DropdownNavbarButton icon={<RiMenuFill size={20} />} />
 
-                    <DropdownMenu.Content className="squirkleDropdown" style={{ width: 150, marginTop: -12, marginRight: -20, backgroundColor: "transparent" }}>
+                    <DropdownMenu.Content className="squirkleDropdown" style={{ width: 160, marginTop: -12, marginRight: -20, backgroundColor: "transparent" }}>
 
                         <Button className="squirkleButton" onClick={() => navigate('/admin/item-management')} style={{ padding: 10, height: '50px', backgroundColor: '#eba62a' }}>
-                            <Text weight="bold">Item management</Text>
+                            <MdManageAccounts size={18} /> <Text weight="bold">Item management</Text>
                         </Button>
                         <Button className="squirkleButton" onClick={() => navigate('/admin/metadata-management')} style={{ padding: 10, height: '50px', backgroundColor: '#eba62a' }}>
-                            <Text weight="bold">Metadata management</Text>
+                            <MdManageAccounts size={18} /> <Text weight="bold">Metadata management</Text>
                         </Button>
                         <Button className="squirkleButton" onClick={() => navigate('/game')} style={{ padding: 5, backgroundColor: '#eba62a' }}>
-                            <Text weight="bold">Game</Text>
+                            <GrGamepad size={18} /> <Text weight="bold">Game</Text>
                         </Button>
                         <Button className="squirkleButton" onClick={signOut} style={{ padding: 5, backgroundColor: "#ee3c3c", }}>
-                            <Text weight="bold">Logout</Text>
+                            <FiLogOut size={18} /> <Text weight="bold">Logout</Text>
                         </Button>
 
                     </DropdownMenu.Content>

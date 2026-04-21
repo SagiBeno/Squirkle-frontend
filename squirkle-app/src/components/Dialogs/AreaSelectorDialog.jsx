@@ -1,22 +1,27 @@
-import { Dialog, Flex } from '@radix-ui/themes'
+import { Dialog, Flex, Text, IconButton, ScrollArea } from '@radix-ui/themes'
 import GameAreaPanel from '../GameComponents/GameAreaPanel'
 import { useState } from 'react'
 import { useEffect } from 'react'
+import { HiXMark } from 'react-icons/hi2';
+import DialogSpinner from '../Spinners/DialogSpinner';
 
 import '../../Modal.css';
 
-export default function AreaSelectorDialog({ user }) {
+export default function AreaSelectorDialog({ user, setDialogState, setOpen }) {
 
     const [areas, setAreas] = useState([])
     const [purchasedAreas, setPurchasedAreas] = useState([])
     const [refresh, setRefresh] = useState(false)
+    const [loading, setLoading] = useState(false);
 
     async function GetAreas() {
+        setLoading(true);
         const areasJson = await (await fetch(`https://squirkle-backend.vercel.app/api/get-all-areas/`)).json()
         const purchasedAreasJson = await (await fetch(`https://squirkle-backend.vercel.app/api/get-user-areas/${user.user.uid}`)).json()
 
         setAreas(areasJson.areas)
         setPurchasedAreas(purchasedAreasJson.ownedAreas)
+        setLoading(false);
     }
 
     function Refresh() {
@@ -29,13 +34,35 @@ export default function AreaSelectorDialog({ user }) {
 
     return (
         <Dialog.Content maxWidth="450px" style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: "auto" }}>
-            <Dialog.Title style={{ textAlign: "center", marginTop: 15, color: "white" }}>SELECT A NEW AREA</Dialog.Title>
+            <Dialog.Title style={{ marginTop: 15, color: 'white', textTransform: 'uppercase' }}>
+                <Flex
+                    style={{
+                        justifyContent: "space-between"
+                    }}
+                >
+                    <Text size='6' style={{ margin: '0 auto' }}>SELECT A NEW AREA</Text>
+                    <IconButton
+                        className="button activeButton"
+                        onClick={() => {
+                            setDialogState(null);
+                            setOpen(false);
+                        }}
+                    >
+                        <HiXMark />
+                    </IconButton>
+                </Flex>
+            </Dialog.Title>
 
-            <Flex direction="column" style={{ maxHeight: 300, overflowY: "scroll", scrollSnapType: "y mandatory" }}>
-                {
-                    areas.map(x => <GameAreaPanel key={x.id} areaData={x} user={user} purchasedAreas={purchasedAreas} refresh={Refresh} />)
-                }
-            </Flex>
+            {loading && <DialogSpinner />}
+
+            <ScrollArea type='auto' scrollbars="vertical" style={{ maxHeight: 300, paddingRight: '15px' }}>
+                <Flex direction="column">
+                    {
+                        areas.map(x => <GameAreaPanel key={x.id} areaData={x} user={user} purchasedAreas={purchasedAreas} refresh={Refresh} />)
+                    }
+                </Flex>
+            </ScrollArea>
+
         </Dialog.Content>
     )
 }
