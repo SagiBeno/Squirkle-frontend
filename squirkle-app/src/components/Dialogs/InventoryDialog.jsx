@@ -4,7 +4,7 @@ import ItemSlot from '../GameComponents/ItemSlot'
 import ItemDetailsDialog from '../Dialogs/ItemDetailsDialog'
 import { useState } from 'react'
 import { useEffect } from 'react'
-import DialogSpinner from '../DialogSpinner'
+import DialogSpinner from '../Spinners/DialogSpinner'
 
 import '../../Modal.css';
 
