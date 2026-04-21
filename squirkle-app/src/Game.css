@@ -1,5 +1,4 @@
-.gameAreaPanel
-{
+.gameAreaPanel {
     min-height: 150px;
     background-size: cover;
     background-position: center;
@@ -20,23 +19,20 @@
     filter: grayscale(0);
 }
 
-.gameAreaPanelTitle, .gameAreaLock
-{
+.gameAreaPanelTitle,
+.gameAreaLock {
     transition: all 0.1s;
 }
 
-.gameAreaPanel:hover.purchased .gameAreaPanelTitle
-{
+.gameAreaPanel:hover.purchased .gameAreaPanelTitle {
     padding-left: 15px;
 }
 
-.gameAreaPanel:hover .gameAreaLock
-{
+.gameAreaPanel:hover .gameAreaLock {
     transform: rotateZ(2deg) scale(1.1);
 }
 
-.itemSlot
-{
+.itemSlot {
     min-width: 64px;
     height: 64px;
 
@@ -44,22 +40,35 @@
     transition: all 0.1s;
 }
 
-.itemSlot:hover
-{
+.itemSlot:hover {
     z-index: 1;
     scale: 1.05;
     box-shadow: 0px, 0px, 10px, 10px, black;
 }
 
-.itemIcon
-{
+.itemSlotListed {
+    background-color: lightblue;
+}
+
+.itemSlotEquipped {
+    background-color: yellow;
+}
+
+.itemSlotListed {
+    background-color: lightblue;
+}
+
+.itemSlotEquipped {
+    background-color: yellow;
+}
+
+.itemIcon {
     width: 48px;
     height: 48px;
     image-rendering: pixelated;
 }
 
-.itemTooltip
-{
+.itemTooltip {
     background-color: white;
     font-family: "Fredoka", sans-serif;
     padding: 5px;

@@ -35,9 +35,9 @@ export default function CreateListingDialog({ open, setOpen, createCandidates, c
                             <GameSpinner />
                             :
                             createCandidates.length === 0 && !createCandidatesLoading ?
-                            <Text style={{ textAlign: 'center', color: 'orange' }} size="4">No available inventory items</Text>
-                            :
-                            <Select.Root
+                                <Text style={{ textAlign: 'center', color: 'orange' }} size="4">No available inventory items</Text>
+                                :
+                                <Select.Root
 
                                 name='selectItem'
                                 id='selectItem'
@@ -68,7 +68,7 @@ export default function CreateListingDialog({ open, setOpen, createCandidates, c
                         className="textField"
                         placeholder="1500"
                         value={createListingForm.price}
-                        onChange={() => {}}
+                        onChange={() => { }}
                         onKeyDown={(e) => {
 
                             let value = createListingForm.price.toString();
