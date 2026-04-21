@@ -1,7 +1,7 @@
 import { Button, Dialog, Flex, Heading, Text, TextField, IconButton } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
 import { HiXMark } from "react-icons/hi2";
-import GameSpinner from '../Spinners/GameSpinner';
+import DialogSpinner from '../Spinners/DialogSpinner';
 import ItemDetailsDialog from './ItemDetailsDialog';
 import CreateListingDialog from './CreateListingDialog';
 import ListingsComponentsForUser from '../ListingsComponents/ListingsContainerForUser';
@@ -347,7 +347,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
                                     padding: '10px'
                                 }}
                             >
-                                <GameSpinner />
+                                <DialogSpinner />
                             </Flex>
                             :
                             (activeTab === 'userListings') ? <ListingsComponentsForUser getUserListings={getUserListings} activeListings={userActiveListings} inactiveListings={userInactiveListings} handleOpenListing={handleOpenListing} userId={userId} setToastData={setToastData} baseUrl={API_BASE_URL} />
