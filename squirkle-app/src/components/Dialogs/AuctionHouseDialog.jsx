@@ -10,6 +10,8 @@ import ListingsContainerForGlobalInactive from '../ListingsComponents/ListingsCo
 
 const API_BASE_URL = 'https://squirkle-backend.vercel.app/api'
 
+import '../../Modal.css';
+
 async function fetchJsonOrThrow(url, options) {
     console.log(`Fetching: ${url}`, options || {});
     const response = await fetch(url, options);

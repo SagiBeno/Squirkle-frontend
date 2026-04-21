@@ -35,30 +35,30 @@ export default function CreateListingDialog({ open, setOpen, createCandidates, c
                             <GameSpinner />
                             :
                             createCandidates.length === 0 && !createCandidatesLoading ?
-                            <Text style={{ textAlign: 'center', color: 'orange' }} size="4">No available inventory items</Text>
-                            :
-                            <Select.Root
+                                <Text style={{ textAlign: 'center', color: 'orange' }} size="4">No available inventory items</Text>
+                                :
+                                <Select.Root
 
-                                name='selectItem'
-                                id='selectItem'
-                                value={createListingForm.userItemId}
-                                onChange={(e) => handleCreateFieldChange('userItemId', e.target.value)}
-                                disabled={createCandidatesLoading || createCandidates.length === 0}
-                            >
-                                <Select.Trigger />
-                                <Select.Content
-                                    color='gold'
-                                    style={{
-                                        borderRadius: 0,
-                                        background: '#bababa',
-                                        border: '3px solid #d5d5d5',
-                                    }}
+                                    name='selectItem'
+                                    id='selectItem'
+                                    value={createListingForm.userItemId}
+                                    onChange={(e) => handleCreateFieldChange('userItemId', e.target.value)}
+                                    disabled={createCandidatesLoading || createCandidates.length === 0}
                                 >
-                                    {
-                                        createCandidates.map((item) => <Select.Item value={item.userItemId} key={item.userItemId}>{`${item.name} (${item.type})`}</Select.Item>)
-                                    }
-                                </Select.Content>
-                            </Select.Root>
+                                    <Select.Trigger />
+                                    <Select.Content
+                                        color='gold'
+                                        style={{
+                                            borderRadius: 0,
+                                            background: '#bababa',
+                                            border: '3px solid #d5d5d5',
+                                        }}
+                                    >
+                                        {
+                                            createCandidates.map((item) => <Select.Item value={item.userItemId} key={item.userItemId}>{`${item.name} (${item.type})`}</Select.Item>)
+                                        }
+                                    </Select.Content>
+                                </Select.Root>
                     }
 
                     <Text as="label" size="4" htmlFor="priceInput">Price</Text>
@@ -68,7 +68,7 @@ export default function CreateListingDialog({ open, setOpen, createCandidates, c
                         className="textField"
                         placeholder="1500"
                         value={createListingForm.price}
-                        onChange={() => {}}
+                        onChange={() => { }}
                         onKeyDown={(e) => {
 
                             let value = createListingForm.price.toString();
