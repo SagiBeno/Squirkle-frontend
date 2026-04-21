@@ -234,8 +234,8 @@ function App() {
 
           {
             <>
-              <Route path='/login' element={<LoginPage handleLoginWithEmailAndPW={handleLoginWithEmailAndPW} handleLoginWithGoogle={handleLoginWithGoogle} loading={loading} setShowAppLoader={setShowAppLoader} />} />
-              <Route path='/register' element={<RegisterPage loading={loading} handleRegistration={handleRegistration} handleLoginWithGoogle={handleLoginWithGoogle} setShowAppLoader={setShowAppLoader} />} />
+              {user === null && <Route path='/login' element={<LoginPage handleLoginWithEmailAndPW={handleLoginWithEmailAndPW} handleLoginWithGoogle={handleLoginWithGoogle} loading={loading} setShowAppLoader={setShowAppLoader} />} />}
+              {user === null && <Route path='/register' element={<RegisterPage loading={loading} handleRegistration={handleRegistration} handleLoginWithGoogle={handleLoginWithGoogle} setShowAppLoader={setShowAppLoader} />} />}
             </>
           }
         </Routes>
