@@ -384,6 +384,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
                         itemData={selectedCreateItem}
                         parentDialog="CreateInspection"
                         createListingForm={createListingForm}
+                        setOpen={setIsCreateInspectOpen}
                     />
                 </Dialog.Root>
             }
@@ -403,6 +404,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
                     }}
                 >
                     <ItemDetailsDialog
+                        setOpen={setIsBuyListingOpen}
                         itemData={selectedListingItemData}
                         parentDialog="BuyListing"
                         selectedListing={selectedListing}

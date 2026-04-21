@@ -1,4 +1,4 @@
-import { Blockquote, Button, Dialog, Flex, Heading, Spinner, Text } from '@radix-ui/themes'
+import { Blockquote, Button, Dialog, Flex, Heading, Spinner, Text, IconButton } from '@radix-ui/themes'
 import ItemStatBlock from '../GameComponents/ItemStatBlock'
 import { CgPushChevronRight } from "react-icons/cg";
 import { FaCircle, FaShoppingCart, FaSquare } from "react-icons/fa";
@@ -9,6 +9,7 @@ import MetadataBlock from '../Cards/MetadataBlock';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { EquipWeapon, Unequip } from '../../GameHandler';
+import { HiXMark } from "react-icons/hi2";
 
 export default function ItemDetailsDialog({
     itemData,
@@ -20,6 +21,7 @@ export default function ItemDetailsDialog({
     handleBuySelectedListing = null,
     buyLoading = false,
     selectedListingLoading = false,
+    setOpen
 }) {
 
     const [metadatas, setMetadatas] = useState(null)
@@ -55,7 +57,30 @@ export default function ItemDetailsDialog({
 
     return (
         <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: "auto" }}>
-            <Dialog.Title style={{ marginTop: 5, marginBottom: -10, backgroundColor: "white", width: "fit-content", padding: 10, borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>ITEM DETAILS - {itemData == null ? "ITEM_NAME" : itemData.name}</Dialog.Title>
+            <Dialog.Title>
+                <Flex
+                    style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between'
+                    }}
+                >
+                    <Flex style={{ marginTop: 5, marginBottom: -15, backgroundColor: "white", width: "fit-content", padding: 10, borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>
+                        ITEM DETAILS - {itemData == null ? "ITEM_NAME" : itemData.name}
+                    </Flex>
+                    <Flex style={{ marginTop: 5, marginBottom: -15, backgroundColor: "white", width: "fit-content", padding: 10, borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>
+                        <IconButton
+                            className="button activeButton"
+                            onClick={() => {
+                                setOpen(false);
+                            }}
+                        >
+                            <HiXMark />
+                        </IconButton>
+                    </Flex>
+                </Flex>
+               
+                
+            </Dialog.Title>
 
             <Flex style={{ backgroundColor: "white", height: "calc(100% - 40px)" }}>
                 <Flex direction="column" gap="3" flexGrow="1" style={{ padding: 20 }}>
