@@ -7,6 +7,8 @@ import { RiAuctionFill, RiMenuFill } from 'react-icons/ri'
 import { AREA_SELECTOR_STATE, AUCTION_HOUSE_STATE, INVENTORY_STATE } from '../../Pages/GamePage'
 import { DropdownNavbarButton } from '../Buttons'
 import { useNavigate } from 'react-router-dom'
+import { FiLogOut } from "react-icons/fi";
+import { MdManageAccounts } from "react-icons/md";
 
 export default function NavbarMobileDropdown({ setDialogState, user, signOut, iconSize, setOpenDialog }) {
 
@@ -63,21 +65,21 @@ export default function NavbarMobileDropdown({ setDialogState, user, signOut, ic
                     <>
                         <Button
                             className="squirkleButton"
-                            style={{ padding: 5, backgroundColor: "#f6f6f6" }}
+                            style={{ padding: 5, backgroundColor: "#f6f6f6", color: 'black' }}
                             onClick={() => {
                                 navigate('/admin/item-management');
                             }}
                         >
-                            <Text style={{ color: "black" }}>Item management</Text>
+                            <MdManageAccounts size={18} /> Item management
                         </Button>
                         <Button
                             className="squirkleButton"
-                            style={{ padding: 5, backgroundColor: "#f6f6f6" }}
+                            style={{ padding: 5, backgroundColor: "#f6f6f6", height: '55px', color: 'black', textAlign: 'center' }}
                             onClick={() => {
                                 navigate('/admin/metadata-management');
                             }}
                         >
-                            <Text style={{ color: "black" }}>Metadata management</Text>
+                            <MdManageAccounts size={18} /> Metadata management
                         </Button>
 
                     </>
@@ -86,7 +88,7 @@ export default function NavbarMobileDropdown({ setDialogState, user, signOut, ic
                 {user ? (
                     <>
                         <Button className="squirkleButton" onClick={signOut} style={{ padding: 5, backgroundColor: "#ee3c3c" }}>
-                            <Text weight="bold">Logout</Text>
+                            <FiLogOut size={18} /> <Text weight="bold">Logout</Text>
                         </Button>
                     </>
                 ) : null}
