@@ -43,7 +43,7 @@ export default function AllMetadataDialog({ open, setOpen, handleSelectedModify 
     }
 
     return (
-        <Dialog.Root open={open} setOpen={setOpen}>
+        <Dialog.Root open={open} onOpenChange={setOpen}>
             <Dialog.Content
                 minWidth="80vw"
                 style={{
