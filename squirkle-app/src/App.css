@@ -22,6 +22,7 @@
     justify-content: center;
     font-family: "Fredoka", sans-serif !important;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .textField, .textArea {
