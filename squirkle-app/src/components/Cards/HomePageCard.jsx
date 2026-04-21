@@ -8,13 +8,12 @@ export default function HomePageCard({ data }) {
                 maxWidth: '300px',
                 minHeight: '250px',
                 maxHeight: '350px',
-                boxShadow: '0px 0px 20px 5px black',
+                boxShadow: '0px 0px 20px 5px rgba(0, 0, 0, 0.25)',
                 backdropFilter: 'blur(10px)',
                 flexDirection: 'column',
                 alignItems: 'center',
                 padding: '15px',
                 gap: 20,
-                borderRadius: '12px'
             }}
         >
             <img 
