@@ -15,9 +15,9 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
     const [inventory, setInventory] = useState([])
     const [listedIds, setListedIds] = useState([])
     const [equippedItems, setEquippedItems] = useState([])
-
     const [selectedItem, setSelectedItem] = useState(null)
     const [loading, setLoading] = useState(false);
+    const [openItemDetailsDialog, setOpenItemDetailsDialog] = useState(false);
     
     async function GetPlayerInventory() {
         async function getData() {
@@ -75,7 +75,7 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
 
             {loading && <DialogSpinner />}
 
-            <Dialog.Root>
+            <Dialog.Root open={openItemDetailsDialog} onOpenChange={setOpenItemDetailsDialog}>
                 
                 <Flex wrap="wrap" justify="start" gap="2">
                     {
@@ -90,7 +90,7 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
                         })
                     }
                 </Flex>
-                <ItemDetailsDialog itemData={selectedItem} parentDialog="Inventory" />
+                <ItemDetailsDialog itemData={selectedItem} parentDialog="Inventory" setOpen={setOpenItemDetailsDialog} />
             </Dialog.Root>
 
         </Dialog.Content>
