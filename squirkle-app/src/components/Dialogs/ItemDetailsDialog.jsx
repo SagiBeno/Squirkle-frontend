@@ -8,7 +8,7 @@ import { GiPunch } from "react-icons/gi";
 import MetadataBlock from '../Cards/MetadataBlock';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { EquipWeapon } from '../../GameHandler';
+import { EquipWeapon, Unequip } from '../../GameHandler';
 
 export default function ItemDetailsDialog({
     itemData,
@@ -45,7 +45,7 @@ export default function ItemDetailsDialog({
     }
 
     function TryUnequipItem() {
-        EquipWeapon("");
+        Unequip(itemData.type);
     }
 
     useEffect(() => {
@@ -71,7 +71,7 @@ export default function ItemDetailsDialog({
                     <Flex gap="1" align="center" justify="start" style={{ marginTop: "auto" }}>
                         {
                             parentDialog == "Inventory" ?
-                                itemData.state !== 'equipped' ?
+                                itemData?.state === 'equipped' ?
                                     <Button
                                         className={`button ${true ? 'activeButton' : 'inactiveButton'}`}
                                         disabled={!true}
@@ -82,15 +82,18 @@ export default function ItemDetailsDialog({
                                         Unequip Item
                                     </Button>
                                     :
-                                    <Button
-                                        className={`button ${true ? 'activeButton' : 'inactiveButton'}`}
-                                        disabled={!true}
-                                        radius='none'
-                                        size='3'
-                                        onClick={TryEquipItem}
-                                    >
-                                        Equip Item
-                                    </Button>
+                                    itemData?.state === 'listed' ?
+                                        <Text size="2" color="gray">This item is currently listed and cannot be equipped.</Text>
+                                        :
+                                        <Button
+                                            className={`button ${true ? 'activeButton' : 'inactiveButton'}`}
+                                            disabled={!true}
+                                            radius='none'
+                                            size='3'
+                                            onClick={TryEquipItem}
+                                        >
+                                            Equip Item
+                                        </Button>
                                 : null
                         }
 
