@@ -42,7 +42,7 @@ export default function CreateListingDialog({ open, setOpen, createCandidates, c
                                 name='selectItem'
                                 id='selectItem'
                                 value={createListingForm.userItemId}
-                                onChange={(e) => handleCreateFieldChange('userItemId', e.target.value)}
+                                onValueChange={(value) => handleCreateFieldChange('userItemId', value)}
                                 disabled={createCandidatesLoading || createCandidates.length === 0}
                             >
                                 <Select.Trigger />
