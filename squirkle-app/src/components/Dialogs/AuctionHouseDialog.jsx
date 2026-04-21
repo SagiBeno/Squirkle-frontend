@@ -1,6 +1,6 @@
-import { Button, Dialog, Flex, Heading, Text, TextField, Tabs } from '@radix-ui/themes';
+import { Button, Dialog, Flex, Heading, Text, TextField, IconButton } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
-
+import { HiXMark } from "react-icons/hi2";
 import GameSpinner from '../Spinners/GameSpinner';
 import ItemDetailsDialog from './ItemDetailsDialog';
 import CreateListingDialog from './CreateListingDialog';
@@ -24,7 +24,7 @@ async function fetchJsonOrThrow(url, options) {
     return data;
 }
 
-export default function AuctionHouseDialog({ user, toastData, setToastData }) {
+export default function AuctionHouseDialog({ user, toastData, setToastData, setOpen }) {
     const [buttonsValue, setButtonsValue] = useState([
         {
             name: 'All listings',
@@ -285,7 +285,21 @@ export default function AuctionHouseDialog({ user, toastData, setToastData }) {
 
         <>
             <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 10, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: 'auto' }}>
-                <Dialog.Title style={{ marginTop: 15, color: 'white', textTransform: 'uppercase' }}>Auction house</Dialog.Title>
+                <Dialog.Title style={{ marginTop: 15, color: 'white', textTransform: 'uppercase' }}>
+                    <Flex
+                        style={{
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <Text size='6' style={{ margin: '0 auto' }}>Auction house</Text>
+                        <IconButton
+                            className="button activeButton"
+                            onClick={() => setOpen(false)}
+                        >
+                            <HiXMark />
+                        </IconButton>
+                    </Flex>
+                </Dialog.Title>
 
                 <Flex
                     direction="column"
