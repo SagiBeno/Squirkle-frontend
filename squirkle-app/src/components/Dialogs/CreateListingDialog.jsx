@@ -8,7 +8,7 @@ export default function CreateListingDialog({ open, setOpen, createCandidates, c
     return (
         <Dialog.Root
             open={open}
-            setOpen={setOpen}
+            onOpenChange={setOpen}
         >
             <Dialog.Content
                 minWidth="80vw"
