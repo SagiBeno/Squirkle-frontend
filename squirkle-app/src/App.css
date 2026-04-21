@@ -164,3 +164,11 @@
         padding: 25px !important;
     }
 }
+
+.homePageGamePreview
+{
+    background-image: url("HomePageIcons/slicing.gif");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
