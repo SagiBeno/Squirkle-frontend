@@ -3,7 +3,7 @@ import { TbCancel } from "react-icons/tb";
 import { IoCheckmark } from "react-icons/io5";
 import GameSpinner from "../Spinners/GameSpinner";
 
-export default function CreateListingDialog({ open, setOpen, createCandidates, createCandidatesLoading, setIsCreateInspectOpen, createListingForm, setCreateListingForm, selectedCreateItem, createLoading, handleCreateFieldChange, handleCreateListingSubmit }) {
+export default function CreateListingDialog({ open, setOpen, createCandidates, createCandidatesLoading, setIsCreateInspectOpen, createListingForm, setCreateListingForm, selectedCreateItem, createLoading, handleCreateFieldChange, handleCreateListingSubmit, handleSelectButton }) {
 
     return (
         <Dialog.Root
@@ -109,7 +109,10 @@ export default function CreateListingDialog({ open, setOpen, createCandidates, c
                 <Flex gap="3" mt="4" justify='between'>
                     <Button
                         className={`button ${createLoading ? 'inactiveButton' : 'activeButton'}`}
-                        onClick={() => setOpen(false)}
+                        onClick={() => {
+                            setOpen(false);
+                            handleSelectButton('userListings');
+                        }}
                         disabled={createLoading}
                     >
                         <TbCancel /> Cancel

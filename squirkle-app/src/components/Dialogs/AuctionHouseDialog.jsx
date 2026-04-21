@@ -102,7 +102,6 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
                 const res = await resJSON.json();
                 if (res?.listings) {
                     const listings = res.listings.filter((listing) => listing.userId !== userId);
-                    console.log(res)
                     setGlobalActiveListings(listings);
                 }
             })
@@ -133,7 +132,6 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
         if (value === 'userListings') getUserListings();
         if (value === 'previousListings') getPreviousListings();
         if (value === 'globalListings') getGlobalActiveListings();
-
     }
 
     function handleOpenListing(listing) {
@@ -372,6 +370,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
                     createLoading={createLoading}
                     handleCreateListingSubmit={handleCreateListingSubmit}
                     setIsCreateInspectOpen={setIsCreateInspectOpen}
+                    handleSelectButton={handleSelectButton}
                 />
             }
 
