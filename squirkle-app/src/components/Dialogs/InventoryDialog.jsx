@@ -17,7 +17,7 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
     const [equippedItems, setEquippedItems] = useState([])
 
     const [selectedItem, setSelectedItem] = useState(null)
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     
     async function GetPlayerInventory() {
         async function getData() {
