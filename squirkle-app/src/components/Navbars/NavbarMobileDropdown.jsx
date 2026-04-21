@@ -6,8 +6,12 @@ import { MdBackpack } from 'react-icons/md'
 import { RiAuctionFill, RiMenuFill } from 'react-icons/ri'
 import { AREA_SELECTOR_STATE, AUCTION_HOUSE_STATE, INVENTORY_STATE } from '../../Pages/GamePage'
 import { DropdownNavbarButton } from '../Buttons'
+import { useNavigate } from 'react-router-dom'
 
 export default function NavbarMobileDropdown({ setDialogState, user, signOut, iconSize, setOpenDialog }) {
+
+    const navigate = useNavigate();
+
     return (
         <DropdownMenu.Root>
             <DropdownNavbarButton icon={<RiMenuFill size={iconSize} />} />
@@ -54,6 +58,30 @@ export default function NavbarMobileDropdown({ setDialogState, user, signOut, ic
                     <Text style={{ color: "black" }}>Auction House</Text>
                 </Button>
 
+                {
+                    user.isAdmin &&
+                    <>
+                        <Button
+                            className="squirkleButton"
+                            style={{ padding: 5, backgroundColor: "#f6f6f6" }}
+                            onClick={() => {
+                                navigate('/admin/item-management');
+                            }}
+                        >
+                            <Text style={{ color: "black" }}>Item management</Text>
+                        </Button>
+                        <Button
+                            className="squirkleButton"
+                            style={{ padding: 5, backgroundColor: "#f6f6f6" }}
+                            onClick={() => {
+                                navigate('/admin/metadata-management');
+                            }}
+                        >
+                            <Text style={{ color: "black" }}>Metadata management</Text>
+                        </Button>
+
+                    </>
+                }
 
                 {user ? (
                     <>
