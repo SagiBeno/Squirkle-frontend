@@ -42,37 +42,32 @@ export default function Navbar({ user, signOut, setDialogState, setOpenDialog })
                 {isMobile ? <NavbarMobileDropdown setDialogState={setDialogState} user={user} signOut={signOut} iconSize={iconSize} setOpenDialog={setOpenDialog} /> : (
                     <>
                         {/* area chooser */}
-                        <Dialog.Trigger>
-                            <NavbarButton
-                                icon={<FaMap size={iconSize} />} 
-                                onClick={() => {
-                                    setDialogState(AREA_SELECTOR_STATE);
-                                    setOpenDialog(true);
-                                }} 
-                            />
-                        </Dialog.Trigger>
+                        <NavbarButton
+                            icon={<FaMap size={iconSize} />}
+                            onClick={() => {
+                                setDialogState(AREA_SELECTOR_STATE);
+                                setOpenDialog(true);
+                            }}
+                        />
+
 
                         {/* inventory */}
-                        <Dialog.Trigger>
-                            <NavbarButton 
-                                icon={<MdBackpack size={iconSize} />} 
-                                onClick={() => {
-                                    setDialogState(INVENTORY_STATE);
-                                    setOpenDialog(true);
-                                }} 
-                            />
-                        </Dialog.Trigger>
+                        <NavbarButton
+                            icon={<MdBackpack size={iconSize} />}
+                            onClick={() => {
+                                setDialogState(INVENTORY_STATE);
+                                setOpenDialog(true);
+                            }}
+                        />
 
                         {/* auction house */}
-                        <Dialog.Trigger>
-                            <NavbarButton
-                                icon={<RiAuctionFill size={iconSize} />}
-                                onClick={() => {
-                                    setDialogState(AUCTION_HOUSE_STATE);
-                                    setOpenDialog(true);
-                                }}
-                            />
-                        </Dialog.Trigger>
+                        <NavbarButton
+                            icon={<RiAuctionFill size={iconSize} />}
+                            onClick={() => {
+                                setDialogState(AUCTION_HOUSE_STATE);
+                                setOpenDialog(true);
+                            }}
+                        />
                     </>
                 )}
             </Flex>
@@ -99,11 +94,11 @@ export default function Navbar({ user, signOut, setDialogState, setOpenDialog })
                                         </Button>
                                     </>
                                 }
-                                
+
                                 <Button className="squirkleButton" onClick={signOut} style={{ padding: 5, backgroundColor: "#ee3c3c", }}>
                                     <Text weight="bold">Logout</Text>
                                 </Button>
-                               
+
                             </DropdownMenu.Content>
                         </DropdownMenu.Root>
                     </>

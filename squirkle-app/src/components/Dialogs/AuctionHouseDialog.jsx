@@ -24,7 +24,7 @@ async function fetchJsonOrThrow(url, options) {
     return data;
 }
 
-export default function AuctionHouseDialog({ user, toastData, setToastData, setOpen }) {
+export default function AuctionHouseDialog({ user, toastData, setToastData, setOpen, setDialogState }) {
     const [buttonsValue, setButtonsValue] = useState([
         {
             name: 'All listings',
@@ -292,7 +292,10 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
                         <Text size='6' style={{ margin: '0 auto' }}>Auction house</Text>
                         <IconButton
                             className="button activeButton"
-                            onClick={() => setOpen(false)}
+                            onClick={() => {
+                                setDialogState(null);
+                                setOpen(false);
+                            }}
                         >
                             <HiXMark />
                         </IconButton>
