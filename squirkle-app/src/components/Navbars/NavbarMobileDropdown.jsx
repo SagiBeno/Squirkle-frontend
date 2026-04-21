@@ -7,7 +7,7 @@ import { RiAuctionFill, RiMenuFill } from 'react-icons/ri'
 import { AREA_SELECTOR_STATE, AUCTION_HOUSE_STATE, INVENTORY_STATE } from '../../Pages/GamePage'
 import { DropdownNavbarButton } from '../Buttons'
 
-export default function NavbarMobileDropdown({setDialogState, user, signOut, iconSize}) {
+export default function NavbarMobileDropdown({setDialogState, user, signOut, iconSize, setOpenDialog}) {
     return (
         <DropdownMenu.Root>
             <DropdownNavbarButton icon={<RiMenuFill size={iconSize} />} />
@@ -18,21 +18,42 @@ export default function NavbarMobileDropdown({setDialogState, user, signOut, ico
                 }
                 
                 <Dialog.Trigger>
-                    <Button className="squirkleButton" style={{padding: 5, backgroundColor: "#f6f6f6"}} onClick={() => setDialogState(AREA_SELECTOR_STATE)}>
+                    <Button 
+                        className="squirkleButton" 
+                        style={{padding: 5, backgroundColor: "#f6f6f6"}} 
+                        onClick={() => {
+                            setDialogState(AREA_SELECTOR_STATE);
+                            setOpenDialog(true);
+                        }}
+                    >
                         <FaMap size={18} color='black' style={{ marginRight: 8 }} /> 
                         <Text style={{color: "black"}}>Area</Text>
                     </Button>
                 </Dialog.Trigger>
 
                 <Dialog.Trigger>
-                    <Button className="squirkleButton" style={{padding: 5, backgroundColor: "#f6f6f6"}} onClick={() => setDialogState(INVENTORY_STATE)}>
+                    <Button 
+                        className="squirkleButton"
+                        style={{padding: 5, backgroundColor: "#f6f6f6"}}
+                        onClick={() => {
+                            setDialogState(INVENTORY_STATE);
+                            setOpenDialog(true);
+                        }}
+                    >
                         <MdBackpack size={18} color='black' style={{ marginRight: 8 }} /> 
                         <Text style={{color: "black"}}>Inventory</Text>
                     </Button>
                 </Dialog.Trigger>
                 
                 <Dialog.Trigger>
-                    <Button className="squirkleButton" style={{padding: 5, backgroundColor: "#f6f6f6"}} onClick={() => setDialogState(AUCTION_HOUSE_STATE)}>
+                    <Button
+                        className="squirkleButton"
+                        style={{padding: 5, backgroundColor: "#f6f6f6"}}
+                        onClick={() => {
+                            setDialogState(AUCTION_HOUSE_STATE);
+                            setOpenDialog(true);
+                        }}
+                    >
                         <RiAuctionFill size={18} color='black' style={{ marginRight: 8 }} /> 
                         <Text style={{color: "black"}}>Auction House</Text>
                     </Button>

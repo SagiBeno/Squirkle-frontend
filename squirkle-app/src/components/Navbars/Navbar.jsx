@@ -11,7 +11,7 @@ import NavbarMobileDropdown from "./NavbarMobileDropdown";
 import CoinCounter from "../GameComponents/CoinCounter";
 import { useNavigate } from "react-router-dom";
 
-export default function Navbar({ user, signOut, setDialogState }) {
+export default function Navbar({ user, signOut, setDialogState, setOpenDialog }) {
     const [isMobile, setIsMobile] = useState(false);
     const navigate = useNavigate();
 
@@ -39,21 +39,39 @@ export default function Navbar({ user, signOut, setDialogState }) {
             }}
         >
             <Flex align="center">
-                {isMobile ? <NavbarMobileDropdown setDialogState={setDialogState} user={user} signOut={signOut} iconSize={iconSize} /> : (
+                {isMobile ? <NavbarMobileDropdown setDialogState={setDialogState} user={user} signOut={signOut} iconSize={iconSize} setOpenDialog={setOpenDialog} /> : (
                     <>
                         {/* area chooser */}
                         <Dialog.Trigger>
-                            <NavbarButton icon={<FaMap size={iconSize} />} onClick={() => setDialogState(AREA_SELECTOR_STATE)} />
+                            <NavbarButton
+                                icon={<FaMap size={iconSize} />} 
+                                onClick={() => {
+                                    setDialogState(AREA_SELECTOR_STATE);
+                                    setOpenDialog(true);
+                                }} 
+                            />
                         </Dialog.Trigger>
 
                         {/* inventory */}
                         <Dialog.Trigger>
-                            <NavbarButton icon={<MdBackpack size={iconSize} />} onClick={() => setDialogState(INVENTORY_STATE)} />
+                            <NavbarButton 
+                                icon={<MdBackpack size={iconSize} />} 
+                                onClick={() => {
+                                    setDialogState(INVENTORY_STATE);
+                                    setOpenDialog(true);
+                                }} 
+                            />
                         </Dialog.Trigger>
 
                         {/* auction house */}
                         <Dialog.Trigger>
-                            <NavbarButton icon={<RiAuctionFill size={iconSize} />} onClick={() => setDialogState(AUCTION_HOUSE_STATE)} />
+                            <NavbarButton
+                                icon={<RiAuctionFill size={iconSize} />}
+                                onClick={() => {
+                                    setDialogState(AUCTION_HOUSE_STATE);
+                                    setOpenDialog(true);
+                                }}
+                            />
                         </Dialog.Trigger>
                     </>
                 )}

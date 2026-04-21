@@ -15,7 +15,8 @@ export const AUCTION_HOUSE_STATE = 3
 
 export default function GamePage({ user, signOut, setShowAppLoader, toastData, setToastData }) {
 
-    const [dialogState, setDialogState] = useState(GAME_STATE)
+    const [dialogState, setDialogState] = useState(GAME_STATE);
+    const [openDialog, setOpenDialog] = useState(false);
 
     const navigate = useNavigate()
 
@@ -29,17 +30,17 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
         setCoins(user.coinCount)
     }, [user])
 
-    function RenderCurrentDialog() {
+    function RenderCurrentDialog(dialogState) {
         switch (dialogState) {
             case AREA_SELECTOR_STATE:
                 return <AreaSelectorDialog user={user}/>
             case INVENTORY_STATE:
                 return <InventoryDialog user={user}/>
             case AUCTION_HOUSE_STATE:
-                return <AuctionHouseDialog user={user} toastData={toastData} setToastData={setToastData} />
+                return <AuctionHouseDialog user={user} toastData={toastData} setToastData={setToastData} setOpen={setOpenDialog} />
         }
 
-        return null
+        return null;
     }
 
     const [isGameLoaded, setIsGameLoaded] = useState(false)
@@ -58,7 +59,7 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
     return (
         <Dialog.Root>
             <GameContext.Provider value={gameContext}>
-                <Navbar user={user} signOut={signOut} setDialogState={setDialogState} />
+                <Navbar user={user} signOut={signOut} setDialogState={setDialogState} setOpenDialog={setOpenDialog} />
                 <Flex className='mainContainer'>
 
                     <Box className='navbarSpacer' />
@@ -67,8 +68,7 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
                         <GameLoader user={user} />
                     </Flex>
                 </Flex>
-
-                {RenderCurrentDialog()}
+                {openDialog === true && RenderCurrentDialog(dialogState)}
             </GameContext.Provider>
         </Dialog.Root>
     )
