@@ -8,7 +8,7 @@ import { GiPunch } from "react-icons/gi";
 import MetadataBlock from '../Cards/MetadataBlock';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { EquipWeapon } from '../../GameHandler';
+import { EquipWeapon, Unequip } from '../../GameHandler';
 
 export default function ItemDetailsDialog({
     itemData,
@@ -45,7 +45,7 @@ export default function ItemDetailsDialog({
     }
 
     function TryUnequipItem() {
-        EquipWeapon("");
+        Unequip(itemData.type);
     }
 
     useEffect(() => {
