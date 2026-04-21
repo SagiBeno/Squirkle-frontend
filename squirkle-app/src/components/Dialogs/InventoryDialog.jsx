@@ -9,6 +9,7 @@ import DialogSpinner from '../Spinners/DialogSpinner'
 import '../../Modal.css';
 
 export default function InventoryDialog({ user }) {
+    //TODO - realtime updating from backend and on fronend when equipping/unequipping/listing/delisting items
 
     const [inventory, setInventory] = useState([])
     const [listedIds, setListedIds] = useState([])
