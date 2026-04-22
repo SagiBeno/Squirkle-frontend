@@ -45,6 +45,7 @@ export default function HomePage({user, setShowAppLoader}) {
                             <Button
                                 onClick={() => {
                                     console.log(user)
+                                    console.log("CIGGGÁÁÁÁNYYY")
                                     if (user !== null) navigate('/game');
                                     else navigate("/login")
                                 }}

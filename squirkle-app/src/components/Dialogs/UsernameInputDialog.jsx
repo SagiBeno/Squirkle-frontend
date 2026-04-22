@@ -1,10 +1,10 @@
-import { Dialog, TextField, Button, Text, Flex } from "@radix-ui/themes";
+import { Dialog, TextField, Text, Flex } from "@radix-ui/themes";
 import { useState } from "react";
 import { UsernameDisabledLoadingButton, UsernameDisabledButton, UsernameConfirmButton } from "../Buttons";
 import { useNavigate } from "react-router-dom";
 import { BiErrorAlt } from "react-icons/bi";
 
-export default function UsernameInputDialog({ open, setOpen, setToastData, toastData, existingUsername, userData, setUser }) {
+export default function UsernameInputDialog({ open, setOpen, setToastData, existingUsername, userData, loadCurrentUserData }) {
 
     let navigate = useNavigate();
     const [username, setUsername] = useState('');
@@ -16,7 +16,7 @@ export default function UsernameInputDialog({ open, setOpen, setToastData, toast
         const existsUsername = await existingUsername(username);
 
         if (existsUsername) {
-            setMessage({ content: 'The username already exist!', error: true });
+            setMessage({ content: 'The username already exists!', error: true });
             setLoading(false);
         } else {
             const userId = userData?.user?.uid;
@@ -25,13 +25,13 @@ export default function UsernameInputDialog({ open, setOpen, setToastData, toast
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userId: userId, username: username })
             })
-                .then(res => {
+                .then(async (res) => {
                     if (res.status === 201) {
                         setToastData({ open: true, title: 'Username successfully saved', description: '', isError: false });
                         setLoading(false);
                         setOpen(false);
-                        setUser({ user: userData, username: username });
-                        navigate('/');
+                        await loadCurrentUserData(userData, { username });
+                        navigate('/game');
                     } else setMessage({ content: 'The username could not be saved. Please try again or enter a different one.', error: true });
                 })
                 .catch(error => {

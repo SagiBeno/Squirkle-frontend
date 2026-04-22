@@ -11,3 +11,8 @@ export function OnPlayerGiveCoins(coins)
     addedCoins += coins
     gameContext.setCoins(addedCoins)
 }
+
+export function ResetPlayerCoins()
+{
+    addedCoins = 0
+}
