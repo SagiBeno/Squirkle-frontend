@@ -48,6 +48,8 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
         itemData.knockback.length > 0 &&
         itemData.stats.critDamage.length > 0;
 
+    const userID = user.user?.uid
+
     useEffect(() => {
         setShowAppLoader(false);
         getMetadata();
@@ -95,11 +97,11 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
 
     function uploadImage(file) {
 
-        if (user.user?.uid) {
+        if (userID) {
             setLoading(true);
             let formData = new FormData();
             formData.append("file", file);
-            formData.append("userId", user.user.uid)
+            formData.append("userId", userID)
 
             fetch('https://squirkle-backend.vercel.app/api/upload-image', {
                 method: 'POST',
@@ -126,84 +128,88 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
 
     function deleteImage() {
 
-        setLoading(true)
-        fetch('https://squirkle-backend.vercel.app/api/delete-image', {
-            method: 'DELETE',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userId: user.user.uid, filename: file.name })
-        })
-            .then(async (resJSON) => {
-                const res = await resJSON.json();
-                if (resJSON.status === 200) setItemData(prev => ({ ...prev, imageUrl: "" }));
-
-                if (res?.error) {
-                    setToastData({ open: true, title: 'Image deletion status', description: res.error, isError: true });
-                }
-
-                if (res?.message) {
-                    setToastData({ open: true, title: 'Image deletion status', description: res.message, isError: false });
-                }
+        if (userID) {
+            setLoading(true)
+            fetch('https://squirkle-backend.vercel.app/api/delete-image', {
+                method: 'DELETE',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId: userID, filename: file.name })
             })
-            .catch((error) => {
-                console.warn(error);
-                setToastData({ open: true, title: 'Image deletion status', description: 'An error occurred during the request. Please try again.', isError: true });
-            })
-            .finally(() => setLoading(false));
+                .then(async (resJSON) => {
+                    const res = await resJSON.json();
+                    if (resJSON.status === 200) setItemData(prev => ({ ...prev, imageUrl: "" }));
+
+                    if (res?.error) {
+                        setToastData({ open: true, title: 'Image deletion status', description: res.error, isError: true });
+                    }
+
+                    if (res?.message) {
+                        setToastData({ open: true, title: 'Image deletion status', description: res.message, isError: false });
+                    }
+                })
+                .catch((error) => {
+                    console.warn(error);
+                    setToastData({ open: true, title: 'Image deletion status', description: 'An error occurred during the request. Please try again.', isError: true });
+                })
+                .finally(() => setLoading(false));
+        } else return;
     }
 
     function handleNewItem() {
 
-        setLoading(true);
-        const itemId = itemData.name.toUpperCase().replace(' ', '_');
-        const reqBody = {
-            userId: user.user.uid,
-            id: itemId,
-            ...itemData,
-            knockback: Number(itemData.knockback),
-            stats: {
-                ...itemData.stats,
-                critDamage: Number(itemData.stats.critDamage)
-            }
-        };
-
-        fetch('https://squirkle-backend.vercel.app/api/create-item', {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(reqBody)
-        })
-            .then(async resJSON => {
-                const res = await resJSON.json();
-                if (res?.error) {
-                    setToastData({ open: true, title: 'Status of the new item submission', description: res.error, isError: true });
+        if (userID) {
+            setLoading(true);
+            const itemId = itemData.name.toUpperCase().replace(' ', '_');
+            const reqBody = {
+                userId: userID,
+                id: itemId,
+                ...itemData,
+                knockback: Number(itemData.knockback),
+                stats: {
+                    ...itemData.stats,
+                    critDamage: Number(itemData.stats.critDamage)
                 }
+            };
 
-                if (res?.message) {
-                    setToastData({ open: true, title: 'Status of the new item submission', description: res.message, isError: false });
-                }
-
-                if (resJSON.status === 201) {
-                    setItemData({
-                        name: "",
-                        type: "",
-                        description: "",
-                        imageUrl: "",
-                        knockback: "0",
-                        stats: {
-                            circleDamage: 0,
-                            squareDamage: 0,
-                            triangleDamage: 0,
-                            critChance: 0,
-                            critDamage: "1.0",
-                            metadata: []
-                        }
-                    })
-                }
+            fetch('https://squirkle-backend.vercel.app/api/create-item', {
+                method: 'POST',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(reqBody)
             })
-            .catch((error) => {
-                console.warn(error);
-                setToastData({ open: true, title: 'Status of the new item submission', description: 'An error occurred during the request. Please try again.', isError: true });
-            })
-            .finally(() => setLoading(false));
+                .then(async resJSON => {
+                    const res = await resJSON.json();
+                    if (res?.error) {
+                        setToastData({ open: true, title: 'Status of the new item submission', description: res.error, isError: true });
+                    }
+
+                    if (res?.message) {
+                        setToastData({ open: true, title: 'Status of the new item submission', description: res.message, isError: false });
+                    }
+
+                    if (resJSON.status === 201) {
+                        setItemData({
+                            name: "",
+                            type: "",
+                            description: "",
+                            imageUrl: "",
+                            knockback: "0",
+                            stats: {
+                                circleDamage: 0,
+                                squareDamage: 0,
+                                triangleDamage: 0,
+                                critChance: 0,
+                                critDamage: "1.0",
+                                metadata: []
+                            }
+                        })
+                    }
+                })
+                .catch((error) => {
+                    console.warn(error);
+                    setToastData({ open: true, title: 'Status of the new item submission', description: 'An error occurred during the request. Please try again.', isError: true });
+                })
+                .finally(() => setLoading(false));
+        } else return;
     }
 
     const onDrop = useCallback((acceptedFiles) => {
@@ -350,10 +356,10 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
 
     function handleDeleteItem() {
 
-        if (user?.user?.uid) {
+        if (userID) {
             setShowDeleteAlert(false);
             setLoading(true);
-            const reqBody = { userId: user.user.uid };
+            const reqBody = { userId: userID };
             fetch(`https://squirkle-backend.vercel.app/api/delete-item/${itemData.itemID}`, {
                 method: 'DELETE',
                 headers: { "Content-Type": "application/json" },
@@ -395,43 +401,47 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                     setToastData({ open: true, title: 'Deletion status', description: 'An error occurred during the request. Please try again.', isError: true });
                 })
                 .finally(() => setLoading(false));
-        }
+        } else return;
     }
 
     function handleModifyItem() {
-        setLoading(true);
-        const reqBody = {
-            userId: user.user.uid,
-            ...itemData,
-            knockback: Number(itemData.knockback),
-            stats: {
-                ...itemData.stats,
-                critDamage: Number(itemData.stats.critDamage)
-            }
-        };
 
-        fetch(`https://squirkle-backend.vercel.app/api/update-item/${reqBody.itemID}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(reqBody)
-        })
-            .then(async (resJSON) => {
-                const res = await resJSON.json();
-                if (res?.error) {
-                    setToastData({ open: true, title: 'Status of the amendment', description: res.error, isError: true });
+        if (userID) {
+            setLoading(true);
+            const reqBody = {
+                userId: userID,
+                ...itemData,
+                knockback: Number(itemData.knockback),
+                stats: {
+                    ...itemData.stats,
+                    critDamage: Number(itemData.stats.critDamage)
                 }
+            };
 
-                if (res?.message) {
-                    setToastData({ open: true, title: 'Status of the amendment', description: res.message, isError: false });
-                }
+            fetch(`https://squirkle-backend.vercel.app/api/update-item/${reqBody.itemID}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(reqBody)
+            })
+                .then(async (resJSON) => {
+                    const res = await resJSON.json();
+                    if (res?.error) {
+                        setToastData({ open: true, title: 'Status of the amendment', description: res.error, isError: true });
+                    }
 
-                if (resJSON.status === 200) setSegmentedControlValue('newItem');
-            })
-            .catch((error) => {
-                console.warn(errorJSON);
-                setToastData({ open: true, title: 'Status of the amendment', description: 'An error occurred during the request. Please try again.', isError: true });
-            })
-            .finally(() => setLoading(false));
+                    if (res?.message) {
+                        setToastData({ open: true, title: 'Status of the amendment', description: res.message, isError: false });
+                    }
+
+                    if (resJSON.status === 200) setSegmentedControlValue('newItem');
+                })
+                .catch((error) => {
+                    console.warn(errorJSON);
+                    setToastData({ open: true, title: 'Status of the amendment', description: 'An error occurred during the request. Please try again.', isError: true });
+                })
+                .finally(() => setLoading(false));
+        } else return;
+
     }
 
     function searchForMetadata(value) {
@@ -447,7 +457,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
             <Flex className='mainContainer'>
 
                 <NavbarForAdmin user={user} signOut={signOut} />
-                <Box className='navbarSpacer'/>
+                <Box className='navbarSpacer' />
 
                 <Flex className='contentContainer'>
                     <Flex
@@ -482,7 +492,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                         {
                             segmentedControlValue === 'newItem'
                                 ?
-                                <Text size="8" style={{ fontWeight: 'bold', marginBottom: "20px" }}>Create new item</Text>
+                                <Text size="8" style={{ fontWeight: 'bold', marginBottom: "20px", letterSpacing: '2px' }}>Create new item</Text>
                                 :
                                 <Flex
                                     className='modifyWrapper'
@@ -495,7 +505,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                                         position: 'relative'
                                     }}
                                 >
-                                    <Text size="8" className='text' style={{ fontWeight: 'bold', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>Modify item</Text>
+                                    <Text size="8" className='text' style={{ letterSpacing: '2px', fontWeight: 'bold', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>Modify item</Text>
                                     {segmentedControlValue === 'modifyItem' && <Button className='button activeButton' onClick={() => setShowItemsDialog(true)}>Select another item</Button>}
                                 </Flex>
                         }
@@ -626,7 +636,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                                                 <ExclamationTriangleIcon />
                                                 <Text size='4'>No results found</Text>
                                             </Flex>
-                                            
+
                                     }
 
                                 </Box>
