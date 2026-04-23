@@ -27,13 +27,9 @@ export default function AppToast( { toastData, setToastData } ) {
                         <Flex direction="row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
                             <Text size="5" style={{ fontWeight: 'bold', letterSpacing: '1px', color: 'white' }}>{toastData.title}</Text>
 
-                            <Flex>
-                                <Toast.Close style={{ background: 'transparent', border: 'none' }} >
-                                    <IconButton variant="ghost" style={{ background: 'transparent', border: 'none', color: 'white', fontWeight: 'bold', cursor: 'pointer'  }} >
-                                        <Cross2Icon width="22" height="22" />
-                                    </IconButton>
-                                </Toast.Close>
-                            </Flex>
+                            <Toast.Close style={{ background: 'transparent', border: 'none', color: 'white', fontWeight: 'bold', cursor: 'pointer' }} >
+                                <Cross2Icon width="22" height="22" />
+                            </Toast.Close>
                         </Flex>
 
 
