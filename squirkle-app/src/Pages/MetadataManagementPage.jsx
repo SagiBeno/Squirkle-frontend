@@ -183,7 +183,7 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
     }
 
     function handleModifyMetadata() {
-        
+
         if (userID) {
             setLoading(true);
             const reqBody = {
@@ -258,7 +258,7 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
                         {
                             segmentedControlValue === 'newMetadata'
                                 ?
-                                <Text size="8" style={{ fontWeight: 'bold', marginBottom: "20px" }}>Create new metadata</Text>
+                                <Text size="8" style={{ fontWeight: 'bold', marginBottom: "20px", letterSpacing: '2px' }}>Create new metadata</Text>
                                 :
                                 <Flex
                                     className='modifyWrapper'
@@ -271,7 +271,7 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
                                         position: 'relative'
                                     }}
                                 >
-                                    <Text size="8" className='text' style={{ fontWeight: 'bold', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>Modify metadata</Text>
+                                    <Text size="8" className='text' style={{ fontWeight: 'bold', position: 'absolute', left: '50%', transform: 'translateX(-50%)', letterSpacing: '2px' }}>Modify metadata</Text>
                                     {segmentedControlValue === 'modifyMetadata' && <Button className='button activeButton' onClick={() => setShowMetadataDialog(true)} >Select another metadata</Button>}
                                 </Flex>
                         }

@@ -492,7 +492,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                         {
                             segmentedControlValue === 'newItem'
                                 ?
-                                <Text size="8" style={{ fontWeight: 'bold', marginBottom: "20px" }}>Create new item</Text>
+                                <Text size="8" style={{ fontWeight: 'bold', marginBottom: "20px", letterSpacing: '2px' }}>Create new item</Text>
                                 :
                                 <Flex
                                     className='modifyWrapper'
@@ -505,7 +505,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                                         position: 'relative'
                                     }}
                                 >
-                                    <Text size="8" className='text' style={{ fontWeight: 'bold', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>Modify item</Text>
+                                    <Text size="8" className='text' style={{ letterSpacing: '2px', fontWeight: 'bold', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>Modify item</Text>
                                     {segmentedControlValue === 'modifyItem' && <Button className='button activeButton' onClick={() => setShowItemsDialog(true)}>Select another item</Button>}
                                 </Flex>
                         }
