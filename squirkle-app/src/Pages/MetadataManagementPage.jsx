@@ -35,17 +35,11 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
         setShowAppLoader(false);
     }, []);
 
-    useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth < 400) setIsMobile(true);
-            else setIsMobile(false);
-        }
-
-        window.addEventListener('resize', handleResize);
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
+    function handleResize() {
+        if (window.innerWidth < 400) setIsMobile(true);
+        else setIsMobile(false);
+    }
+    window.addEventListener('resize', handleResize);
 
     useEffect(() => {
 

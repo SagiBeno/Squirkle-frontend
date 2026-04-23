@@ -12,7 +12,9 @@ export default function UserListingCard({ listing, idx, handleOpenListing, handl
                 color: 'black',
                 boxShadow: 'none',
                 flexDirection: 'column',
-                padding: '10px'
+                padding: '10px',
+                borderRadius: '10px',
+                fontFamily: `"Fredoka", sans-serif`
             }}
         >
             <Flex
@@ -39,11 +41,11 @@ export default function UserListingCard({ listing, idx, handleOpenListing, handl
                     />
 
                     <Flex direction="column" style={{ gap: 4 }}>
-                        <Heading size="3" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        <Heading size="4" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontFamily: `"Fredoka", sans-serif`, letterSpacing: '1px' }}>
                             {listing.itemName}
                         </Heading>
                         {
-                            listing?.buyerName && <Text size='2' style={{ opacity: '0.6' }}>Buyer: {listing.buyerName}</Text>
+                            listing?.buyerName && <Text size='4' style={{ opacity: '0.7' }}>Buyer: {listing.buyerName}</Text>
                         }
 
                     </Flex>
@@ -52,13 +54,13 @@ export default function UserListingCard({ listing, idx, handleOpenListing, handl
 
                 <Flex style={{ alignItems: 'center', gap: 4, flexWrap: 'wrap', justifyContent: 'end' }}>
 
-                    <Flex style={{ alignItems: 'center', gap: 4, color: 'rgb(255, 233, 35)', background: 'rgba(0, 0, 0, 0.59)', padding: '5px', height: '35px' }}>
+                    <Flex style={{ alignItems: 'center', gap: 4, color: 'rgb(255, 233, 35)', background: 'rgba(0, 0, 0, 0.59)', padding: '5px', height: '35px', borderRadius: '10px' }}>
                         <GiTwoCoins size={30} />
                         <Text style={{ fontSize: '20px', fontWeight: 'bold', }}>{listing.price}</Text>
                     </Flex>
 
                     {
-                        listing.active && <IconButton radius="none" style={{ cursor: 'pointer', height: '35px', width: "35px" }} color='tomato' variant="solid" onClick={() => handleDeleteListing(listing)}><FaTrash /></IconButton>
+                        listing.active && <IconButton radius="none" style={{ cursor: 'pointer', height: '35px', width: "35px", borderRadius: '10px' }} color='tomato' variant="solid" onClick={() => handleDeleteListing(listing)}><FaTrash /></IconButton>
                     }
 
                 </Flex>

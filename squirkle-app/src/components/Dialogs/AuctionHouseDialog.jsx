@@ -67,11 +67,22 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
     const [createCandidatesLoading, setCreateCandidatesLoading] = useState(false);
     const [createLoading, setCreateLoading] = useState(false);
     const [buyLoading, setBuyLoading] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
     const userIdentifier = user?.username || user?.name || user?.email || 'You';
     const userId = user?.user?.uid || user?.uid || user?.user?.user?.uid || null;
     const selectedCreateItem = createCandidates.find((item) => item.userItemId === createListingForm.userItemId) || null;
 
+
+    function handleResize () {
+        if (window.innerHeight < 500) {
+            setIsMobile(true);
+        }
+        else setIsMobile(false);
+    }
+    window.addEventListener('resize', handleResize);
+
     useEffect(() => {
+        handleResize();
         handleSelectButton('userListings');
     }, []);
 
@@ -286,83 +297,143 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
     return (
 
         <>
-            <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 10, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent" }}>
-                <ScrollArea type="auto" style={{ padding: "0px 15px" }}>
-                    <Dialog.Title style={{ marginTop: 15, color: 'white', textTransform: 'uppercase' }}>
-                        <Flex
-                            style={{
-                                justifyContent: "space-between"
-                            }}
-                        >
-                            <Text size='6' style={{ margin: '0 auto' }}>Auction house</Text>
-                            <IconButton
-                                className="button activeButton"
-                                onClick={() => {
-                                    setDialogState(null);
-                                    setOpen(false);
-                                }}
-                            >
-                                <HiXMark />
-                            </IconButton>
-                        </Flex>
-                    </Dialog.Title>
+            <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 10, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: 'hidden' }}>
 
+                <Dialog.Title style={{ marginTop: 15, color: 'white', textTransform: 'uppercase' }}>
                     <Flex
-                        direction="column"
-                        height="calc(100% - 52px)"
-                        style={{ backgroundColor: 'transparent' }}
+                        style={{
+                            justifyContent: "space-between"
+                        }}
                     >
-                        <Flex
-                            style={{
-                                flexDirection: 'row',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                flexWrap: 'wrap',
-                                gap: 4,
-                                marginBottom: '10px'
+                        <Text size='6' style={{ margin: '0 auto' }}>Auction house</Text>
+                        <IconButton
+                            className="button activeButton"
+                            onClick={() => {
+                                setDialogState(null);
+                                setOpen(false);
                             }}
                         >
-
-                            {
-                                buttonsValue.length > 0 &&
-                                buttonsValue.map((button, idx) => (
-                                    <Button
-                                        key={idx}
-                                        value={button.value}
-                                        onClick={(e) => handleSelectButton(e.target.value)}
-                                        style={{
-                                            cursor: 'pointer',
-                                            opacity: activeTab === button.value ? '1' : '0.7'
-                                        }}
-                                        color='gray'
-                                        className='button activeButton'
-                                    >
-                                        {button.name}
-                                    </Button>
-                                ))
-                            }
-                        </Flex>
-
-                        {
-                            loading ?
+                            <HiXMark />
+                        </IconButton>
+                    </Flex>
+                </Dialog.Title>
+                {
+                    isMobile ?
+                        <ScrollArea type='auto' style={{ padding: '15px', height: "calc(100% - 52px)" }}>
+                            <Flex
+                                direction="column"
+                                style={{ backgroundColor: 'transparent' }}
+                            >
                                 <Flex
                                     style={{
+                                        flexDirection: 'row',
                                         justifyContent: 'center',
                                         alignItems: 'center',
-                                        padding: '10px'
+                                        flexWrap: 'wrap',
+                                        gap: 4,
+                                        marginBottom: '10px'
                                     }}
                                 >
-                                    <DialogSpinner />
+
+                                    {
+                                        buttonsValue.length > 0 &&
+                                        buttonsValue.map((button, idx) => (
+                                            <Button
+                                                key={idx}
+                                                value={button.value}
+                                                onClick={(e) => handleSelectButton(e.target.value)}
+                                                style={{
+                                                    cursor: 'pointer',
+                                                    opacity: activeTab === button.value ? '1' : '0.7'
+                                                }}
+                                                color='gray'
+                                                className='button activeButton'
+                                            >
+                                                {button.name}
+                                            </Button>
+                                        ))
+                                    }
                                 </Flex>
-                                :
-                                (activeTab === 'userListings') ? <ListingsComponentsForUser getUserListings={getUserListings} activeListings={userActiveListings} inactiveListings={userInactiveListings} handleOpenListing={handleOpenListing} userId={userId} setToastData={setToastData} baseUrl={API_BASE_URL} />
-                                    :
-                                    (activeTab === 'globalListings') ? <ListingsContainerForGlobalActive activeListings={globalActiveListings} handleOpenListing={handleOpenListing} />
+
+                                {
+                                    loading ?
+                                        <Flex
+                                            style={{
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                padding: '10px'
+                                            }}
+                                        >
+                                            <DialogSpinner />
+                                        </Flex>
                                         :
-                                        (activeTab === 'previousListings') && <ListingsContainerForGlobalInactive inactiveListings={previousListings} handleOpenListing={handleOpenListing} />
-                        }
-                    </Flex>
-                </ScrollArea>
+                                        (activeTab === 'userListings') ? <ListingsComponentsForUser getUserListings={getUserListings} activeListings={userActiveListings} inactiveListings={userInactiveListings} handleOpenListing={handleOpenListing} userId={userId} setToastData={setToastData} baseUrl={API_BASE_URL} />
+                                            :
+                                            (activeTab === 'globalListings') ? <ListingsContainerForGlobalActive activeListings={globalActiveListings} handleOpenListing={handleOpenListing} />
+                                                :
+                                                (activeTab === 'previousListings') && <ListingsContainerForGlobalInactive inactiveListings={previousListings} handleOpenListing={handleOpenListing} />
+                                }
+                            </Flex>
+                        </ScrollArea>
+                        :
+                        <>
+                            <Flex
+                                direction="column"
+                                height="calc(100% - 52px)"
+                                style={{ backgroundColor: 'transparent' }}
+                            >
+                                <Flex
+                                    style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        flexWrap: 'wrap',
+                                        gap: 4,
+                                        marginBottom: '10px'
+                                    }}
+                                >
+
+                                    {
+                                        buttonsValue.length > 0 &&
+                                        buttonsValue.map((button, idx) => (
+                                            <Button
+                                                key={idx}
+                                                value={button.value}
+                                                onClick={(e) => handleSelectButton(e.target.value)}
+                                                style={{
+                                                    cursor: 'pointer',
+                                                    opacity: activeTab === button.value ? '1' : '0.7'
+                                                }}
+                                                color='gray'
+                                                className='button activeButton'
+                                            >
+                                                {button.name}
+                                            </Button>
+                                        ))
+                                    }
+                                </Flex>
+
+                                {
+                                    loading ?
+                                        <Flex
+                                            style={{
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                padding: '10px'
+                                            }}
+                                        >
+                                            <DialogSpinner />
+                                        </Flex>
+                                        :
+                                        (activeTab === 'userListings') ? <ListingsComponentsForUser getUserListings={getUserListings} activeListings={userActiveListings} inactiveListings={userInactiveListings} handleOpenListing={handleOpenListing} userId={userId} setToastData={setToastData} baseUrl={API_BASE_URL} />
+                                            :
+                                            (activeTab === 'globalListings') ? <ListingsContainerForGlobalActive activeListings={globalActiveListings} handleOpenListing={handleOpenListing} />
+                                                :
+                                                (activeTab === 'previousListings') && <ListingsContainerForGlobalInactive inactiveListings={previousListings} handleOpenListing={handleOpenListing} />
+                                }
+                            </Flex>
+                        </>
+                }
 
             </Dialog.Content>
 
