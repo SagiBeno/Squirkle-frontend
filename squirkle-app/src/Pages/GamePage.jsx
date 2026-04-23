@@ -39,7 +39,7 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
             case INVENTORY_STATE:
                 return <InventoryDialog user={user} setDialogState={setDialogState} setOpen={setOpenDialog} />
             case AUCTION_HOUSE_STATE:
-                return <AuctionHouseDialog user={user} toastData={toastData} setToastData={setToastData} setOpen={setOpenDialog} setDialogState={setDialogState} />
+                return <AuctionHouseDialog user={user} toastData={toastData} setToastData={setToastData} setOpen={setOpenDialog} setDialogState={setDialogState} refreshUser={refreshUser}/>
         }
 
         return null;
