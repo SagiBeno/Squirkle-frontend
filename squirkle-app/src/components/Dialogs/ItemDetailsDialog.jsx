@@ -62,7 +62,7 @@ export default function ItemDetailsDialog({
 
     return (
         <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent" }}>
-            <ScrollArea type='auto' style={{ padding: '15px' }}>
+            <ScrollArea type='auto' style={{ padding: '0px 15px' }}>
                 <Dialog.Title>
                     <Flex
                         style={{
