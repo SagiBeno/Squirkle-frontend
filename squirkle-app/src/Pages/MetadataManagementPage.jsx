@@ -29,6 +29,8 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
         metadata.title.trim().length > 0 &&
         metadata.description.trim().length > 0;
 
+    const userID = user.user?.uid
+
     useEffect(() => {
         setShowAppLoader(false);
     }, []);
@@ -72,11 +74,10 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
 
     function handleNewMetadata() {
 
-        if (user?.user.uid) {
+        if (userID) {
             setLoading(true);
-            const userId = user.user.uid;
             const reqBody = {
-                userId: userId,
+                userId: userID,
                 ...metadata,
                 title: metadata.title.trim(),
                 description: metadata.description.trim()
@@ -141,10 +142,10 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
 
     function handleDeleteMetadata() {
 
-        if (user?.user?.uid) {
+        if (userID) {
             setShowDeleteAlert(false);
             setLoading(true);
-            const reqBody = { userId: user.user.uid };
+            const reqBody = { userId: userID };
             fetch(`https://squirkle-backend.vercel.app/api/delete-metadata/${metadata.id}`, {
                 method: 'DELETE',
                 headers: { "Content-Type": "application/json" },
@@ -182,34 +183,37 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
     }
 
     function handleModifyMetadata() {
-        setLoading(true);
-        const reqBody = {
-            userId: user.user.uid,
-            ...metadata
-        };
+        
+        if (userID) {
+            setLoading(true);
+            const reqBody = {
+                userId: userID,
+                ...metadata
+            };
 
-        fetch(`https://squirkle-backend.vercel.app/api/update-metadata/${metadata.id}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(reqBody)
-        })
-            .then(async (resJSON) => {
-                const res = await resJSON.json();
-                if (res?.error) {
-                    setToastData({ open: true, title: 'Status of the amendment', description: res.error, isError: true });
-                }
-
-                if (res?.message) {
-                    setToastData({ open: true, title: 'Status of the amendment', description: res.message, isError: false });
-                }
-
-                if (resJSON.status === 200) setSegmentedControlValue('newMetadata');
+            fetch(`https://squirkle-backend.vercel.app/api/update-metadata/${metadata.id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(reqBody)
             })
-            .catch((error) => {
-                console.warn(error);
-                setToastData({ open: true, title: 'Status of the amendment', description: 'An error occurred during the request. Please try again.', isError: true });
-            })
-            .finally(() => setLoading(false));
+                .then(async (resJSON) => {
+                    const res = await resJSON.json();
+                    if (res?.error) {
+                        setToastData({ open: true, title: 'Status of the amendment', description: res.error, isError: true });
+                    }
+
+                    if (res?.message) {
+                        setToastData({ open: true, title: 'Status of the amendment', description: res.message, isError: false });
+                    }
+
+                    if (resJSON.status === 200) setSegmentedControlValue('newMetadata');
+                })
+                .catch((error) => {
+                    console.warn(error);
+                    setToastData({ open: true, title: 'Status of the amendment', description: 'An error occurred during the request. Please try again.', isError: true });
+                })
+                .finally(() => setLoading(false));
+        } else return;
     }
 
 
