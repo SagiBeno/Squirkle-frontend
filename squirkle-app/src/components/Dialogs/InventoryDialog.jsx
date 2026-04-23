@@ -10,7 +10,6 @@ import { HiXMark } from "react-icons/hi2";
 import '../../Modal.css';
 
 export default function InventoryDialog({ user, setOpen, setDialogState }) {
-    //TODO - realtime updating from backend and on fronend when equipping/unequipping/listing/delisting items
 
     const [inventory, setInventory] = useState([])
     const [listedIds, setListedIds] = useState([])
@@ -20,6 +19,7 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
     const [openItemDetailsDialog, setOpenItemDetailsDialog] = useState(false);
     
     async function GetPlayerInventory() {
+        setInventory([]);
         async function getData() {
             setLoading(true);
             const getInventory = await fetch(`https://squirkle-backend.vercel.app/api/get-inventory/${user.user.uid}`)
@@ -90,7 +90,7 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
                         })
                     }
                 </Flex>
-                <ItemDetailsDialog itemData={selectedItem} parentDialog="Inventory" setOpen={setOpenItemDetailsDialog} />
+                <ItemDetailsDialog itemData={selectedItem} parentDialog="Inventory" setOpen={setOpenItemDetailsDialog} GetPlayerInventory={GetPlayerInventory} />
             </Dialog.Root>
 
         </Dialog.Content>
