@@ -7,6 +7,7 @@ import CreateListingDialog from './CreateListingDialog';
 import ListingsComponentsForUser from '../ListingsComponents/ListingsContainerForUser';
 import ListingsContainerForGlobalActive from '../ListingsComponents/ListingsContainerForGlobalActive';
 import ListingsContainerForGlobalInactive from '../ListingsComponents/ListingsContainerForGlobalInactive';
+import { ResetPlayerCoins } from '../../GameEvents';
 
 const API_BASE_URL = 'https://squirkle-backend.vercel.app/api'
 
@@ -24,7 +25,7 @@ async function fetchJsonOrThrow(url, options) {
     return data;
 }
 
-export default function AuctionHouseDialog({ user, toastData, setToastData, setOpen, setDialogState }) {
+export default function AuctionHouseDialog({ user, toastData, setToastData, setOpen, setDialogState, refreshUser }) {
     const [buttonsValue, setButtonsValue] = useState([
         {
             name: 'All listings',
@@ -268,6 +269,9 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
                 if (resJSON.status === 200) {
                     setToastData({ open: true, title: 'The puchase was successful', description: res.message, isError: false });
                     handleSelectButton('globalListings');
+
+                    const refreshedUser = await refreshUser(user)
+                    ResetPlayerCoins(refreshedUser?.coinCount)
                 }
 
                 else setToastData({ open: true, title: 'The puchase was failed', description: res.error, isError: true });
