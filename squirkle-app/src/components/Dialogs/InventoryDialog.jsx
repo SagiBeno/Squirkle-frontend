@@ -1,4 +1,4 @@
-import { Box, Dialog, Flex, IconButton, Text } from '@radix-ui/themes'
+import { Box, Dialog, Flex, IconButton, Text, ScrollArea } from '@radix-ui/themes'
 import React from 'react'
 import ItemSlot from '../GameComponents/ItemSlot'
 import ItemDetailsDialog from '../Dialogs/ItemDetailsDialog'
@@ -17,7 +17,7 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
     const [selectedItem, setSelectedItem] = useState(null)
     const [loading, setLoading] = useState(false);
     const [openItemDetailsDialog, setOpenItemDetailsDialog] = useState(false);
-    
+
     async function GetPlayerInventory() {
         setInventory([]);
         async function getData() {
@@ -35,15 +35,9 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
             setInventory(items.items)
             setListedIds(listedIds.userItemIds)
             setEquippedItems(equippedItems.items.map(i => i.userItemId))
-
-            /*
-            console.log("items: ", items.items)
-            console.log("listedIds: ", listedIds.userItemIds)
-            console.log("equippedItems: ", equippedItems.items.map(i => i.userItemId))
-            */
             setLoading(false);
         }
-        
+
         getData();
     }
 
@@ -52,46 +46,48 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
     }, [])
 
     return (
-        <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: "auto" }}>
-
-            <Dialog.Title style={{ marginTop: 15, color: 'white', textTransform: 'uppercase' }}>
-                <Flex
-                    style={{
-                        justifyContent: "space-between"
-                    }}
-                >
-                    <Text size='6'>Inventory</Text>
-                    <IconButton
-                        className="button activeButton"
-                        onClick={() => {
-                            setDialogState(null);
-                            setOpen(false);
+        <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent" }}>
+            <ScrollArea type="auto" style={{ padding: "0px 15px" }}>
+                <Dialog.Title style={{ marginTop: 15, color: 'white', textTransform: 'uppercase' }}>
+                    <Flex
+                        style={{
+                            justifyContent: "space-between"
                         }}
                     >
-                        <HiXMark />
-                    </IconButton>
-                </Flex>
-            </Dialog.Title>
+                        <Text size='6'>Inventory</Text>
+                        <IconButton
+                            className="button activeButton"
+                            onClick={() => {
+                                setDialogState(null);
+                                setOpen(false);
+                            }}
+                        >
+                            <HiXMark />
+                        </IconButton>
+                    </Flex>
+                </Dialog.Title>
 
-            {loading && <DialogSpinner />}
+                {loading && <DialogSpinner />}
 
-            <Dialog.Root open={openItemDetailsDialog} onOpenChange={setOpenItemDetailsDialog}>
-                
-                <Flex wrap="wrap" justify="start" gap="2">
-                    {
-                        inventory?.map((x, i) => {
-                            if (listedIds.includes(x.userItemId) || equippedItems.some(e => e.itemId === x.itemId)) {
-                                return <ItemSlot key={x.itemId + i} itemData={x} onClick={setSelectedItem} state={'listed'} />
-                            }
-                            if (equippedItems.includes(x.userItemId) || equippedItems.some(e => e.userItemId === x.userItemId)) {
-                                return <ItemSlot key={x.itemId + i} itemData={x} onClick={setSelectedItem} state={'equipped'} />
-                            }
-                            return <ItemSlot key={x.itemId + i} itemData={x} onClick={setSelectedItem} state={''} />
-                        })
-                    }
-                </Flex>
-                <ItemDetailsDialog itemData={selectedItem} parentDialog="Inventory" setOpen={setOpenItemDetailsDialog} GetPlayerInventory={GetPlayerInventory} />
-            </Dialog.Root>
+                <Dialog.Root open={openItemDetailsDialog} onOpenChange={setOpenItemDetailsDialog}>
+
+                    <Flex wrap="wrap" justify="start" gap="2">
+                        {
+                            inventory?.map((x, i) => {
+                                if (listedIds.includes(x.userItemId) || equippedItems.some(e => e.itemId === x.itemId)) {
+                                    return <ItemSlot key={x.itemId + i} itemData={x} onClick={setSelectedItem} state={'listed'} />
+                                }
+                                if (equippedItems.includes(x.userItemId) || equippedItems.some(e => e.userItemId === x.userItemId)) {
+                                    return <ItemSlot key={x.itemId + i} itemData={x} onClick={setSelectedItem} state={'equipped'} />
+                                }
+                                return <ItemSlot key={x.itemId + i} itemData={x} onClick={setSelectedItem} state={''} />
+                            })
+                        }
+                    </Flex>
+                    <ItemDetailsDialog itemData={selectedItem} parentDialog="Inventory" setOpen={setOpenItemDetailsDialog} GetPlayerInventory={GetPlayerInventory} />
+                </Dialog.Root>
+            </ScrollArea>
+
 
         </Dialog.Content>
     )

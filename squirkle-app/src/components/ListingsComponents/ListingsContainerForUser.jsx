@@ -71,8 +71,8 @@ export default function ListingsComponentsForUser({ getUserListings, baseUrl, us
                             type='auto'
                             scrollbars="vertical"
                             style={{
-                                minHeight: '220px',
-                                padding: '0px 20px',
+                                maxHeight: '220px',
+                                paddingRight: '15px'
                             }}
                         >
                             <Flex style={{ flexDirection: 'column', gap: 4 }}>
@@ -106,8 +106,8 @@ export default function ListingsComponentsForUser({ getUserListings, baseUrl, us
                         type='auto'
                         scrollbars="vertical"
                         style={{
-                            minHeight: '220px',
-                            padding: '0px 20px',
+                            maxHeight: '220px',
+                            paddingRight: '15px'
                         }}
                     >
                         <Flex style={{ flexDirection: 'column', gap: 4 }}>

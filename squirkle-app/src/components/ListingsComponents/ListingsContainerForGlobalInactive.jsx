@@ -28,22 +28,12 @@ export default function ListingsContainerForGlobalInactive({ inactiveListings, h
                                 <Text style={{ width: '75%' }}>Active listing(s)</Text>
                             </Flex>
                         </Flex>
-                        <ScrollArea
-                            type='auto'
-                            scrollbars="vertical"
-                            style={{
-                                minHeight: '220px',
-                                borderRadius: '12px',
-                                paddingRight: '20px',
-                                marginBottom: '20px'
-                            }}
-                        >
-                            <Flex style={{ padding: '10px', flexDirection: 'column', gap: 4 }}>
-                                {
-                                    inactiveListings.map((listing, index) => <InactiveGlobalListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} />)
-                                }
-                            </Flex>
-                        </ScrollArea>
+
+                        <Flex style={{ padding: '10px', flexDirection: 'column', gap: 4 }}>
+                            {
+                                inactiveListings.map((listing, index) => <InactiveGlobalListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} />)
+                            }
+                        </Flex>
                     </>
 
             }
