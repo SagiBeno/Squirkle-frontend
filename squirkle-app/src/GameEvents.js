@@ -1,11 +1,13 @@
 let setCoins = null
 let baseCoins = 0
 let addedCoins = 0
+let hasBaseCoins = false
 
 export function SetGameContext(_gameContext)
 {
     setCoins = _gameContext?.setCoins ?? null
-    setCoins(baseCoins + addedCoins)
+
+    if (hasBaseCoins) setCoins(baseCoins + addedCoins)
 }
 
 export function OnPlayerGiveCoins(coins)
@@ -18,9 +20,11 @@ export function OnPlayerGiveCoins(coins)
 
 export function ResetPlayerCoins(coins = baseCoins)
 {
+    baseCoins = Number(coins)
+    hasBaseCoins = true
+    addedCoins = 0
+
     if (setCoins == null) return
 
-    baseCoins = Number(coins)
-    addedCoins = 0
     setCoins(baseCoins)
 }
