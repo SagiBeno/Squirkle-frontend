@@ -47,7 +47,7 @@ export default function UsernameInputDialog({ open, setOpen, setToastData, exist
             <Dialog.Content 
                 style={{
                     color: 'white',
-                    maxWidth: "80vw",
+                    minWidth: "50vw",
                     background: '#21212c',
                     fontFamily: `"Fredoka", sans-serif`,
                 }}

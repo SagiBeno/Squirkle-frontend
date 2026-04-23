@@ -117,7 +117,6 @@ function App() {
         if (!currentUserData) return;
       } else {
         setUser(null);
-        // navigate('/');
       }
     });
     return unsubscribe
@@ -226,21 +225,12 @@ function App() {
     <>
       <Theme>
         <Routes>
-          {
-            <>
-              <Route path='/' element={<HomePage user={user} setShowAppLoader={setShowAppLoader} />} />
+          <Route path='/' element={<HomePage user={user} setShowAppLoader={setShowAppLoader} />} />
               <Route path='/game' element={<GamePage user={user} signOut={signOut} setShowAppLoader={setShowAppLoader} toastData={toastData} setToastData={setToastData} refreshUser={loadCurrentUserData}/>} />
+              <Route path='/login' element={<LoginPage handleLoginWithEmailAndPW={handleLoginWithEmailAndPW} handleLoginWithGoogle={handleLoginWithGoogle} loading={loading} setShowAppLoader={setShowAppLoader} user={user} />} />
+              <Route path='/register' element={<RegisterPage loading={loading} handleRegistration={handleRegistration} handleLoginWithGoogle={handleLoginWithGoogle} setShowAppLoader={setShowAppLoader} user={user} />} />
               {user?.isAdmin && <Route path='/admin/item-management' element={<ItemManagementPage user={user} toastData={toastData} setToastData={setToastData} setShowAppLoader={setShowAppLoader} signOut={signOut} />} />}
               {user?.isAdmin && <Route path='/admin/metadata-management' element={<MetadataManagementPage user={user} toastData={toastData} setToastData={setToastData} setShowAppLoader={setShowAppLoader} signOut={signOut} />} />}
-            </>
-          }
-
-          {
-            <>
-              {<Route path='/login' element={<LoginPage handleLoginWithEmailAndPW={handleLoginWithEmailAndPW} handleLoginWithGoogle={handleLoginWithGoogle} loading={loading} setShowAppLoader={setShowAppLoader} />} />}
-              {<Route path='/register' element={<RegisterPage loading={loading} handleRegistration={handleRegistration} handleLoginWithGoogle={handleLoginWithGoogle} setShowAppLoader={setShowAppLoader} />} />}
-            </>
-          }
         </Routes>
 
         <AppToast
