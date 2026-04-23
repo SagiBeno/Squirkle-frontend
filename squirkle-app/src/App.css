@@ -17,12 +17,8 @@
 .contentContainer {
     width: 100%;
     height: 100%;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     font-family: "Fredoka", sans-serif !important;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: hidden !important;
 }
 
 .textField, .textArea {

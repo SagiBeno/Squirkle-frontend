@@ -46,31 +46,31 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
     }, [])
 
     return (
-        <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent" }}>
-            <ScrollArea type="auto" style={{ padding: "0px 15px" }}>
-                <Dialog.Title style={{ marginTop: 15, color: 'white', textTransform: 'uppercase' }}>
-                    <Flex
-                        style={{
-                            justifyContent: "space-between"
+        <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: 'hidden' }}>
+
+            <Dialog.Title style={{ marginTop: 15, color: 'white', textTransform: 'uppercase' }}>
+                <Flex
+                    style={{
+                        justifyContent: "space-between"
+                    }}
+                >
+                    <Text size='6'>Inventory</Text>
+                    <IconButton
+                        className="button activeButton"
+                        onClick={() => {
+                            setDialogState(null);
+                            setOpen(false);
                         }}
                     >
-                        <Text size='6'>Inventory</Text>
-                        <IconButton
-                            className="button activeButton"
-                            onClick={() => {
-                                setDialogState(null);
-                                setOpen(false);
-                            }}
-                        >
-                            <HiXMark />
-                        </IconButton>
-                    </Flex>
-                </Dialog.Title>
+                        <HiXMark />
+                    </IconButton>
+                </Flex>
+            </Dialog.Title>
 
-                {loading && <DialogSpinner />}
+            {loading && <DialogSpinner />}
 
-                <Dialog.Root open={openItemDetailsDialog} onOpenChange={setOpenItemDetailsDialog}>
-
+            <Dialog.Root open={openItemDetailsDialog} onOpenChange={setOpenItemDetailsDialog}>
+                <ScrollArea type="auto" style={{ padding: "0px 15px", maxHeight: '80%' }}>
                     <Flex wrap="wrap" justify="start" gap="2">
                         {
                             inventory?.map((x, i) => {
@@ -84,11 +84,9 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
                             })
                         }
                     </Flex>
-                    <ItemDetailsDialog itemData={selectedItem} parentDialog="Inventory" setOpen={setOpenItemDetailsDialog} GetPlayerInventory={GetPlayerInventory} />
-                </Dialog.Root>
-            </ScrollArea>
-
-
-        </Dialog.Content>
+                </ScrollArea>
+                <ItemDetailsDialog itemData={selectedItem} parentDialog="Inventory" setOpen={setOpenItemDetailsDialog} GetPlayerInventory={GetPlayerInventory} />
+            </Dialog.Root>
+        </Dialog.Content >
     )
 }

@@ -61,7 +61,7 @@ export default function NavbarMobileDropdown({ setDialogState, user, signOut, ic
                 </Button>
 
                 {
-                    user.isAdmin &&
+                    user?.isAdmin &&
                     <>
                         <Button
                             className="squirkleButton"

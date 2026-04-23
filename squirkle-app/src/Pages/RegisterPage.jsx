@@ -1,4 +1,4 @@
-import { Card, Flex, Box, Text, TextField, Button } from "@radix-ui/themes";
+import { Card, Flex, Box, Text, TextField, Button, ScrollArea } from "@radix-ui/themes";
 import { useState, useEffect } from "react";
 import PasswordInput from "../components/Inputs/PasswordInput";
 import { DisabledLoadingButton, EnterButton, DisabledButton, OrButton, GoogleLoginButton } from "../components/Buttons";
@@ -26,7 +26,7 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
         }
     }, [user]);
 
-    useEffect( () => {
+    useEffect(() => {
         setShowAppLoader(false);
     }, []);
 
@@ -48,216 +48,223 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
 
     return (
         <Flex className="mainContainer">
-            <Box style={{minHeight: '10px'}}/>
-            <Flex className="contentContainer">
+
+            <ScrollArea scrollbars="vertical" className='contentContainer' type='auto'>
+                <Box style={{ minHeight: '10px' }} />
                 <Flex
                     style={{
-                        margin: 'auto',
-                        width: '80%',
-                        maxWidth: '720px',
-                        flexDirection: 'column',
-                        background: 'linear-gradient(180deg, #1e1e28, #21212c)',
-                        boxShadow: '0px 0px 10px 2px #bababa',
-                        padding: '20px',
-                        borderRadius: '20px',
-                        textAlign: 'center',
-                        color: 'white',
+                        height: '100%',
                     }}
                 >
-                    <Text
-                        size='8'
-                        style={{
-                            fontWeight: 'bold'
-                        }}
-                    >
-                        Registration
-                    </Text>
-
                     <Flex
                         style={{
+                            margin: 'auto',
+                            width: '80%',
+                            maxWidth: '720px',
                             flexDirection: 'column',
-                            textAlign: 'left'
+                            background: 'linear-gradient(180deg, #1e1e28, #21212c)',
+                            boxShadow: '0px 0px 10px 0px #bababa',
+                            padding: '20px 10% 20px 10%',
+                            borderRadius: '20px',
+                            textAlign: 'center',
+                            color: 'white'
                         }}
                     >
-                        <Text as='label' htmlFor="username" size='4' style={{ cursor: 'pointer', marginBottom: '5px' }}>Username</Text>
-                        <TextField.Root
-                            className="textField"
-                            radius="none"
-                            placeholder="Username"
-                            size="3"
-                            name="username"
-                            id="username"
-                            value={formData.username}
-                            required
-                            onChange={(e) => {
-                                if (e.target.value.includes(' ')) return;
-                                else setFormData(prev => ({ ...prev, username: e.target.value }));
-                            }}
+                        <Text
+                            size='8'
                             style={{
-                                marginBottom: '12px'
+                                fontWeight: 'bold'
                             }}
-                        />
+                        >
+                            Registration
+                        </Text>
 
-                        <Text as='label' htmlFor="email" style={{ marginTop: '10px', cursor: 'pointer', marginBottom: '5px' }} size='4'>Email</Text>
-                        <TextField.Root
-                            className="textField"
-                            radius="none"
-                            placeholder="example@gmail.com"
-                            size="3"
-                            name="email"
-                            id="email"
-                            value={formData.email}
-                            required
-                            onChange={(e) => {
-                                if (e.target.value.includes(' ')) return;
-                                else {
-                                    setFormData(prev => ({ ...prev, email: e.target.value }));
-                                    setValidEmailFormat(isValidEmailFormat(e.target.value));
-                                }
-                            }}
+                        <Flex
                             style={{
-                                marginBottom: '12px'
+                                flexDirection: 'column',
+                                textAlign: 'left'
                             }}
-                        />
-
-                        {
-                            !validEmailFormat &&
-                            <Flex
-                                style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    marginTop: '5px',
-                                    padding: '10px',
-                                    color: 'gold',
-                                    flexWrap: 'wrap'
+                        >
+                            <Text as='label' htmlFor="username" size='4' style={{ cursor: 'pointer', marginBottom: '5px' }}>Username</Text>
+                            <TextField.Root
+                                className="textField"
+                                radius="none"
+                                placeholder="Username"
+                                size="3"
+                                name="username"
+                                id="username"
+                                value={formData.username}
+                                required
+                                onChange={(e) => {
+                                    if (e.target.value.includes(' ')) return;
+                                    else setFormData(prev => ({ ...prev, username: e.target.value }));
                                 }}
-                            >
-                                <ExclamationTriangleIcon 
-                                    style={{
-                                        width: '20px',
-                                        height: '20px',
-                                        marginRight: '5px',
-                                    }}
-                                />
-                                <Text
-                                    as="p"
-                                    size='3'
-                                    align='center'
-                                >
-                                    Invalid email format!
-                                </Text>
-                            </Flex>
-
-                        }
-
-                        <Text as='label' htmlFor="password" style={{ marginTop: '10px', cursor: "pointer", marginBottom: '5px' }} size='4'>Password</Text>
-                        <PasswordInput
-                            inputName="password"
-                            value={formData.password}
-                            onChange={(e) => {
-                                if (e.target.value.includes(' ')) return;
-                                else setFormData(prev => ({ ...prev, password: e.target.value }));
-                            }}
-                            
-                        />
-
-                        <Text as='label' htmlFor="confirmPassword" style={{ marginTop: '22px', cursor: 'pointer', marginBottom: '5px' }} size='4'>Confirm password</Text>
-                        <PasswordInput
-                            inputName="confirmPassword"
-                            value={formData.confirmPassword}
-                            onChange={(e) => {
-                                if (e.target.value.includes(' ')) return;
-                                else setFormData(prev => ({ ...prev, confirmPassword: e.target.value }));
-                            }}
-
-                        />
-
-                        {
-                            (formData.password.length < 8 || formData.password !== formData.confirmPassword) &&
-                            <Flex
                                 style={{
-                                    flexDirection: 'row',
-                                    marginTop: '10px',
-                                    marginBottom: '10px',
-                                    padding: '10px',
-                                    justifyContent: "space-around",
-                                    alignItems: 'center',
-                                    color: '#64c8c8'
+                                    marginBottom: '12px'
                                 }}
-                            >
-                                <Flex>
-                                    <InfoCircledIcon
-                                        style={{
-                                            width: '25px',
-                                            height: '25px',
-                                            marginRight: '5px'
-                                        }}
-                                    />
-                                </Flex>
+                            />
 
+                            <Text as='label' htmlFor="email" style={{ marginTop: '10px', cursor: 'pointer', marginBottom: '5px' }} size='4'>Email</Text>
+                            <TextField.Root
+                                className="textField"
+                                radius="none"
+                                placeholder="example@gmail.com"
+                                size="3"
+                                name="email"
+                                id="email"
+                                value={formData.email}
+                                required
+                                onChange={(e) => {
+                                    if (e.target.value.includes(' ')) return;
+                                    else {
+                                        setFormData(prev => ({ ...prev, email: e.target.value }));
+                                        setValidEmailFormat(isValidEmailFormat(e.target.value));
+                                    }
+                                }}
+                                style={{
+                                    marginBottom: '12px'
+                                }}
+                            />
+
+                            {
+                                !validEmailFormat &&
                                 <Flex
                                     style={{
-                                        flexDirection: 'column',
-                                        alignItems: 'center'
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        marginTop: '5px',
+                                        padding: '10px',
+                                        color: 'gold',
+                                        flexWrap: 'wrap'
                                     }}
                                 >
-                                    {
-                                        formData.password.length < 8 &&
-                                        <Text
-                                            as="p"
-                                            size='3'
-                                            align="center"
-                                        >
-                                            The password must be at least eight characherts long!
-                                        </Text>
-                                    }
-
-                                    {
-                                        formData.password !== formData.confirmPassword &&
-                                        <Text
-                                            as="p"
-                                            size='3'
-                                            align="center"
-                                        >
-                                            Password do not match!
-                                        </Text>
-                                    }
+                                    <ExclamationTriangleIcon
+                                        style={{
+                                            width: '20px',
+                                            height: '20px',
+                                            marginRight: '5px',
+                                        }}
+                                    />
+                                    <Text
+                                        as="p"
+                                        size='3'
+                                        align='center'
+                                    >
+                                        Invalid email format!
+                                    </Text>
                                 </Flex>
-                            </Flex>
-                        }
-                    </Flex>
 
-                    <Box
-                        style={{
-                            marginTop: '10px'
-                        }}
-                    >
-                        {
-                            validEmailFormat && formData.email && formData.password.length >= 8 && formData.password === formData.confirmPassword
-                                ?
-                                loading
+                            }
+
+                            <Text as='label' htmlFor="password" style={{ marginTop: '10px', cursor: "pointer", marginBottom: '5px' }} size='4'>Password</Text>
+                            <PasswordInput
+                                inputName="password"
+                                value={formData.password}
+                                onChange={(e) => {
+                                    if (e.target.value.includes(' ')) return;
+                                    else setFormData(prev => ({ ...prev, password: e.target.value }));
+                                }}
+
+                            />
+
+                            <Text as='label' htmlFor="confirmPassword" style={{ marginTop: '22px', cursor: 'pointer', marginBottom: '5px' }} size='4'>Confirm password</Text>
+                            <PasswordInput
+                                inputName="confirmPassword"
+                                value={formData.confirmPassword}
+                                onChange={(e) => {
+                                    if (e.target.value.includes(' ')) return;
+                                    else setFormData(prev => ({ ...prev, confirmPassword: e.target.value }));
+                                }}
+
+                            />
+
+                            {
+                                (formData.password.length < 8 || formData.password !== formData.confirmPassword) &&
+                                <Flex
+                                    style={{
+                                        flexDirection: 'row',
+                                        marginTop: '10px',
+                                        marginBottom: '10px',
+                                        padding: '10px',
+                                        justifyContent: "space-around",
+                                        alignItems: 'center',
+                                        color: '#64c8c8'
+                                    }}
+                                >
+                                    <Flex>
+                                        <InfoCircledIcon
+                                            style={{
+                                                width: '25px',
+                                                height: '25px',
+                                                marginRight: '5px'
+                                            }}
+                                        />
+                                    </Flex>
+
+                                    <Flex
+                                        style={{
+                                            flexDirection: 'column',
+                                            alignItems: 'center'
+                                        }}
+                                    >
+                                        {
+                                            formData.password.length < 8 &&
+                                            <Text
+                                                as="p"
+                                                size='3'
+                                                align="center"
+                                            >
+                                                The password must be at least eight characherts long!
+                                            </Text>
+                                        }
+
+                                        {
+                                            formData.password !== formData.confirmPassword &&
+                                            <Text
+                                                as="p"
+                                                size='3'
+                                                align="center"
+                                            >
+                                                Password do not match!
+                                            </Text>
+                                        }
+                                    </Flex>
+                                </Flex>
+                            }
+                        </Flex>
+
+                        <Box
+                            style={{
+                                marginTop: '10px'
+                            }}
+                        >
+                            {
+                                validEmailFormat && formData.email && formData.password.length >= 8 && formData.password === formData.confirmPassword
                                     ?
-                                    <DisabledLoadingButton text={'Registration'} />
+                                    loading
+                                        ?
+                                        <DisabledLoadingButton text={'Registration'} />
+                                        :
+                                        <EnterButton text={'Registration'} onClick={() => handleRegistration(formData)} />
                                     :
-                                    <EnterButton text={'Registration'} onClick={() => handleRegistration(formData)} />
-                                :
-                                <DisabledButton text={'Registration'} />
-                        }
+                                    <DisabledButton text={'Registration'} />
+                            }
 
-                        <GoogleLoginButton text={'Login with Google'} onClick={handleLoginWithGoogle} />
-                        <Separator text={'or'} />
-                        <Box style={{ textAlign: 'center' }}>
-                            <Text size="3">Do you have an account?</Text>
+                            <GoogleLoginButton text={'Login with Google'} onClick={handleLoginWithGoogle} />
+                            <Separator text={'or'} />
+                            <Box style={{ textAlign: 'center' }}>
+                                <Text size="3">Do you have an account?</Text>
+                            </Box>
+
+                            <OrButton text={'Login'} onClick={() => navigate('/login')} />
+
                         </Box>
 
-                        <OrButton text={'Login'} onClick={() => navigate('/login')} />
-
-                    </Box>
-
+                    </Flex>
                 </Flex>
-            </Flex>
-            <Box style={{minHeight: '10px'}}/>
+                <Box style={{ minHeight: '10px' }} />
+            </ScrollArea>
         </Flex>
     )
 }

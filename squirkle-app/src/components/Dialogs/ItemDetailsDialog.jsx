@@ -61,31 +61,31 @@ export default function ItemDetailsDialog({
     }, [itemData]);
 
     return (
-        <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent" }}>
-            <ScrollArea type='auto' style={{ padding: '0px 15px' }}>
-                <Dialog.Title>
-                    <Flex
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            width: '100%'
-                        }}
-                    >
-                        <Flex style={{ marginTop: 5, marginBottom: -15, backgroundColor: "white", width: "fit-content", padding: 10, borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>
-                            ITEM DETAILS - {itemData == null ? "ITEM_NAME" : itemData.name}
-                        </Flex>
-                        <Flex style={{ marginTop: 5, marginBottom: -15, backgroundColor: "whitesmoke", width: "fit-content", padding: 10, borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>
-                            <IconButton
-                                className="button activeButton"
-                                onClick={() => {
-                                    setOpen(false);
-                                }}
-                            >
-                                <HiXMark />
-                            </IconButton>
-                        </Flex>
+        <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: 'hidden' }}>
+            <Dialog.Title>
+                <Flex
+                    style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        width: '100%'
+                    }}
+                >
+                    <Flex style={{ marginTop: 5, marginBottom: -15, backgroundColor: "white", width: "fit-content", padding: 10, borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>
+                        ITEM DETAILS - {itemData == null ? "ITEM_NAME" : itemData.name}
                     </Flex>
-                </Dialog.Title>
+                    <Flex style={{ marginTop: 5, marginBottom: -15, backgroundColor: "whitesmoke", width: "fit-content", padding: 10, borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>
+                        <IconButton
+                            className="button activeButton"
+                            onClick={() => {
+                                setOpen(false);
+                            }}
+                        >
+                            <HiXMark />
+                        </IconButton>
+                    </Flex>
+                </Flex>
+            </Dialog.Title>
+            <ScrollArea type='auto' style={{ maxHeight: '80%' }}>
                 <Flex style={{ backgroundColor: "white", flexWrap: 'wrap', justifyContent: 'center', flexDirection: 'row-reverse' }}>
                     <Flex align="center" style={{ backgroundColor: "whitesmoke", padding: 20, flexDirection: 'column', justifyContent: 'center', gap: 10 }} className='statsContainer'>
                         <img width={128} height={128} src={itemData?.imageUrl} />
@@ -93,6 +93,7 @@ export default function ItemDetailsDialog({
                         <Flex
                             style={{
                                 flexDirection: 'column',
+                                gap: 2
                             }}
                         >
                             <Dialog.Description style={{ textAlign: 'center' }}>
@@ -241,9 +242,6 @@ export default function ItemDetailsDialog({
                         </Flex>
                     </Flex>
                 </Flex>
-
-
-
             </ScrollArea>
         </Dialog.Content>
     )

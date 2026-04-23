@@ -459,15 +459,15 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                 <NavbarForAdmin user={user} signOut={signOut} />
                 <Box className='navbarSpacer' />
 
-                <Flex className='contentContainer'>
+                <ScrollArea className='contentContainer' type='auto' style={{ padding: '10px' }} scrollbars="vertical">
                     <Flex
                         style={{
-                            margin: '20px',
+                            margin: '20px auto',
                             width: '95%',
                             textAlign: 'center',
                             flexDirection: 'column',
                             background: 'linear-gradient(180deg, #1e1e28, #21212c)',
-                            boxShadow: '0px 0px 10px 2px #bababa',
+                            boxShadow: '0px 0px 10px 0px #bababa',
                             padding: '20px',
                             borderRadius: '20px',
                             color: 'white',
@@ -813,7 +813,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                         }
 
                     </Flex>
-                </Flex>
+                </ScrollArea>
             </Flex>
             {
                 showItemsDialog === true &&
