@@ -5,13 +5,20 @@ import { DisabledLoadingButton, EnterButton, DisabledButton, OrButton, GoogleLog
 import Separator from '../components/Separator';
 import { useNavigate } from "react-router-dom";
 
-export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGoogle, loading, setShowAppLoader }) {
+export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGoogle, loading, setShowAppLoader, user }) {
 
     let navigate = useNavigate();
 
     useEffect( () => {
         setShowAppLoader(false);
     }, []);
+
+    useEffect(() => {
+        if (user !== null) {
+            setShowAppLoader(true);
+            navigate("/game");
+        }
+    }, [user]);
 
     const [formData, setFormData] = useState({
         email: '',

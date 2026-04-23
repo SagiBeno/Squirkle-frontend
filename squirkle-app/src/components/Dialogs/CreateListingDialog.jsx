@@ -106,7 +106,7 @@ export default function CreateListingDialog({ open, setOpen, createCandidates, c
                     </Button>
                 </Flex>
 
-                <Flex gap="3" mt="4" justify='between'>
+                <Flex gap="3" mt="4" style={{ flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }} className="createListingButtonContainer">
                     <Button
                         className={`button ${createLoading ? 'inactiveButton' : 'activeButton'}`}
                         onClick={() => {

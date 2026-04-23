@@ -6,7 +6,7 @@ import Separator from '../components/Separator';
 import { useNavigate } from "react-router-dom";
 import { InfoCircledIcon, ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
-export default function RegisterPage({ loading, handleRegistration, handleLoginWithGoogle, setShowAppLoader }) {
+export default function RegisterPage({ loading, handleRegistration, handleLoginWithGoogle, setShowAppLoader, user }) {
 
     let navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -18,6 +18,13 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
         type: "user"
     });
     const [validEmailFormat, setValidEmailFormat] = useState(true);
+
+    useEffect(() => {
+        if (user !== null) {
+            setShowAppLoader(true);
+            navigate("/game");
+        }
+    }, [user]);
 
     useEffect( () => {
         setShowAppLoader(false);
