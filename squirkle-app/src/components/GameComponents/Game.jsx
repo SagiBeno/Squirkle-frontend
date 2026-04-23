@@ -12,6 +12,10 @@ export default function Game({ filePaths, user }) {
     const gameContext = useContext(GameContext)
 
     useEffect(() => {
+        GameEvents.SetGameContext(gameContext)
+    }, [gameContext])
+
+    useEffect(() => {
         const eventNames = Object.keys(GameEvents);
 
         eventNames.forEach(name => {
@@ -32,8 +36,6 @@ export default function Game({ filePaths, user }) {
         console.log("Game initialized!")
         InitializeGameHandler(sendMessage)
         InitializeGame(user)
-
-        GameEvents.SetGameContext(gameContext)
 
     }, [isLoaded])
 

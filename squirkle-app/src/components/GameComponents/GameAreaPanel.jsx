@@ -7,7 +7,6 @@ import { GiTwoCoins } from 'react-icons/gi';
 import { useState } from 'react';
 import { useContext } from 'react';
 import { GameContext } from "./GameContext.jsx"
-import { OnPlayerGiveCoins } from '../../GameEvents.js';
 
 export default function GameAreaPanel({ areaData, purchasedAreas, user, refresh }) {
 
@@ -26,7 +25,6 @@ export default function GameAreaPanel({ areaData, purchasedAreas, user, refresh 
         })
 
         if (res.status == 200) {
-            OnPlayerGiveCoins(-areaData.price)
             refresh()
             LoadArea(areaData.id)
         }

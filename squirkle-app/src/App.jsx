@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import './App.css'
-import { Theme, Box, Flex } from '@radix-ui/themes';
+import { Theme } from '@radix-ui/themes';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import HomePage from './Pages/HomePage';
 import LoginPage from './Pages/LoginPage';
 import RegisterPage from './Pages/RegisterPage';
-import Navbar from './components/Navbars/Navbar';
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import AppToast from './components/AppToast';
@@ -14,6 +13,50 @@ import ItemManagementPage from './Pages/ItemManagementPage';
 import GamePage from './Pages/GamePage';
 import MetadataManagementPage from './Pages/MetadataManagementPage';
 import AppLoader from './components/Spinners/AppLoader';
+
+function getFirebaseUser(userObject) {
+  if (userObject?.uid) return userObject;
+  if (userObject?.user?.uid) return userObject.user;
+  if (userObject?.user?.user?.uid) return userObject.user.user;
+  return null;
+}
+
+function getUserIdFromUserObject(userObject) {
+  return getFirebaseUser(userObject)?.uid ?? null;
+}
+
+async function getCoinCount(userId) {
+  if (!userId) return 0;
+
+  try {
+    const resultJSON = await fetch(`https://squirkle-backend.vercel.app/api/get-coins/${userId}`);
+    const result = await resultJSON.json();
+    const parsedCoinCount = Number(result?.coinCount ?? result?.coins ?? 0);
+    return Number.isFinite(parsedCoinCount) ? parsedCoinCount : 0;
+  } catch (error) {
+    console.warn(error);
+    return 0;
+  }
+}
+
+async function getPermissions(userId) {
+  if (!userId) return false;
+
+  try {
+    const resJSON = await fetch(`https://squirkle-backend.vercel.app/api/get-permissions/${userId}`);
+    const res = await resJSON.json();
+    return resJSON.status === 200 ? Boolean(res?.isAdmin) : false;
+  } catch (error) {
+    console.warn(error);
+    return false;
+  }
+}
+
+async function getUsername(userId) {
+  const resultJSON = await fetch(`https://squirkle-backend.vercel.app/api/get-username/${userId}`);
+  const result = await resultJSON.json();
+  return result?.username;
+}
 
 function App() {
   const firebaseApp = initializeApp({
@@ -31,128 +74,87 @@ function App() {
   const [usernameDialogOpen, setUsernameDialogOpen] = useState(false);
   const [loginWithGoogleUserData, setLoginWithGoogleUserData] = useState({});
   const [showAppLoader, setShowAppLoader] = useState(true);
-  const loggedIn = user?.accessToken != null
   let navigate = useNavigate();
 
-  function getUserIdFromUserObject(userObject) {
-    return userObject?.user?.uid ?? userObject?.user?.user?.uid ?? null;
-  }
+  const loadCurrentUserData = useCallback(async (userObject, options = {}) => {
+    const firebaseUser = getFirebaseUser(userObject);
+    const userId = getUserIdFromUserObject(firebaseUser);
 
-  async function getCoinCount(userId) {
-    if (!userId) return 0;
+    if (!userId) {
+      setUser(null);
+      return null;
+    }
 
     try {
-      const resultJSON = await fetch(`https://squirkle-backend.vercel.app/api/get-coins/${userId}`);
-      const result = await resultJSON.json();
-      const parsedCoinCount = Number(result?.coinCount ?? result?.coins ?? 0);
-      return Number.isFinite(parsedCoinCount) ? parsedCoinCount : 0;
+      const username = options.username ?? await getUsername(userId);
+
+      if (!username) return null;
+
+      const [coinCount, isAdmin] = await Promise.all([
+        getCoinCount(userId),
+        getPermissions(userId),
+      ]);
+
+      const currentUserData = {
+        user: firebaseUser,
+        username,
+        coinCount,
+        isAdmin,
+      };
+
+      setUser(currentUserData);
+      return currentUserData;
     } catch (error) {
       console.warn(error);
-      return 0;
+      return null;
     }
-  }
-
-  async function withCoinCount(userObject) {
-    if (!userObject) return userObject;
-
-    const userId = getUserIdFromUserObject(userObject);
-    const coinCount = await getCoinCount(userId);
-    return { ...userObject, coinCount };
-  }
-
-  useEffect(() => {
-    if (user?.user?.uid) getPermissions(user.user.uid);
-  }, [user?.user?.uid])
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
-        const userId = currentUser?.uid;
-
-        if (userId) {
-          const username = await getUsername(userId);
-          if (!username) {
-            return;
-          }
-          else {
-            const userWithCoinCount = await withCoinCount({ user: currentUser, username: username });
-            setUser(userWithCoinCount);
-          }
-        } else navigate('/');
-      } else navigate('/');
+        const currentUserData = await loadCurrentUserData(currentUser);
+        if (!currentUserData) return;
+      } else {
+        setUser(null);
+        // navigate('/');
+      }
     });
     return unsubscribe
-  }, [auth, loggedIn]);
-
-  function getPermissions(userId) {
-    setLoading(true);
-    fetch(`https://squirkle-backend.vercel.app/api/get-permissions/${userId}`)
-      .then(async (resJSON) => {
-        const res = await resJSON.json();
-
-        if (resJSON.status === 200) {
-          if (res?.isAdmin) {
-            setUser(prev => ({
-              ...prev,
-              isAdmin: res.isAdmin
-            }));
-          } else {
-            setUser(prev => ({
-              ...prev,
-              isAdmin: false
-            }));
-          }
-        } else {
-          setUser(prev => ({
-            ...prev,
-            isAdmin: false
-          }));
-        }
-      })
-      .catch(console.warn)
-      .finally(() => setLoading(false));
-  }
-
-  async function getUsername(userId) {
-    const resultJSON = await fetch(`https://squirkle-backend.vercel.app/api/get-username/${userId}`);
-    const result = await resultJSON.json();
-    return result?.username;
-  }
+  }, [auth, navigate, loadCurrentUserData]);
 
   async function handleLoginWithEmailAndPW(data) {
     setLoading(true);
     const email = data?.email;
     const password = data?.password;
 
-    if (!email || !password) return;
-    else {
+    if (!email || !password) {
+      setLoading(false);
+      return;
+    } else {
       try {
         const result = await signInWithEmailAndPassword(auth, email, password);
-        const userId = result?.user?.uid;
-
-        if (userId) {
-          const username = await getUsername(userId);
-          if (!username) return;
-          else {
-            const userWithCoinCount = await withCoinCount({ user: result, username: username });
-            setUser(userWithCoinCount);
-            navigate('/');
-          }
-        } else return;
+        const currentUserData = await loadCurrentUserData(result);
+        if (!currentUserData) return;
+        navigate('/game');
       } catch (error) {
         console.warn(error);
         setToastData({ open: true, title: 'Failed login', description: 'Invalid email or password', isError: true })
+      } finally {
+        setLoading(false);
       }
     }
-    setLoading(false);
   }
 
   async function handleLoginWithGoogle() {
     const result = await signInWithPopup(auth, new GoogleAuthProvider());
     const userId = result?.user?.uid;
     const username = await getUsername(userId);
-    if (username) navigate("/");
-    else {
+    if (username) {
+      const currentUserData = await loadCurrentUserData(result, { username });
+      if (!currentUserData) return;
+      navigate('/game');
+    } else {
       setLoginWithGoogleUserData(result);
       setUsernameDialogOpen(true);
     }
@@ -178,8 +180,10 @@ function App() {
     const password = data?.password;
     const username = data?.username;
 
-    if (!email || !password || !username) return;
-    else {
+    if (!email || !password || !username) {
+      setLoading(false);
+      return;
+    } else {
       const existsUsername = await existingUsername(username);
 
       if (existsUsername) {
@@ -200,9 +204,8 @@ function App() {
               .then(async (res) => {
                 if (res.status === 201) {
                   setToastData({ open: true, title: 'Successfully registartion!', description: '', isError: false });
-                  const userWithCoinCount = await withCoinCount({ user: registerResult, username: username });
-                  setUser(userWithCoinCount);
-                  navigate('/');
+                  await loadCurrentUserData(registerResult, { username });
+                  navigate('/game');
                 }
               })
               .catch(error => {
@@ -226,7 +229,7 @@ function App() {
           {
             <>
               <Route path='/' element={<HomePage user={user} setShowAppLoader={setShowAppLoader} />} />
-              <Route path='/game' element={<GamePage user={user} signOut={signOut} setShowAppLoader={setShowAppLoader} toastData={toastData} setToastData={setToastData} />} />
+              <Route path='/game' element={<GamePage user={user} signOut={signOut} setShowAppLoader={setShowAppLoader} toastData={toastData} setToastData={setToastData} refreshUser={loadCurrentUserData}/>} />
               {user?.isAdmin && <Route path='/admin/item-management' element={<ItemManagementPage user={user} toastData={toastData} setToastData={setToastData} setShowAppLoader={setShowAppLoader} signOut={signOut} />} />}
               {user?.isAdmin && <Route path='/admin/metadata-management' element={<MetadataManagementPage user={user} toastData={toastData} setToastData={setToastData} setShowAppLoader={setShowAppLoader} signOut={signOut} />} />}
             </>
@@ -234,8 +237,8 @@ function App() {
 
           {
             <>
-              {user === null && <Route path='/login' element={<LoginPage handleLoginWithEmailAndPW={handleLoginWithEmailAndPW} handleLoginWithGoogle={handleLoginWithGoogle} loading={loading} setShowAppLoader={setShowAppLoader} />} />}
-              {user === null && <Route path='/register' element={<RegisterPage loading={loading} handleRegistration={handleRegistration} handleLoginWithGoogle={handleLoginWithGoogle} setShowAppLoader={setShowAppLoader} />} />}
+              {<Route path='/login' element={<LoginPage handleLoginWithEmailAndPW={handleLoginWithEmailAndPW} handleLoginWithGoogle={handleLoginWithGoogle} loading={loading} setShowAppLoader={setShowAppLoader} />} />}
+              {<Route path='/register' element={<RegisterPage loading={loading} handleRegistration={handleRegistration} handleLoginWithGoogle={handleLoginWithGoogle} setShowAppLoader={setShowAppLoader} />} />}
             </>
           }
         </Routes>
@@ -245,7 +248,7 @@ function App() {
           setToastData={setToastData}
         />
         {
-          usernameDialogOpen && <UsernameInputDialog open={usernameDialogOpen} setOpen={setUsernameDialogOpen} toastData={toastData} setToastData={setToastData} existingUsername={existingUsername} userData={loginWithGoogleUserData} setUser={async (userObject) => setUser(await withCoinCount(userObject))} />
+          usernameDialogOpen && <UsernameInputDialog open={usernameDialogOpen} setOpen={setUsernameDialogOpen} setToastData={setToastData} existingUsername={existingUsername} userData={loginWithGoogleUserData} loadCurrentUserData={loadCurrentUserData} />
         }
       </Theme>
       {

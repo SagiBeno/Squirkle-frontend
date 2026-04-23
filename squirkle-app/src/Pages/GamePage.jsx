@@ -2,6 +2,7 @@ import { Box, Dialog, Flex } from '@radix-ui/themes';
 import Navbar from '../components/Navbars/Navbar';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ResetPlayerCoins } from '../GameEvents';
 import AreaSelectorDialog from '../components/Dialogs/AreaSelectorDialog';
 import InventoryDialog from '../components/Dialogs/InventoryDialog';
 import AuctionHouseDialog from '../components/Dialogs/AuctionHouseDialog';
@@ -13,7 +14,7 @@ export const AREA_SELECTOR_STATE = 1
 export const INVENTORY_STATE = 2
 export const AUCTION_HOUSE_STATE = 3
 
-export default function GamePage({ user, signOut, setShowAppLoader, toastData, setToastData }) {
+export default function GamePage({ user, signOut, setShowAppLoader, toastData, setToastData, refreshUser }) {
 
     const [dialogState, setDialogState] = useState(GAME_STATE);
     const [openDialog, setOpenDialog] = useState(false);
@@ -28,12 +29,13 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
         }
 
         setCoins(user.coinCount)
+        ResetPlayerCoins(user.coinCount)
     }, [user])
 
     function RenderCurrentDialog() {
         switch (dialogState) {
             case AREA_SELECTOR_STATE:
-                return <AreaSelectorDialog user={user} setDialogState={setDialogState} setOpen={setOpenDialog} />
+                return <AreaSelectorDialog user={user} setDialogState={setDialogState} setOpen={setOpenDialog} refreshUser={refreshUser}/>
             case INVENTORY_STATE:
                 return <InventoryDialog user={user} setDialogState={setDialogState} setOpen={setOpenDialog} />
             case AUCTION_HOUSE_STATE:
@@ -46,14 +48,14 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
     const [isGameLoaded, setIsGameLoaded] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [filePaths, setFilePaths] = useState({})
-    const [coins, setCoins] = useState(0)
+    const [coins, setCoins] = useState(() => user?.coinCount ?? 0)
 
     const gameContext = {
         isGameLoaded, setIsGameLoaded,
         isLoading, setIsLoading,
         filePaths, setFilePaths,
         coins: coins,
-        setCoins: x => setCoins(coins + x),
+        setCoins,
     }
 
     return (
