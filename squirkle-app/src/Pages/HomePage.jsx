@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Button, Link } from '@radix-ui/themes';
+import { Box, Flex, Text, Button, Link, ScrollArea } from '@radix-ui/themes';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { cardData } from '../HomePageCardData';
@@ -26,7 +26,7 @@ export default function HomePage({user, setShowAppLoader}) {
     return (
         <Flex className='mainContainer'>
             
-            <Flex className='contentContainer'>
+            <ScrollArea scrollbars="vertical" className='contentContainer' type='auto' style={{ paddingRight: '10px' }}>
                 
                 <Flex direction="row" gap="5" justify="center" wrap={isBig ? "wrap" : "wrap-reverse"} style={isBig ? {width: "100%", marginTop: 100, minHeight: "calc(100vh - 100px)", position: "relative"} : {width: "100%", minHeight: "100vh", position: "relative"}}>
                     <Flex direction="column" gap="5" style={{ textAlign: 'right', marginTop: 20, padding: 20 }}>
@@ -101,13 +101,13 @@ export default function HomePage({user, setShowAppLoader}) {
                     </Flex>
                 </Flex>
 
-                <Flex gap="2" style={{padding: 15, paddingTop: 10, backdropFilter: 'blur(10px)', boxShadow: '0px 0px 20px 5px rgba(0, 0, 0, 0.25)', borderTopLeftRadius: 10, borderTopRightRadius: 10, flexWrap: 'wrap'}}>
+                <Flex gap="2" style={{ alignItems: 'center', justifyContent: 'center' , padding: 15, paddingTop: 10, backdropFilter: 'blur(10px)', boxShadow: '0px 0px 20px 5px rgba(0, 0, 0, 0.25)', borderTopLeftRadius: 10, borderTopRightRadius: 10, flexWrap: 'wrap', maxWidth: '400px', margin: '0 auto'}}>
                     <Text size="3" style={{color: 'white', opacity: '0.6' }}>Made by:</Text>
                     <Link style={{ color: 'white', opacity: '0.6' }} target='_blank' href='https://github.com/hajos8/'>@hajos8</Link>
                     <Link style={{ color: 'white', opacity: '0.6' }} target='_blank' href='https://github.com/kristoffred/'>@Kristoff Red</Link>
                     <Link style={{ color: 'white', opacity: '0.6' }} target='_blank' href='https://github.com/sagibeno'>@SagiBeno</Link>
                 </Flex>
-            </Flex>
+            </ScrollArea>
         </Flex>
     )
 }
