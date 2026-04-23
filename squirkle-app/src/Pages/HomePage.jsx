@@ -101,11 +101,11 @@ export default function HomePage({user, setShowAppLoader}) {
                     </Flex>
                 </Flex>
 
-                <Flex gap="2" style={{padding: 15, paddingTop: 10, backdropFilter: 'blur(10px)', boxShadow: '0px 0px 20px 5px rgba(0, 0, 0, 0.25)', borderTopLeftRadius: 10, borderTopRightRadius: 10}}>
+                <Flex gap="2" style={{padding: 15, paddingTop: 10, backdropFilter: 'blur(10px)', boxShadow: '0px 0px 20px 5px rgba(0, 0, 0, 0.25)', borderTopLeftRadius: 10, borderTopRightRadius: 10, flexWrap: 'wrap'}}>
                     <Text size="3" style={{color: 'white', opacity: '0.6' }}>Made by:</Text>
-                    <Link target='_blank' href='https://github.com/hajos8/'>@hajos8</Link>
-                    <Link target='_blank' href='https://github.com/kristoffred/'>@Kristoff Red</Link>
-                    <Link target='_blank' href='https://github.com/sagibeno'>@SagiBeno</Link>
+                    <Link style={{ color: 'white', opacity: '0.6' }} target='_blank' href='https://github.com/hajos8/'>@hajos8</Link>
+                    <Link style={{ color: 'white', opacity: '0.6' }} target='_blank' href='https://github.com/kristoffred/'>@Kristoff Red</Link>
+                    <Link style={{ color: 'white', opacity: '0.6' }} target='_blank' href='https://github.com/sagibeno'>@SagiBeno</Link>
                 </Flex>
             </Flex>
         </Flex>
