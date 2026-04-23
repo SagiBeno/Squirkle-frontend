@@ -9,7 +9,7 @@ export default function ListingsContainerForGlobalActive({ activeListings, handl
                 activeListings.length === 0
                     ?
                     <Flex>
-                        <Text size="5" style={{ color: 'white', margin: '10px auto 20px auto' }}>No active listing yet.</Text>
+                        <Text size="5" style={{ color: 'white', margin: '10px auto 20px auto', textAlign: 'center' }}>No active listing yet.</Text>
                     </Flex>
                     :
                     !isLow ?

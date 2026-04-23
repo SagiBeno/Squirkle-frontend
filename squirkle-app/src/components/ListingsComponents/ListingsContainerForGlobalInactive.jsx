@@ -10,7 +10,7 @@ export default function ListingsContainerForGlobalInactive({ inactiveListings, h
                 inactiveListings.length === 0
                     ?
                     <Flex>
-                        <Text size="5" style={{ color: 'white', margin: '10px auto 20px auto' }}>No previous listing yet.</Text>
+                        <Text size="5" style={{ color: 'white', margin: '10px auto 20px auto', textAlign: 'center' }}>No previous listing yet.</Text>
                     </Flex>
                     :
                     !isLow ?

@@ -61,7 +61,7 @@ export default function ListingsComponentsForUser({ isLow, getUserListings, base
                 activeListings.length === 0
                     ?
                     <Flex>
-                        <Text size="5" style={{ color: 'white', margin: '10px auto 20px auto' }}>You have no active listing yet.</Text>
+                        <Text size="5" style={{ color: 'white', margin: '10px auto 20px auto', textAlign: 'center' }}>You have no active listing yet.</Text>
                     </Flex>
                     :
                     (!isLow && !isMobile) ?
@@ -144,7 +144,7 @@ export default function ListingsComponentsForUser({ isLow, getUserListings, base
                         </ScrollArea>
                     </>
                     :
-                    !isMobile &&
+                    (!isMobile && inactiveListings.length !== 0) &&
                     <>
                         <Flex
                             direction="row"
@@ -224,8 +224,6 @@ export default function ListingsComponentsForUser({ isLow, getUserListings, base
                             </Flex>
                         </>
                     }
-
-
                 </ScrollArea>
             }
 
