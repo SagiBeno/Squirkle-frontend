@@ -6,8 +6,9 @@ import { HiXMark } from 'react-icons/hi2';
 import DialogSpinner from '../Spinners/DialogSpinner';
 
 import '../../Modal.css';
+import { ResetPlayerCoins } from '../../GameEvents';
 
-export default function AreaSelectorDialog({ user, setDialogState, setOpen }) {
+export default function AreaSelectorDialog({ user, setDialogState, setOpen, refreshUser }) {
 
     const [areas, setAreas] = useState([])
     const [purchasedAreas, setPurchasedAreas] = useState([])
@@ -24,8 +25,11 @@ export default function AreaSelectorDialog({ user, setDialogState, setOpen }) {
         setLoading(false);
     }
 
-    function Refresh() {
+    async function Refresh() 
+    {
         setRefresh(!refresh)
+        const refreshedUser = await refreshUser(user)
+        ResetPlayerCoins(refreshedUser?.coinCount)
     }
 
     useEffect(() => {

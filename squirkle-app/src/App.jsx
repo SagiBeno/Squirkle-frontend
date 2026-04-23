@@ -229,7 +229,7 @@ function App() {
           {
             <>
               <Route path='/' element={<HomePage user={user} setShowAppLoader={setShowAppLoader} />} />
-              <Route path='/game' element={<GamePage user={user} signOut={signOut} setShowAppLoader={setShowAppLoader} toastData={toastData} setToastData={setToastData} />} />
+              <Route path='/game' element={<GamePage user={user} signOut={signOut} setShowAppLoader={setShowAppLoader} toastData={toastData} setToastData={setToastData} refreshUser={loadCurrentUserData}/>} />
               {user?.isAdmin && <Route path='/admin/item-management' element={<ItemManagementPage user={user} toastData={toastData} setToastData={setToastData} setShowAppLoader={setShowAppLoader} signOut={signOut} />} />}
               {user?.isAdmin && <Route path='/admin/metadata-management' element={<MetadataManagementPage user={user} toastData={toastData} setToastData={setToastData} setShowAppLoader={setShowAppLoader} signOut={signOut} />} />}
             </>
