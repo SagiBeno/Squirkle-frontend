@@ -1,21 +1,7 @@
 import { ScrollArea, Flex, Text } from "@radix-ui/themes";
 import ActiveGlobalListingCard from "./ActiveGlobalListingCard";
-import { useState, useEffect } from "react";
 
-export default function ListingsContainerForGlobalActive({ activeListings, handleOpenListing }) {
-
-    const [isMobile, setIsMobile] = useState(false);
-
-    function handleResize () {
-        if (window.innerHeight < 500) setIsMobile(true);
-        else setIsMobile(false);
-    }
-
-    window.addEventListener('resize', handleResize);
-
-    useEffect(() => {
-        handleResize();
-    }, []);
+export default function ListingsContainerForGlobalActive({ activeListings, handleOpenListing, isLow }) {
 
     return (
         <>
@@ -26,7 +12,7 @@ export default function ListingsContainerForGlobalActive({ activeListings, handl
                         <Text size="5" style={{ color: 'white', margin: '10px auto 20px auto' }}>No active listing yet.</Text>
                     </Flex>
                     :
-                    !isMobile ?
+                    !isLow ?
                         <>
                             <Flex
                                 direction="row"
@@ -42,7 +28,7 @@ export default function ListingsContainerForGlobalActive({ activeListings, handl
                             >
                                 <Text size='4' style={{ fontWeight: '550', letterSpacing: '1px' }}>Active listing(s)</Text>
                             </Flex>
-                            <ScrollArea type="auto" style={{ padding: '20px' }}>
+                            <ScrollArea type="auto" style={{ padding: ' 5px 15px' }}>
                                 <Flex style={{ flexDirection: 'column', gap: 4 }}>
                                     {
                                         activeListings.map((listing, index) => <ActiveGlobalListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} />)

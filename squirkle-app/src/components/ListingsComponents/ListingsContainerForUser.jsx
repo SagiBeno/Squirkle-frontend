@@ -3,7 +3,7 @@ import UserListingCard from "./UserListingsCard";
 import { useState, useEffect } from "react";
 import DeleteListingAlert from "./DeleteListingAlert";
 
-export default function ListingsComponentsForUser({ getUserListings, baseUrl, userId, setToastData, activeListings, inactiveListings, handleOpenListing, handleConfirmDeleteListing }) {
+export default function ListingsComponentsForUser({ isLow, getUserListings, baseUrl, userId, setToastData, activeListings, inactiveListings, handleOpenListing, handleConfirmDeleteListing }) {
 
     const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
     const [selectedListing, setSelectedListing] = useState({});
@@ -11,7 +11,7 @@ export default function ListingsComponentsForUser({ getUserListings, baseUrl, us
     const [isMobile, setIsMobile] = useState(false);
 
     function handleResize() {
-        if (window.innerHeight < 500) setIsMobile(true);
+        if (window.innerHeight < 700 && window.innerHeight > 500) setIsMobile(true);
         else setIsMobile(false);
     }
 
@@ -64,31 +64,33 @@ export default function ListingsComponentsForUser({ getUserListings, baseUrl, us
                         <Text size="5" style={{ color: 'white', margin: '10px auto 20px auto' }}>You have no active listing yet.</Text>
                     </Flex>
                     :
-                    !isMobile ?
+                    (!isLow && !isMobile) ?
                         <>
                             <Flex
                                 direction="row"
                                 style={{
                                     backgroundColor: '#646465',
-                                    color: 'white',
+                                    color: 'yellow',
                                     borderRadius: '10px',
                                     justifyContent: 'start',
                                     padding: '10px',
                                     fontFamily: `"Fredoka", sans-serif`,
-                                    borderBottom: '8px solid #494949'
+                                    borderBottom: '8px solid #494949',
+                                    marginBottom: '5px'
                                 }}
                             >
                                 <Text size='4' style={{ fontWeight: '550', letterSpacing: '1px' }}>Active listing(s)</Text>
                             </Flex>
-                            <ScrollArea type="auto" style={{ padding: '10px 20px' }}>
+                            <ScrollArea type="auto" style={{ padding: '0px 15px' }}>
                                 <Flex style={{ flexDirection: 'column', gap: 4 }}>
                                     {
-                                         activeListings.map((listing, index) => <UserListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
+                                        activeListings.map((listing, index) => <UserListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
                                     }
                                 </Flex>
                             </ScrollArea>
                         </>
                         :
+                        !isMobile &&
                         <>
                             <Flex
                                 direction="row"
@@ -99,13 +101,12 @@ export default function ListingsComponentsForUser({ getUserListings, baseUrl, us
                                     justifyContent: 'start',
                                     padding: '10px',
                                     fontFamily: `"Fredoka", sans-serif`,
-                                    marginBottom: '10px',
                                     borderBottom: '8px solid #494949'
                                 }}
                             >
                                 <Text size='4' style={{ fontWeight: '550', letterSpacing: '1px' }}>Active listing(s)</Text>
                             </Flex>
-                            <Flex style={{ flexDirection: 'column', gap: 4, padding: '0px 10px' }}>
+                            <Flex style={{ flexDirection: 'column', gap: 4, padding: '5px' }}>
                                 {
                                     activeListings.map((listing, index) => <UserListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
                                 }
@@ -115,8 +116,66 @@ export default function ListingsComponentsForUser({ getUserListings, baseUrl, us
             }
 
             {
-                (inactiveListings.length !== 0 && !isMobile)
+                inactiveListings.length !== 0 && !isLow && !isMobile
                     ?
+                    <>
+                        <Flex
+                            direction="row"
+                            style={{
+                                backgroundColor: '#646465',
+                                color: 'white',
+                                borderRadius: '10px',
+                                justifyContent: 'start',
+                                padding: '10px',
+                                fontFamily: `"Fredoka", sans-serif`,
+                                borderBottom: '8px solid #494949',
+                                marginTop: '10px',
+                                marginBottom: '5px'
+                            }}
+                        >
+                            <Text size='4' style={{ fontWeight: '550', letterSpacing: '1px' }}>Previous listing(s)</Text>
+                        </Flex>
+                        <ScrollArea type="auto" style={{ padding: '0px 15px' }}>
+                            <Flex style={{ flexDirection: 'column', gap: 4 }}>
+                                {
+                                    inactiveListings.map((listing, index) => <UserListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
+                                }
+                            </Flex>
+                        </ScrollArea>
+                    </>
+                    :
+                    !isMobile &&
+                    <>
+                        <Flex
+                            direction="row"
+                            style={{
+                                backgroundColor: '#646465',
+                                color: 'white',
+                                borderRadius: '10px',
+                                justifyContent: 'start',
+                                padding: '10px',
+                                fontFamily: `"Fredoka", sans-serif`,
+                                borderBottom: '8px solid #494949',
+                                marginTop: '15px'
+                            }}
+                        >
+                            <Text size='4' style={{ fontWeight: '550', letterSpacing: '1px' }}>Previous listing(s)</Text>
+                        </Flex>
+
+                        <Flex style={{ flexDirection: 'column', gap: 4, padding: '5px' }}>
+                            {
+                                inactiveListings.map((listing, index) => <UserListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
+                            }
+                        </Flex>
+                    </>
+            }
+
+            {
+                isMobile &&
+                <ScrollArea type="auto" style={{ padding: '15px' }}>
+                    {
+                        activeListings.length !== 0 &&
+
                         <>
                             <Flex
                                 direction="row"
@@ -130,17 +189,16 @@ export default function ListingsComponentsForUser({ getUserListings, baseUrl, us
                                     borderBottom: '8px solid #494949'
                                 }}
                             >
-                                <Text size='4' style={{ fontWeight: '550', letterSpacing: '1px' }}>Previous listing(s)</Text>
+                                <Text size='4' style={{ fontWeight: '550', letterSpacing: '1px' }}>Active listing(s)</Text>
                             </Flex>
-                            <ScrollArea type="auto" style={{ padding: '10px 20px' }}>
-                                <Flex style={{ flexDirection: 'column', gap: 4 }}>
-                                    {
-                                        inactiveListings.map((listing, index) => <UserListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
-                                    }
-                                </Flex>
-                            </ScrollArea>
+                            <Flex style={{ flexDirection: 'column', gap: 4, padding: '5px' }}>
+                                {
+                                    activeListings.map((listing, index) => <UserListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
+                                }
+                            </Flex>
                         </>
-                        :
+                    }
+                    {
                         inactiveListings.length !== 0 &&
                         <>
                             <Flex
@@ -153,18 +211,22 @@ export default function ListingsComponentsForUser({ getUserListings, baseUrl, us
                                     padding: '10px',
                                     fontFamily: `"Fredoka", sans-serif`,
                                     borderBottom: '8px solid #494949',
-                                    marginTop: '15px'
+                                    marginTop: '10px'
                                 }}
                             >
                                 <Text size='4' style={{ fontWeight: '550', letterSpacing: '1px' }}>Previous listing(s)</Text>
                             </Flex>
 
-                            <Flex style={{ flexDirection: 'column', gap: 4, padding: '0px 10px', marginTop: '5px' }}>
+                            <Flex style={{ flexDirection: 'column', gap: 4, padding: '5px' }}>
                                 {
-                                   inactiveListings.map((listing, index) => <UserListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
+                                    inactiveListings.map((listing, index) => <UserListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
                                 }
                             </Flex>
                         </>
+                    }
+
+
+                </ScrollArea>
             }
 
             {

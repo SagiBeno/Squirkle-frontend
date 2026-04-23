@@ -1,21 +1,7 @@
 import { ScrollArea, Flex, Text } from "@radix-ui/themes";
 import InactiveGlobalListingCard from "./ActiveGlobalListingCard";
-import { useState, useEffect } from "react";
 
-export default function ListingsContainerForGlobalInactive({ inactiveListings, handleOpenListing }) {
-
-    const [isMobile, setIsMobile] = useState(false);
-
-    function handleResize () {
-        if (window.innerHeight < 500) setIsMobile(true);
-        else setIsMobile(false);
-    }
-
-    window.addEventListener('resize', handleResize);
-
-    useEffect(() => {
-        handleResize();
-    }, []);
+export default function ListingsContainerForGlobalInactive({ inactiveListings, handleOpenListing, isLow }) {
 
     return (
         <>
@@ -27,7 +13,7 @@ export default function ListingsContainerForGlobalInactive({ inactiveListings, h
                         <Text size="5" style={{ color: 'white', margin: '10px auto 20px auto' }}>No previous listing yet.</Text>
                     </Flex>
                     :
-                    !isMobile ?
+                    !isLow ?
                         <>
                             <Flex
                                 direction="row"
@@ -43,7 +29,7 @@ export default function ListingsContainerForGlobalInactive({ inactiveListings, h
                             >
                                 <Text size='4' style={{ fontWeight: '550', letterSpacing: '1px' }}>Previous listing(s)</Text>
                             </Flex>
-                            <ScrollArea type="auto" style={{ padding: '10px 20px' }}>
+                            <ScrollArea type="auto" style={{ padding: '5px 15px' }}>
                                 <Flex style={{ flexDirection: 'column', gap: 4 }}>
                                     {
                                         inactiveListings.map((listing, index) => <InactiveGlobalListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} />)
@@ -68,7 +54,7 @@ export default function ListingsContainerForGlobalInactive({ inactiveListings, h
                             >
                                 <Text size='4' style={{ fontWeight: '550', letterSpacing: '1px' }}>Previous listing(s)</Text>
                             </Flex>
-                            <Flex style={{ flexDirection: 'column', gap: 4, padding: '0px 10px' }}>
+                            <Flex style={{ flexDirection: 'column', gap: 4, padding: '0px' }}>
                                 {
                                     inactiveListings.map((listing, index) => <InactiveGlobalListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} />)
                                 }

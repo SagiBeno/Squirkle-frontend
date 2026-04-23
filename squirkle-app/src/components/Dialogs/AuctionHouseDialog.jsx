@@ -67,7 +67,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
     const [createCandidatesLoading, setCreateCandidatesLoading] = useState(false);
     const [createLoading, setCreateLoading] = useState(false);
     const [buyLoading, setBuyLoading] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
+    const [isLow, setIsLow] = useState(false);
     const userIdentifier = user?.username || user?.name || user?.email || 'You';
     const userId = user?.user?.uid || user?.uid || user?.user?.user?.uid || null;
     const selectedCreateItem = createCandidates.find((item) => item.userItemId === createListingForm.userItemId) || null;
@@ -75,9 +75,9 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
 
     function handleResize () {
         if (window.innerHeight < 500) {
-            setIsMobile(true);
+            setIsLow(true);
         }
-        else setIsMobile(false);
+        else setIsLow(false);
     }
     window.addEventListener('resize', handleResize);
 
@@ -318,7 +318,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
                     </Flex>
                 </Dialog.Title>
                 {
-                    isMobile ?
+                    isLow ?
                         <ScrollArea type='auto' style={{ padding: '15px', height: "calc(100% - 52px)" }}>
                             <Flex
                                 direction="column"
@@ -367,11 +367,11 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
                                             <DialogSpinner />
                                         </Flex>
                                         :
-                                        (activeTab === 'userListings') ? <ListingsComponentsForUser getUserListings={getUserListings} activeListings={userActiveListings} inactiveListings={userInactiveListings} handleOpenListing={handleOpenListing} userId={userId} setToastData={setToastData} baseUrl={API_BASE_URL} />
+                                        (activeTab === 'userListings') ? <ListingsComponentsForUser isLow={isLow} getUserListings={getUserListings} activeListings={userActiveListings} inactiveListings={userInactiveListings} handleOpenListing={handleOpenListing} userId={userId} setToastData={setToastData} baseUrl={API_BASE_URL} />
                                             :
-                                            (activeTab === 'globalListings') ? <ListingsContainerForGlobalActive activeListings={globalActiveListings} handleOpenListing={handleOpenListing} />
+                                            (activeTab === 'globalListings') ? <ListingsContainerForGlobalActive isLow={isLow} activeListings={globalActiveListings} handleOpenListing={handleOpenListing} />
                                                 :
-                                                (activeTab === 'previousListings') && <ListingsContainerForGlobalInactive inactiveListings={previousListings} handleOpenListing={handleOpenListing} />
+                                                (activeTab === 'previousListings') && <ListingsContainerForGlobalInactive isLow={isLow} inactiveListings={previousListings} handleOpenListing={handleOpenListing} />
                                 }
                             </Flex>
                         </ScrollArea>
@@ -425,11 +425,11 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
                                             <DialogSpinner />
                                         </Flex>
                                         :
-                                        (activeTab === 'userListings') ? <ListingsComponentsForUser getUserListings={getUserListings} activeListings={userActiveListings} inactiveListings={userInactiveListings} handleOpenListing={handleOpenListing} userId={userId} setToastData={setToastData} baseUrl={API_BASE_URL} />
+                                        (activeTab === 'userListings') ? <ListingsComponentsForUser isLow={isLow} getUserListings={getUserListings} activeListings={userActiveListings} inactiveListings={userInactiveListings} handleOpenListing={handleOpenListing} userId={userId} setToastData={setToastData} baseUrl={API_BASE_URL} />
                                             :
-                                            (activeTab === 'globalListings') ? <ListingsContainerForGlobalActive activeListings={globalActiveListings} handleOpenListing={handleOpenListing} />
+                                            (activeTab === 'globalListings') ? <ListingsContainerForGlobalActive isLow={isLow} activeListings={globalActiveListings} handleOpenListing={handleOpenListing} />
                                                 :
-                                                (activeTab === 'previousListings') && <ListingsContainerForGlobalInactive inactiveListings={previousListings} handleOpenListing={handleOpenListing} />
+                                                (activeTab === 'previousListings') && <ListingsContainerForGlobalInactive isLow={isLow} inactiveListings={previousListings} handleOpenListing={handleOpenListing} />
                                 }
                             </Flex>
                         </>
