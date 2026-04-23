@@ -166,6 +166,20 @@
     }
 }
 
+@media screen and (max-width: 860px) {
+    .statsContainer {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 10 !important;
+    }
+}
+
+@media screen and (max-width: 343px) {
+    .createListingButtonContainer {
+        justify-content: center !important;
+    }
+}
+
 .homePageGamePreview
 {
     background-image: url("HomePageIcons/slicing.gif");

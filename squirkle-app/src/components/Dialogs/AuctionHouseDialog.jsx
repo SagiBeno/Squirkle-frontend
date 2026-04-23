@@ -1,4 +1,4 @@
-import { Button, Dialog, Flex, Heading, Text, TextField, IconButton } from '@radix-ui/themes';
+import { Button, Dialog, Flex, Heading, Text, TextField, IconButton, ScrollArea } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
 import { HiXMark } from "react-icons/hi2";
 import DialogSpinner from '../Spinners/DialogSpinner';
@@ -282,81 +282,84 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
     return (
 
         <>
-            <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 10, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: 'auto' }}>
-                <Dialog.Title style={{ marginTop: 15, color: 'white', textTransform: 'uppercase' }}>
-                    <Flex
-                        style={{
-                            justifyContent: "space-between"
-                        }}
-                    >
-                        <Text size='6' style={{ margin: '0 auto' }}>Auction house</Text>
-                        <IconButton
-                            className="button activeButton"
-                            onClick={() => {
-                                setDialogState(null);
-                                setOpen(false);
+            <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 10, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent" }}>
+                <ScrollArea type="auto" style={{ padding: '15px' }}>
+                    <Dialog.Title style={{ marginTop: 15, color: 'white', textTransform: 'uppercase' }}>
+                        <Flex
+                            style={{
+                                justifyContent: "space-between"
                             }}
                         >
-                            <HiXMark />
-                        </IconButton>
-                    </Flex>
-                </Dialog.Title>
-
-                <Flex
-                    direction="column"
-                    height="calc(100% - 52px)"
-                    style={{ backgroundColor: 'transparent' }}
-                >
-                    <Flex
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            flexWrap: 'wrap',
-                            gap: 4,
-                            marginBottom: '10px'
-                        }}
-                    >
-
-                        {
-                            buttonsValue.length > 0 &&
-                            buttonsValue.map((button, idx) => (
-                                <Button
-                                    key={idx}
-                                    value={button.value}
-                                    onClick={(e) => handleSelectButton(e.target.value)}
-                                    style={{
-                                        cursor: 'pointer',
-                                        opacity: activeTab === button.value ? '1' : '0.7'
-                                    }}
-                                    color='gray'
-                                    className='button activeButton'
-                                >
-                                    {button.name}
-                                </Button>
-                            ))
-                        }
-                    </Flex>
-
-                    {
-                        loading ?
-                            <Flex
-                                style={{
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    padding: '10px'
+                            <Text size='6' style={{ margin: '0 auto' }}>Auction house</Text>
+                            <IconButton
+                                className="button activeButton"
+                                onClick={() => {
+                                    setDialogState(null);
+                                    setOpen(false);
                                 }}
                             >
-                                <DialogSpinner />
-                            </Flex>
-                            :
-                            (activeTab === 'userListings') ? <ListingsComponentsForUser getUserListings={getUserListings} activeListings={userActiveListings} inactiveListings={userInactiveListings} handleOpenListing={handleOpenListing} userId={userId} setToastData={setToastData} baseUrl={API_BASE_URL} />
+                                <HiXMark />
+                            </IconButton>
+                        </Flex>
+                    </Dialog.Title>
+
+                    <Flex
+                        direction="column"
+                        height="calc(100% - 52px)"
+                        style={{ backgroundColor: 'transparent' }}
+                    >
+                        <Flex
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                flexWrap: 'wrap',
+                                gap: 4,
+                                marginBottom: '10px'
+                            }}
+                        >
+
+                            {
+                                buttonsValue.length > 0 &&
+                                buttonsValue.map((button, idx) => (
+                                    <Button
+                                        key={idx}
+                                        value={button.value}
+                                        onClick={(e) => handleSelectButton(e.target.value)}
+                                        style={{
+                                            cursor: 'pointer',
+                                            opacity: activeTab === button.value ? '1' : '0.7'
+                                        }}
+                                        color='gray'
+                                        className='button activeButton'
+                                    >
+                                        {button.name}
+                                    </Button>
+                                ))
+                            }
+                        </Flex>
+
+                        {
+                            loading ?
+                                <Flex
+                                    style={{
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        padding: '10px'
+                                    }}
+                                >
+                                    <DialogSpinner />
+                                </Flex>
                                 :
-                                (activeTab === 'globalListings') ? <ListingsContainerForGlobalActive activeListings={globalActiveListings} handleOpenListing={handleOpenListing} />
+                                (activeTab === 'userListings') ? <ListingsComponentsForUser getUserListings={getUserListings} activeListings={userActiveListings} inactiveListings={userInactiveListings} handleOpenListing={handleOpenListing} userId={userId} setToastData={setToastData} baseUrl={API_BASE_URL} />
                                     :
-                                    (activeTab === 'previousListings') && <ListingsContainerForGlobalInactive inactiveListings={previousListings} handleOpenListing={handleOpenListing} />
-                    }
-                </Flex>
+                                    (activeTab === 'globalListings') ? <ListingsContainerForGlobalActive activeListings={globalActiveListings} handleOpenListing={handleOpenListing} />
+                                        :
+                                        (activeTab === 'previousListings') && <ListingsContainerForGlobalInactive inactiveListings={previousListings} handleOpenListing={handleOpenListing} />
+                        }
+                    </Flex>
+                </ScrollArea>
+
             </Dialog.Content>
 
             {
