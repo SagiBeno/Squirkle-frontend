@@ -1,11 +1,24 @@
+/**
+ * Fullscreen loading spinner overlay for admin pages.
+ *
+ * Displays a centered animated spinner with a semi-transparent
+ * dark background, blocking user interaction during loading states.
+ *
+ * Uses inline CSS and a pseudo-element for the spinner animation.
+ *
+ * @component
+ *
+ * @returns { JSX.Element }
+ */
+
 export default function AdminSpinner() {
     return (
         <>
-            <div id='adminSpinner'></div>
+            <div className='adminSpinner'></div>
 
             <style>
                 {`
-                    #adminSpinner {
+                    .adminSpinner {
                         display: flex;
                         justify-content: center;
                         align-items: center;
@@ -15,9 +28,10 @@ export default function AdminSpinner() {
                         position: fixed;
                         top: 0;
                         background: rgba(0, 0, 0, 0.62);
+                        backdrop-filter: blur(3px);
                     }
 
-                    #adminSpinner::after {
+                    .adminSpinner::after {
                         content: '';
                         height: 30px;
                         width: 30px;
