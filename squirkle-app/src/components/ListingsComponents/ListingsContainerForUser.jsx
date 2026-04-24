@@ -70,7 +70,7 @@ export default function ListingsComponentsForUser({ isLow, getUserListings, base
                                 direction="row"
                                 style={{
                                     backgroundColor: '#646465',
-                                    color: 'yellow',
+                                    color: 'white',
                                     borderRadius: '10px',
                                     justifyContent: 'start',
                                     padding: '10px',
