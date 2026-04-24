@@ -1,6 +1,26 @@
 import { Flex, Heading, Text } from "@radix-ui/themes";
 import { GiTwoCoins } from "react-icons/gi";
 
+/**
+ * Card component for displaying an active global marketplace listing.
+ *
+ * Shows item image, name, seller (if available), and price.
+ * Clicking the card opens the listing details.
+ *
+ * @component
+ *
+ * @param { Object } props - Component props
+ * @param { Object } props.listing - Listing data
+ * @param { string } props.listing.itemName - Name of the item
+ * @param { string } props.listing.itemImageUrl - Image URL of the item
+ * @param { number } props.listing.price - Listing price
+ * @param { string } [props.listing.username] - Seller username (optional)
+ * @param { number } props.idx - Index used for alternating background styling
+ * @param { Function } props.handleOpenListing - Callback when the card is clicked
+ *
+ * @returns { JSX.Element }
+ */
+
 export default function ActiveGlobalListingCard({ listing, idx, handleOpenListing }) {
 
     return (
@@ -13,9 +33,9 @@ export default function ActiveGlobalListingCard({ listing, idx, handleOpenListin
                 flexDirection: 'column',
                 padding: '10px',
                 borderRadius: '10px',
-                fontFamily: `"Fredoka", sans-serif`
+                fontFamily: `"Fredoka", sans-serif`,
+                cursor: 'pointer'
             }}
-
             onClick={() => handleOpenListing(listing)}
         >
 
@@ -37,7 +57,8 @@ export default function ActiveGlobalListingCard({ listing, idx, handleOpenListin
                 >
                     <img
                         src={listing.itemImageUrl}
-                        alt={listing.itemName}
+                        alt={listing?.itemName || "item image"}
+                        title={listing?.itemName || "item image"}
                         style={{ width: 64, height: 48, objectFit: 'cover', flexShrink: 0, }}
                     />
 
