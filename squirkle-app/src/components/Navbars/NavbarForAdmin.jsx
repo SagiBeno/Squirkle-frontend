@@ -1,19 +1,30 @@
-import { Button, Dialog, DropdownMenu, Flex, Text } from "@radix-ui/themes";
-import { useEffect, useState } from "react";
-import { DropdownNavbarButton, NavbarButton } from "../Buttons";
-import { FaMap } from "react-icons/fa";
-import { MdBackpack } from "react-icons/md";
-import { IoGameController } from "react-icons/io5";
-import { GiTwoCoins } from "react-icons/gi";
-import { RiAuctionFill, RiMenuFill } from "react-icons/ri";
-import { AREA_SELECTOR_STATE, AUCTION_HOUSE_STATE, GAME_STATE, INVENTORY_STATE } from "../../Pages/GamePage";
-import NavbarMobileDropdown from "./NavbarMobileDropdown";
-import CoinCounter from "../GameComponents/CoinCounter";
+import { Button, DropdownMenu, Flex, Text } from "@radix-ui/themes";
+import { DropdownNavbarButton } from "../Buttons";
+import { RiMenuFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { FiLogOut } from "react-icons/fi";
 import { MdManageAccounts } from "react-icons/md";
 import { GrGamepad } from "react-icons/gr";
 
+/**
+ * Navigation bar for the admin interface.
+ *
+ * Displays the admin label, current user's username,
+ * and a dropdown menu with navigation options:
+ * - Item management
+ * - Metadata management
+ * - Back to game
+ * - Logout
+ *
+ * @component
+ *
+ * @param { Object } props - Component props
+ * @param { Object } props.user - Current authenticated user
+ * @param { string } props.user.username - Display username
+ * @param { Function } props.signOut - Logs out the current user
+ *
+ * @returns { JSX.Element }
+ */
 export default function NavbarForAdmin({ user, signOut }) {
 
     const navigate = useNavigate();
