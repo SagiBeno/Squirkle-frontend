@@ -388,7 +388,6 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
                                     id="metadataID"
                                     value={metadata.id}
                                     onChange={(e) => {
-                                        console.log(metadata.id);
                                         let value = e.target.value;
                                         value = value.toUpperCase();
                                         if (value.includes(' ')) value = value.replace(' ', '_');
