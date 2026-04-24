@@ -6,6 +6,23 @@ import HomePageCard from '../components/Cards/HomePageCard';
 import { FaPlay } from "react-icons/fa";
 import { BiSolidDownArrow } from "react-icons/bi";
 
+/**
+ * Home page component.
+ * 
+ * Display the landing page of the application with a hort game description,
+ * a play button, and informational cards about the game.
+ * 
+ * Handles responsive layout changes and redirects users to the game
+ * or login page depending on authentication state.
+ * 
+ * @component
+ * 
+ * @param { Object } props - Component props
+ * @param { Object | null } props.user - Currently authenticated user objet, or null if not logged in
+ *  
+ * @returns { JSX.Element } Home page UI
+ */
+
 export default function HomePage({user, setShowAppLoader}) {
     const navigate = useNavigate();
 
