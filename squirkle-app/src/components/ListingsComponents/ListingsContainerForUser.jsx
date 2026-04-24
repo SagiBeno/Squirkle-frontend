@@ -15,10 +15,11 @@ export default function ListingsComponentsForUser({ isLow, getUserListings, base
         else setIsMobile(false);
     }
 
-    window.addEventListener('resize', handleResize);
-
     useEffect(() => {
         handleResize();
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     function handleDeleteListing(listing) {

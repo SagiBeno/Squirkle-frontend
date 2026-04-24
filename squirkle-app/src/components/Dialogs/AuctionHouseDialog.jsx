@@ -79,7 +79,14 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
         }
         else setIsLow(false);
     }
-    window.addEventListener('resize', handleResize);
+    
+    useEffect(() => {
+        handleResize();
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
 
     useEffect(() => {
         handleResize();
