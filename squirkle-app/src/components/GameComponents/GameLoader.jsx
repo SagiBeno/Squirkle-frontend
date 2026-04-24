@@ -1,41 +1,72 @@
-import React from 'react'
-import { useEffect } from 'react'
-import { useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import Game from './Game'
 import JSZip from 'jszip'
-import { useContext } from 'react'
 import { GameContext } from './GameContext'
-import { Flex, Spinner, Text } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import GameSpinner from '../Spinners/GameSpinner'
+
+/**
+ * Game loader component.
+ *
+ * Checks the latest game build version, loads the Unity build either
+ * from IndexedDB cache or downloads the newest version, unzips the game files,
+ * and passes the generated file paths to the Unity game component.
+ *
+ * @component
+ *
+ * @param { Object } props - Component props
+ * @param { Object } props.user - Current authenticated user data
+ *
+ * @returns { JSX.Element } Game loader or Unity game component
+ */
 
 export default function GameLoader({user}) {
 
     const { isGameLoaded, setIsGameLoaded, isLoading, setIsLoading, filePaths, setFilePaths } = useContext(GameContext)
     
-    async function GetVersion()
-    {
-        if (isLoading) return
-        setIsLoading(true)
+    /**
+     * Checks whether a newer game build is available.
+     *
+     * Downloads the latest build if no local version exists or the external
+     * build is newer, otherwise loads the cached build from IndexedDB.
+     */
+    async function GetVersion() {
+        if (isLoading) return;
 
-        let localVersion = JSON.parse(localStorage.getItem("gameBuildDate"))
-        let externalVersion = await (await fetch("https://squirkle.netlify.app/version.json")).json()
-        let externalDate = GetDateFromString(externalVersion.buildDate)
-            
-        let gameFiles = null
+        setIsLoading(true);
 
-        if (localVersion == null)
+        try 
         {
-            gameFiles = await DownloadLatest(externalVersion, x => UnzipGame(x))
+            let localVersion = JSON.parse(localStorage.getItem("gameBuildDate"));
+            let externalVersion = await (await fetch("https://squirkle.netlify.app/version.json")).json();
+            let externalDate = GetDateFromString(externalVersion.buildDate);
+
+            if (localVersion == null) await DownloadLatest(externalVersion, x => UnzipGame(x));
+            else 
+            {
+                let localDate = GetDateFromString(localVersion.buildDate);
+
+                if (localDate.getTime() < externalDate.getTime()) await DownloadLatest(externalVersion, x => UnzipGame(x));
+
+                else await LoadGameLocally(x => UnzipGame(x));
+            }
+        } 
+        catch (error)
+        {
+            console.error("Error during version check:", error);
         }
-        else
+        finally
         {
-            let localDate = GetDateFromString(localVersion.buildDate)
-
-            if (localDate.getTime() < externalDate.getTime()) gameFiles = await DownloadLatest(externalVersion, x => UnzipGame(x))
-            else gameFiles = await LoadGameLocally(x => UnzipGame(x))
+            setIsLoading(false);
         }
     }
 
+    /**
+     * Downloads the latest game zip file and stores it in IndexedDB.
+     *
+     * @param { Object } date - External version metadata
+     * @param { Function } onFinish - Callback executed after download
+     */
     async function DownloadLatest(date, onFinish) 
     {
         console.log("Downloading game externally...")
@@ -71,6 +102,11 @@ export default function GameLoader({user}) {
         localStorage.setItem("gameBuildDate", JSON.stringify(date))
     }
 
+    /**
+     * Loads the cached game zip file from IndexedDB.
+     *
+     * @param { Function } onFinish - Callback executed after loading
+     */
     async function LoadGameLocally(onFinish) 
     {
         console.log("Loading game locally...")
@@ -90,6 +126,14 @@ export default function GameLoader({user}) {
         };
     }
 
+    /**
+     * Converts a build date string into a JavaScript Date object.
+     *
+     * Expected format: MM/DD/YYYY HH:mm:ss
+     *
+     * @param { string } dateString - Build date string
+     * @returns { Date } Parsed date object
+     */
     function GetDateFromString(dateString)
     {
         let dateTimeSplit = dateString.split(" ")
@@ -107,6 +151,14 @@ export default function GameLoader({user}) {
         return new Date(year, month, day, hour, minute, second)
     }
 
+    /**
+     * Unzips the Unity WebGL build and creates object URLs for required files.
+     *
+     * Extracts framework, loader, data, and wasm files,
+     * then stores them in game context.
+     *
+     * @param { Blob } gameFiles - Unity game zip file
+     */
     async function UnzipGame(gameFiles)
     {
         const zip = new JSZip();
