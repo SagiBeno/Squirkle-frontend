@@ -2,12 +2,33 @@ import * as Toast from "@radix-ui/react-toast";
 import { Card, Text, Button, Flex, IconButton, Portal } from "@radix-ui/themes";
 import { Cross2Icon } from "@radix-ui/react-icons";
 
+/**
+ * Global toast notification component.
+ * 
+ * Displays temporary success or error messages at the top of the screen.
+ * Controlled via 'toastData' state object.
+ * 
+ * @component
+ * 
+ * @param { Object } props - Component props
+ * @param { ToastData } props.toastData - Current toast state
+ * @param { Function } props.setToastData - Function to update toast state
+ *  
+ * @returns { JSX.Element } Toast notification UI
+ */
 
+/**
+ * @typedef { Object } ToastData
+ * @property { boolean } open - Controls whether the toast is visible
+ * @property { string } title - Title of the toast message
+ * @property { string } [description] - Optional detailed message
+ * @property { boolean } isError - Determines if the toast is an error (red) or success (green)
+ */
 export default function AppToast( { toastData, setToastData } ) {
 
     return (
         <Toast.Provider swipeDirection="up" style={{zIndex: 9999, padding: 0}}>
-            <Toast.Root open={toastData.open} onOpenChange={() => setToastData({ ...toastData, open: false })} className="toastStyle">
+            <Toast.Root open={toastData.open} onOpenChange={(open) => setToastData({ ...toastData, open })} className="toastStyle">
                 <Flex
                     style={{
                         position: "fixed",
