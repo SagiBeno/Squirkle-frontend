@@ -13,10 +13,36 @@ import CoinCounter from "../GameComponents/CoinCounter";
 import { useNavigate } from "react-router-dom";
 import { MdManageAccounts } from "react-icons/md";
 
+/**
+ * Main in-game navigation bar.
+ *
+ * Provides access to game dialogs such as area selection,
+ * inventory, and auction house. Displays the user's coin count,
+ * username, logout option, and admin management links when the
+ * current user has admin permissions.
+ *
+ * Switches to a mobile dropdown layout on small screens.
+ *
+ * @component
+ *
+ * @param { Object } props - Component props
+ * @param { Object | null } props.user - Current authenticated user data
+ * @param { string } [props.user.username] - Display username
+ * @param { boolean } [props.user.isAdmin] - Whether the user has admin permissions
+ * @param { Function } props.signOut - Signs out the current user
+ * @param { Function } props.setDialogState - Sets the active game dialog state
+ * @param { Function } props.setOpenDialog - Controls game dialog visibility
+ *
+ * @returns { JSX.Element }
+ */
+
 export default function Navbar({ user, signOut, setDialogState, setOpenDialog }) {
     const [isMobile, setIsMobile] = useState(false);
     const navigate = useNavigate();
 
+    /**
+     * Tracks mobile layout state based on viewport width.
+     */
     useEffect(() => {
         const mediaQuery = window.matchMedia("(max-width: 640px)")
         const onChange = (event) => setIsMobile(event.matches)
