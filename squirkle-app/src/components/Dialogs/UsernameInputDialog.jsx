@@ -4,6 +4,27 @@ import { UsernameDisabledLoadingButton, UsernameDisabledButton, UsernameConfirmB
 import { useNavigate } from "react-router-dom";
 import { BiErrorAlt } from "react-icons/bi";
 
+/**
+ * Dialog for entering a username after Google login.
+ *
+ * Shown when a Google-authenticated user does not yet have
+ * an application username. Checks username availability,
+ * saves the username, loads current user data, and redirects
+ * the user to the game page after success.
+ *
+ * @component
+ *
+ * @param { Object } props - Component props
+ * @param { boolean } props.open - Controls whether the dialog is visible
+ * @param { Function } props.setOpen - Controls dialog visibility
+ * @param { Function } props.setToastData - Updates global toast notification state
+ * @param { Function } props.existingUsername - Checks whether a username already exists
+ * @param { Object } props.userData - Firebase Google login result/user data
+ * @param { Function } props.loadCurrentUserData - Loads current user data after saving username
+ *
+ * @returns {JSX.Element} Username input dialog UI
+ */
+
 export default function UsernameInputDialog({ open, setOpen, setToastData, existingUsername, userData, loadCurrentUserData }) {
 
     let navigate = useNavigate();
@@ -11,6 +32,13 @@ export default function UsernameInputDialog({ open, setOpen, setToastData, exist
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({ content: 'The username could not be saved. Please try again or enter a different one.', error: true });
 
+    /**
+     * Validates and saves the selected username.
+     *
+     * Checks whether the username already exists, creates the username
+     * for the authenticated user, reloads user data, and redirects
+     * to the game page after successful creation.
+     */
     async function handleUsername() {
         setLoading(true);
         const existsUsername = await existingUsername(username);
@@ -43,7 +71,7 @@ export default function UsernameInputDialog({ open, setOpen, setToastData, exist
     }
 
     return (
-        <Dialog.Root open={open} >
+        <Dialog.Root open={open} onOpenChange={setOpen}>
             <Dialog.Content 
                 style={{
                     color: 'white',
