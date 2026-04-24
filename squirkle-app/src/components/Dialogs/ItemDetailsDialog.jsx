@@ -6,11 +6,63 @@ import { RiTriangleFill } from "react-icons/ri";
 import { TbSquarePercentage } from "react-icons/tb";
 import { GiPunch } from "react-icons/gi";
 import MetadataBlock from '../Cards/MetadataBlock';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { EquipWeapon, Unequip } from '../../GameHandler';
 import { HiXMark } from "react-icons/hi2";
 
+/**
+ * @typedef { Object } ItemStats
+ * @property { number } circleDamage
+ * @property { number } squareDamage
+ * @property { number } triangleDamage
+ * @property { number } critChance
+ * @property { number } critDamage
+ * @property { string[] } metadata - Metadata IDs assigned to the item
+ */
+
+/**
+ * @typedef { Object } ItemDetailsData
+ * @property { string } [name]
+ * @property { string } [description]
+ * @property { string } [imageUrl]
+ * @property { string } [type]
+ * @property { number } [knockback]
+ * @property { ItemStats } [stats]
+ * @property { "equipped" | "listed" | "" } [state]
+ */
+
+/**
+ * @typedef { Object } ListingData
+ * @property { string } id
+ * @property { string } username
+ * @property { number } price
+ */
+
+/**
+ * Dialog for displaying detailed information about an item.
+ *
+ * Shows item image, description, stats, metadata blocks, and context-specific
+ * actions such as equipping, unequipping, inspecting, or buying an item.
+ *
+ * The rendered action panel depends on the `parentDialog` value.
+ *
+ * @component
+ *
+ * @param { Object } props - Component props
+ * @param { ItemDetailsData null } props.itemData - Item data to display
+ * @param { JSX.Element | null } [props.rightPanelExtra=null] - Optional custom right panel content
+ * @param { "Inventory" | "BuyListing" | "CreateInspection" } props.parentDialog - Source dialog context
+ * @param { Object | null } [props.createListingForm=null] - Create listing form data
+ * @param { ListingData | null } [props.selectedListing=null] - Selected auction listing
+ * @param { boolean } [props.selectedListingBuyable=false] - Whether the selected listing can be bought
+ * @param { Function | null } [props.handleBuySelectedListing=null] - Function called when buying the selected listing
+ * @param { boolean } [props.buyLoading=false] - Indicates whether purchase is loading
+ * @param { boolean } [props.selectedListingLoading=false] - Indicates whether listing item details are loading
+ * @param { Function } props.setOpen - Controls dialog visibility
+ * @param { Function | null } props.GetPlayerInventory - Refreshes player inventory after equip/unequip
+ *
+ * @returns {JSX.Element} Item details dialog UI
+ */
 export default function ItemDetailsDialog({
     itemData,
     rightPanelExtra = null,
@@ -28,6 +80,12 @@ export default function ItemDetailsDialog({
     const [metadatas, setMetadatas] = useState(null)
     const itemStats = itemData?.stats || null;
 
+    /**
+     * Fetches metadata details assigned to the current item.
+     *
+     * Uses metadata IDs from `itemData.stats.metadata` and stores
+     * the loaded metadata results locally.
+     */
     async function GetMetadatas() {
         if (itemData == null || itemStats == null || itemStats.metadata == null) {
             setMetadatas(null)
@@ -43,16 +101,22 @@ export default function ItemDetailsDialog({
         setMetadatas(result)
     }
 
+    /**
+     * Equips the current item and refreshes the player inventory.
+     */
     function TryEquipItem() {
         EquipWeapon(itemData);
         setOpen(false);
-        GetPlayerInventory();
+        GetPlayerInventory?.();
     }
 
+    /**
+     * Unequips the current item and refreshes the player inventory.
+     */
     function TryUnequipItem() {
         Unequip(itemData.type);
         setOpen(false);
-        GetPlayerInventory();
+        GetPlayerInventory?.();
     }
 
     useEffect(() => {
@@ -172,24 +236,22 @@ export default function ItemDetailsDialog({
 
                         <Flex gap="1" align="center" justify="start" style={{ marginTop: "auto" }}>
                             {
-                                parentDialog == "Inventory" ?
+                                parentDialog === "Inventory" ?
                                     itemData?.state === 'equipped' ?
                                         <Button
-                                            className={`button ${true ? 'activeButton' : 'inactiveButton'}`}
-                                            disabled={!true}
+                                            className="button activeButton"
                                             radius='none'
                                             size='3'
                                             onClick={TryUnequipItem}
                                         >
-                                            Unequip Item
+                                            Unequip Item {JSON.stringify(itemData)}
                                         </Button>
                                         :
                                         itemData?.state === 'listed' ?
                                             <Text size="2" color="gray">This item is currently listed and cannot be equipped.</Text>
                                             :
                                             <Button
-                                                className={`button ${true ? 'activeButton' : 'inactiveButton'}`}
-                                                disabled={!true}
+                                                className="button activeButton"
                                                 radius='none'
                                                 size='3'
                                                 onClick={TryEquipItem}
@@ -204,7 +266,7 @@ export default function ItemDetailsDialog({
 
                         <Flex style={{ marginTop: '30px' }}>
                             {
-                                parentDialog == "BuyListing" ?
+                                parentDialog === "BuyListing" ?
                                     (selectedListing ? (
                                         <Flex direction="column" gap="2" mt="2" style={{ width: '100%' }}>
                                             <Text size="2" color="gray">Seller: {selectedListing.username}</Text>
@@ -214,7 +276,7 @@ export default function ItemDetailsDialog({
                                                     onClick={handleBuySelectedListing}
                                                     disabled={buyLoading || selectedListingLoading || !selectedListing}
                                                     style={{ width: '100%' }}
-                                                    className={`button ${(!buyLoading || selectedListingLoading || selectedListing) && 'activeButton'}`}
+                                                    className={`button ${buyLoading || selectedListingLoading || !selectedListing ? 'inactiveButton' : 'activeButton'}`}
                                                 >
                                                     {
                                                         buyLoading
@@ -229,7 +291,7 @@ export default function ItemDetailsDialog({
                                             )}
                                         </Flex>
                                     ) : null)
-                                    : parentDialog == "CreateInspection" ?
+                                    : parentDialog === "CreateInspection" ?
                                         (itemData ? (
                                             <Flex direction="column" gap="2" mt="2" style={{ width: '100%' }}>
                                                 <Text size="2" color="gray">Selected for listing</Text>
