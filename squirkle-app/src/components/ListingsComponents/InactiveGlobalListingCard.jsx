@@ -31,7 +31,9 @@ export default function InactiveGlobalListingCard({ listing, idx, handleOpenList
                 boxShadow: 'none',
                 flexDirection: 'column',
                 padding: '10px',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                borderRadius: '10px',
+                fontFamily: `"Fredoka", sans-serif`,
             }}
 
             onClick={() => handleOpenListing(listing)}
@@ -61,17 +63,17 @@ export default function InactiveGlobalListingCard({ listing, idx, handleOpenList
                     />
 
                     <Flex direction="column" style={{ gap: 4}}>
-                        <Heading size="3" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        <Heading size="3" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontFamily: `"Fredoka", sans-serif`, letterSpacing: '1px', }}>
                             {listing?.itemName}
                         </Heading>
                         {
-                            listing?.username && <Text size='2' style={{ opacity: '0.6' }}>Seller: {listing.username}</Text>
+                            listing?.username && <Text size='3' style={{ opacity: '0.7' }}>Seller: {listing.username}</Text>
                         }
 
                     </Flex>
                 </Flex>
 
-                <Flex style={{ alignItems: 'center', gap: 4, color: 'rgb(255, 233, 35)', background: 'rgba(0, 0, 0, 0.59)', padding: '5px' }}>
+                <Flex style={{ alignItems: 'center', gap: 4, color: 'rgb(255, 233, 35)', background: 'rgba(0, 0, 0, 0.59)', padding: '5px', borderRadius: '10px' }}>
                     <GiTwoCoins size={30} />
                     <Text style={{ fontSize: '20px', fontWeight: 'bold', }}>{listing?.price} </Text>
                 </Flex>
