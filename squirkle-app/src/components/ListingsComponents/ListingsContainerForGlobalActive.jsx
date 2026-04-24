@@ -40,7 +40,6 @@ export default function ListingsContainerForGlobalActive({ activeListings, handl
 
     return (
         <>
-            {Header}
             {
                 !activeListings || activeListings.length === 0
                     ?
@@ -48,20 +47,25 @@ export default function ListingsContainerForGlobalActive({ activeListings, handl
                         <Text size="5" style={{ color: 'white', margin: '10px auto 20px auto', textAlign: 'center' }}>No active listing yet.</Text>
                     </Flex>
                     :
-                    !isLow ?
-                        <ScrollArea type="auto" style={{ padding: '0px 15px 5px 15px' }}>
-                            <Flex style={{ flexDirection: 'column', gap: 4 }}>
+                    <>
+                        {Header}
+                        {
+                            !isLow ?
+                            <ScrollArea type="auto" style={{ padding: '0px 15px 5px 15px' }}>
+                                <Flex style={{ flexDirection: 'column', gap: 4 }}>
+                                    {
+                                        activeListings.map((listing, index) => <ActiveGlobalListingCard key={listing.id || index} listing={listing} idx={index} handleOpenListing={handleOpenListing} />)
+                                    }
+                                </Flex>
+                            </ScrollArea>
+                            :
+                            <Flex style={{ flexDirection: 'column', gap: 4, padding: '0px 10px' }}>
                                 {
                                     activeListings.map((listing, index) => <ActiveGlobalListingCard key={listing.id || index} listing={listing} idx={index} handleOpenListing={handleOpenListing} />)
                                 }
                             </Flex>
-                        </ScrollArea>
-                        :
-                        <Flex style={{ flexDirection: 'column', gap: 4, padding: '0px 10px' }}>
-                            {
-                                activeListings.map((listing, index) => <ActiveGlobalListingCard key={listing.id || index} listing={listing} idx={index} handleOpenListing={handleOpenListing} />)
-                            }
-                        </Flex>
+                        }
+                    </>
             }
         </>
 
