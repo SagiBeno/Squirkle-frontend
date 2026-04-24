@@ -1,5 +1,18 @@
 import { Box, Text } from '@radix-ui/themes';
 
+/**
+ * Separator component with centered text.
+ * 
+ * Displays a horizontal line with a label in the middle,
+ * commonly used separate sections (e.g., "or").
+ * 
+ * @component
+ * 
+ * @param { Object } props
+ * @param { string } props.text - Text displayed in the center of the separator
+ *  
+ * @returns { JSX.Element }
+ */
 export default function Separator( { text } ) {
     return (
         <Box 
