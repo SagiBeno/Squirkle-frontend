@@ -6,15 +6,38 @@ import * as GameEvents from "../../GameEvents.js"
 import { useContext } from 'react';
 import { GameContext } from './GameContext.jsx';
 
+/**
+ * Unity game renderer component.
+ *
+ * Initializes the Unity WebGL context, connects Unity events to
+ * JavaScript handlers, provides the game context to game events,
+ * and initializes the game once Unity has finished loading.
+ *
+ * @component
+ *
+ * @param { Object } props - Component props
+ * @param { Object } props.filePaths - Unity WebGL build file paths used by react-unity-webgl
+ * @param { Object } props.user - Current authenticated user data used to initialize the game
+ *
+ * @returns { JSX.Element } Unity game canvas
+ */
+
 export default function Game({ filePaths, user }) {
 
     const { unityProvider, sendMessage, addEventListener, isLoaded } = useUnityContext(filePaths);
     const gameContext = useContext(GameContext)
 
+    /**
+     * Provides the current React game context to Unity event handlers.
+     */
     useEffect(() => {
         GameEvents.SetGameContext(gameContext)
     }, [gameContext])
 
+    /**
+     * Registers all GameEvents as Unity event listeners.
+     * Cleans them up on unmount.
+     */
     useEffect(() => {
         const eventNames = Object.keys(GameEvents);
 
@@ -30,6 +53,9 @@ export default function Game({ filePaths, user }) {
 
     }, [addEventListener, removeEventListener, isLoaded, sendMessage])
 
+    /**
+     * Initializes the Unity game once it is fully loaded.
+     */
     useEffect(() => {
         if (!isLoaded) return
         
