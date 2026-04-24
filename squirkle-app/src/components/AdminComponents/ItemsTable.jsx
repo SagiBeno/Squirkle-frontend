@@ -1,22 +1,43 @@
-import { Table, Avatar, Code, Flex, IconButton } from '@radix-ui/themes';
+import { Table, Avatar, Code, Flex, IconButton, ScrollArea } from '@radix-ui/themes';
 import { FaEdit } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * @typedef { Object } ItemTableData 
+ * @property { string } id - Unique identifier of the item
+ * @property { string } name - Name of the item 
+ * @property { string } [imageUrl] - Optional image URL of the item
+ */
+
+/**
+ * Table component for displaying items in the admin panel.
+ * 
+ * Renders a list of items with their ID, name, and edit action.
+ * Allows selecting an item for modification.
+ * 
+ * @component
+ * 
+ * @param { Object } props - Component props
+ * @param { ItemTableData[] } - props.items - List of the items to display
+ * @param { Function } props.handleSelectedModify - Function called when an item is selected for modification
+ * 
+ * @returns { JSX.Element } Items table UI
+ */
 export default function ItemsTable( { items, handleSelectedModify } ) {
 
     return (
-        <Flex
+        <ScrollArea
+            type='auto'
             style={{
-                overflow: 'auto',
                 width: '75vw',
-                padding: '20px'
+                padding: '20px',
             }}
         >
             <Table.Root
-            className='adminTable'
+                className='adminTable'
                 style={{
                     width: '920px',
-                    margin: 'auto',
+                    margin: '10px auto',
                     boxShadow: '0px 0px 2px 1px #777777'
                 }}
             >
@@ -77,8 +98,9 @@ export default function ItemsTable( { items, handleSelectedModify } ) {
                                         }}
                                     >
                                         <Avatar 
+                                            color='gray'
                                             src={item?.imageUrl}
-                                            fallback={item?.name.charAt(0)}
+                                            fallback={item?.name?.charAt(0) || "?"}
                                             style={{
                                                 marginRight: '15px'
                                             }}
@@ -106,6 +128,6 @@ export default function ItemsTable( { items, handleSelectedModify } ) {
                     }
                 </Table.Body>
             </Table.Root>
-        </Flex>
+        </ScrollArea>
     )
 }
