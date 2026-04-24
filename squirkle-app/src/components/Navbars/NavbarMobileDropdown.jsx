@@ -10,6 +10,27 @@ import { useNavigate } from 'react-router-dom'
 import { FiLogOut } from "react-icons/fi";
 import { MdManageAccounts } from "react-icons/md";
 
+/**
+ * Mobile dropdown navigation for the in-game navbar.
+ *
+ * Provides access to game dialogs such as area selection,
+ * inventory, and auction house. Also displays admin navigation
+ * options for admin users and a logout button for authenticated users.
+ *
+ * @component
+ *
+ * @param { Object } props - Component props
+ * @param { Function } props.setDialogState - Sets the active game dialog state
+ * @param { Object | null } props.user - Current authenticated user data
+ * @param { string } [props.user.username] - Display username
+ * @param { boolean } [props.user.isAdmin] - Whether the user has admin permissions
+ * @param { Function } props.signOut - Logs out the current user
+ * @param { number } props.iconSize - Size of the menu icon
+ * @param { Function } props.setOpenDialog - Controls game dialog visibility
+ *
+ * @returns { JSX.Element }
+ */
+
 export default function NavbarMobileDropdown({ setDialogState, user, signOut, iconSize, setOpenDialog }) {
 
     const navigate = useNavigate();
