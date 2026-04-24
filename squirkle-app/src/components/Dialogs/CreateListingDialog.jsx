@@ -3,6 +3,48 @@ import { TbCancel } from "react-icons/tb";
 import { IoCheckmark } from "react-icons/io5";
 import GameSpinner from "../Spinners/GameSpinner";
 
+/**
+ * @typedef { Object} CreateListingForm
+ * @property { string } itemId
+ * @property { string } userItemId
+ * @property { number | string } price
+ */
+
+/**
+ * @typedef { Object } InventoryItem
+ * @property { string } userItemId
+ * @property { string } itemId
+ * @property { string } name
+ * @property { string } type
+ */
+
+/**
+ * Dialog for creating a new auction listing.
+ *
+ * Allows the user to:
+ * - Select an item from their inventory
+ * - Set a price
+ * - Inspect the selected item
+ * - Submit a new listing
+ *
+ * @component
+ *
+ * @param { Object} props
+ * @param { boolean} props.open - Controls dialog visibility
+ * @param { Function } props.setOpen - Updates dialog visibility
+ * @param { InventoryItem[] } props.createCandidates - Available inventory items
+ * @param { boolean } props.createCandidatesLoading - Loading state for inventory
+ * @param { Function } props.setIsCreateInspectOpen - Opens item inspection dialog
+ * @param { CreateListingForm } props.createListingForm - Current form state
+ * @param { Function } props.setCreateListingForm - Updates form state
+ * @param { InventoryItem | null } props.selectedCreateItem - Currently selected item
+ * @param { boolean } props.createLoading - Loading state for submission
+ * @param { Function } props.handleCreateFieldChange - Handles form field updates
+ * @param { Function } props.handleCreateListingSubmit - Submits the listing
+ * @param { Function } props.handleSelectButton - Changes parent tab
+ *
+ * @returns {JSX.Element}
+ */
 export default function CreateListingDialog({ open, setOpen, createCandidates, createCandidatesLoading, setIsCreateInspectOpen, createListingForm, setCreateListingForm, selectedCreateItem, createLoading, handleCreateFieldChange, handleCreateListingSubmit, handleSelectButton }) {
 
     return (
