@@ -9,8 +9,34 @@ import AllMetadataDialog from "../components/Dialogs/AllMetadataDialog";
 import DeleteAlert from "../components/DeleteAlert";
 import NavbarForAdmin from "../components/Navbars/NavbarForAdmin";
 
+/**
+ * Metadata management admin page.
+ * 
+ * Allows administrators to create, modify, and delete metadata entries.
+ * Handles metadata form state, color selection, preview rendering,
+ * and backen communication for metadata management.
+ * 
+ * @component
+ * 
+ * @param { Object } props - Component props
+ * @param { Object } props.user - Currently authenticated admin user data
+ * @param { Function } props.setShowApploader - Controls the global app loader visibility
+ * @param { Object } props.toastData - Current toast notification data
+ * @param { Function } props.setToastData - Updates toast notification data
+ * @param { Function } props.signOut - Function used to sign out the current user
+ * 
+ * @returns { JSX.Element } Metadata management page UI
+ */
 export default function MetadataManagementPage({ user, setShowAppLoader, toastData, setToastData, signOut }) {
 
+    /**
+     * @typedef { Object } Metadata
+     * @property { string } id - Unique identifier of the metadata
+     * @property { string } title - Display title of the metadata
+     * @property { string } description - Decription text
+     * @property { string } backgroundColor - Background color in HEX format
+     * @property { string } textColor - Text color in HEX format
+     */
     const [metadata, setMetadata] = useState({
         id: '',
         title: '',
@@ -35,12 +61,25 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
         setShowAppLoader(false);
     }, []);
 
+    /**
+     * Updates the mobile layout state based on window width.
+     * 
+     * Sets 'isMobile' to true if the screen width is below 400px.
+     * 
+     * @returns { void }
+     */
     function handleResize() {
         if (window.innerWidth < 400) setIsMobile(true);
         else setIsMobile(false);
     }
-    window.addEventListener('resize', handleResize);
 
+    useEffect(() => {
+        handleResize();
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    
     useEffect(() => {
 
         if (segmentedControlValue === 'modifyMetadata') {
@@ -59,6 +98,13 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
 
     }, [segmentedControlValue]);
 
+    /**
+     * Updates a field in the metadata state.
+     * 
+     * @param { keyOf Metadata | string } field - Field name to update
+     * @param { * } value - New field value 
+     * @returns { void }
+     */
     function updateMetadata(field, value) {
         setMetadata(prev => ({
             ...prev,
@@ -66,6 +112,14 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
         }));
     }
 
+    /**
+     * Create a new metadata entry.
+     * 
+     * Sends the metadata form data to the backend and resets the form
+     * after a successful creation.
+     * 
+     * @returns { void }
+     */
     function handleNewMetadata() {
 
         if (userID) {
@@ -110,6 +164,14 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
         }
     }
 
+    /**
+     * Loads metadata data for modification.
+     * 
+     * Fetches metadat by ID and fills the form with the retrieved values.
+     * 
+     * @param { Metadata } data - Selected metadata summary
+     * @returns { void } 
+     */
     function handleSelectedModify(data) {
 
         setLoading(true);
@@ -134,6 +196,14 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
             .finally(() => setLoading(false));
     }
 
+    /**
+     * Deletes the currently selected metadata.
+     * 
+     * Sends a delete request to the backend and resets the form
+     * after successful deletion.
+     * 
+     * @returns { void }
+     */
     function handleDeleteMetadata() {
 
         if (userID) {
@@ -176,6 +246,13 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
         }
     }
 
+    /**
+     * Updates an existing metadata entry.
+     * 
+     * Sends the updated metadata to the backend.
+     * 
+     * @returns { void }
+     */
     function handleModifyMetadata() {
 
         if (userID) {
