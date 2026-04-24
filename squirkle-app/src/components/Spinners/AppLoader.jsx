@@ -42,10 +42,10 @@ export default function AppLoader() {
                         border: 6px solid gray;
                         border-top-color: white;
                         border-radius: 50%;
-                        animation: loading 0.75s ease infinite;
+                        animation: app-loading 0.75s ease infinite;
                     }
 
-                    @keyframes loading {
+                    @keyframes app-loading {
                         from{
                             transform: rotate(0turn);
                         }

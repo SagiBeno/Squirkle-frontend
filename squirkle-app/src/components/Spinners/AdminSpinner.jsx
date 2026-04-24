@@ -38,10 +38,10 @@ export default function AdminSpinner() {
                         border: 6px solid gray;
                         border-top-color: white;
                         border-radius: 50%;
-                        animation: loading 0.75s ease infinite;
+                        animation: admin-loading 0.75s ease infinite;
                     }
 
-                    @keyframes loading {
+                    @keyframes admin-loading {
                         from{
                             transform: rotate(0turn);
                         }

@@ -35,10 +35,10 @@ export default function DialogSpinner() {
                         border: 6px solid gray;
                         border-top-color: white;
                         border-radius: 50%;
-                        animation: loading 0.75s ease infinite;
+                        animation: dialog-loading 0.75s ease infinite;
                     }
 
-                    @keyframes loading {
+                    @keyframes dialog-loading {
                         from{
                             transform: rotate(0turn);
                         }

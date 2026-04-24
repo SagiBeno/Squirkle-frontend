@@ -13,7 +13,7 @@
  * @example
  * <Text>Loading<GameSpinner /></Text>
  *
- * @returns { JSX.Elemen }
+ * @returns { JSX.Element }
  */
 
 export default function GameSpinner () {
@@ -37,10 +37,10 @@ export default function GameSpinner () {
             border: 6px solid gray;
             border-top-color: white;
             border-radius: 50%;
-            animation: loading 0.75s ease infinite;
+            animation: game-loading 0.75s ease infinite;
           }
 
-          @keyframes loading {
+          @keyframes game-loading {
             from{
               transform: rotate(0turn);
             }
