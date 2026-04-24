@@ -1,22 +1,47 @@
 import { Flex, Box, Text, Dialog, IconButton, TextField } from "@radix-ui/themes"
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import ItemsTable from '../AdminComponents/ItemsTable';
 import { HiXMark } from "react-icons/hi2";
 import DialogSpinner from '../Spinners/DialogSpinner';
 
+/**
+ * @typedef { Object } Item
+ * @property { string } id - Unique identifier of the item
+ * @property { string } name - Name of the item 
+ * @property { string } [imageUrl] - Optional image URL of the item
+ */
+
+/**
+ * Dialog for displaying and selecting items from the database.
+ * 
+ * Fetches all items from backend, allows searching by ID or name,
+ * and lets the user select an item for modification.
+ * 
+ * @param { Object } props
+ * @param { boolean } props.open - Controls whether the dialog is visible
+ * @param { Function } props.setOpen - Function to update dialog visibility
+ * @param { Function } props.handleSelectedModify - Function called when an item is selected
+ * 
+ * @returns { JSX.Element } Item selection dialog
+ */
 export default function AllItemsDialog({ open, setOpen, handleSelectedModify }) {
 
     const [items, setItems] = useState([]);
     const [filteredItems, setFilteredItems] = useState([]);
     const [filterValue, setFilterValue] = useState('');
-    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         getItems();
     }, []);
 
+    /**
+     * Fetches all items from the backend.
+     * 
+     * Stores the full item list and initializes the filtered list. 
+     * 
+     * @returns { void }
+     */
     function getItems() {
         setLoading(true);
         fetch('https://squirkle-backend.vercel.app/api/get-all-items')
@@ -31,14 +56,21 @@ export default function AllItemsDialog({ open, setOpen, handleSelectedModify }) 
             .finally(() => setLoading(false));
     }
 
+    /**
+     * Filteres items by search input.
+     * 
+     * Matches items by ID or name (case-insensitive).
+     * 
+     * @param { string } value - Search text
+     * @returns { void }
+     */
     function searchForItem(value) {
         if (value.trim().length === 0) {
             setFilteredItems(items);
             return;
         }
 
-        setFilteredItems(items.filter((item) => item.id.toLowerCase().includes(value) || item.name.toLowerCase().includes(value)));
-        return;
+        setFilteredItems(items.filter((item) => (item.id?.toLowerCase() ?? "").includes(value) || item.name.toLowerCase().includes(value)));
     }
 
     return (

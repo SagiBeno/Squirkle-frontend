@@ -2,12 +2,41 @@ import { Box, Dialog, Flex, IconButton, Text, ScrollArea } from '@radix-ui/theme
 import React from 'react'
 import ItemSlot from '../GameComponents/ItemSlot'
 import ItemDetailsDialog from '../Dialogs/ItemDetailsDialog'
-import { useState } from 'react'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import DialogSpinner from '../Spinners/DialogSpinner'
 import { HiXMark } from "react-icons/hi2";
-
 import '../../Modal.css';
+
+/**
+ * @typedef { Object } InventoryItem
+ * @property { string } userItemId
+ * @property { string } itemId
+ * @property { string } name
+ * @property { string } type
+ * @property { string } imageUrl
+ */
+
+/**
+ * Dialog displaying the player's inventory.
+ *
+ * Fetches:
+ * - All inventory items
+ * - Listed item IDs
+ * - Equipped items
+ *
+ * Allows:
+ * - Viewing item states (listed, equipped, available)
+ * - Opening item details dialog
+ *
+ * @component
+ *
+ * @param { Object } props
+ * @param { Object } props.user - Current authenticated user
+ * @param { Function } props.setOpen - Controls dialog visibility
+ * @param { Function } props.setDialogState - Controls parent dialog state
+ *
+ * @returns {JSX.Element}
+ */
 
 export default function InventoryDialog({ user, setOpen, setDialogState }) {
 
@@ -18,6 +47,12 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
     const [loading, setLoading] = useState(false);
     const [openItemDetailsDialog, setOpenItemDetailsDialog] = useState(false);
 
+    /**
+     * Fetches player inventory data:
+     * - Inventory items
+     * - Listed item IDs
+     * - Equipped items
+     */
     async function GetPlayerInventory() {
         setInventory([]);
         async function getData() {
@@ -74,13 +109,39 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
                     <Flex wrap="wrap" justify="start" gap="2">
                         {
                             inventory?.map((x, i) => {
-                                if (listedIds.includes(x.userItemId) || equippedItems.some(e => e.itemId === x.itemId)) {
-                                    return <ItemSlot key={x.itemId + i} itemData={x} onClick={setSelectedItem} state={'listed'} />
+                                const isListed = listedIds.includes(x.userItemId);
+                                const isEquipped = equippedItems.includes(x.userItemId);
+
+                                if (isListed) {
+                                    return (
+                                        <ItemSlot
+                                            key={x.userItemId ?? x.itemId + i}
+                                            itemData={x}
+                                            onClick={setSelectedItem}
+                                            state="listed"
+                                        />
+                                    );
                                 }
-                                if (equippedItems.includes(x.userItemId) || equippedItems.some(e => e.userItemId === x.userItemId)) {
-                                    return <ItemSlot key={x.itemId + i} itemData={x} onClick={setSelectedItem} state={'equipped'} />
+                            
+                                if (isEquipped) {
+                                    return (
+                                        <ItemSlot
+                                            key={x.userItemId ?? x.itemId + i}
+                                            itemData={x}
+                                            onClick={setSelectedItem}
+                                            state="equipped"
+                                        />
+                                    );
                                 }
-                                return <ItemSlot key={x.itemId + i} itemData={x} onClick={setSelectedItem} state={''} />
+                            
+                                return (
+                                    <ItemSlot
+                                        key={x.userItemId ?? x.itemId + i}
+                                        itemData={x}
+                                        onClick={setSelectedItem}
+                                        state=""
+                                    />
+                                );
                             })
                         }
                     </Flex>

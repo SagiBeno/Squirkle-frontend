@@ -1,1 +1,0 @@
-# Squirkle-frontend

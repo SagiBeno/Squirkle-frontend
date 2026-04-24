@@ -1,9 +1,21 @@
 import { Flex, Text } from '@radix-ui/themes';
 
+/**
+ * Home page card component.
+ * 
+ * Displays a feature card with icon, title, and description.
+ * 
+ * @component
+ * 
+ * @param { Object } props - Component props
+ * @param { HomePageCardData } props.data - Card data to display
+ * 
+ * @returns { JSX.Element } Home page card UI
+ */
 export default function HomePageCard({ data }) {
     return (
         <Flex className='homePageCard'>
-            {data?.image}
+            {data?.image ?? null}
 
             <Flex
                 style={{

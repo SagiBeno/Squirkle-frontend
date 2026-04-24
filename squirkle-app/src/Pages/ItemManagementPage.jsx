@@ -13,8 +13,47 @@ import CheckboxCardsForItemPage from '../components/Cards/CheckboxCardsForItemPa
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import NavbarForAdmin from '../components/Navbars/NavbarForAdmin';
 
+/**
+ * Item management admin page
+ * 
+ * Allows administrators to create, modify, and delete game items.
+ * Handles item form state, image upload/deletion, metadata selection,
+ * item validation, and backend requests for item managment.
+ * 
+ * @component
+ * 
+ * @param { Object } props - Component props
+ * @param { Object } props.user - Currently authenticated admin user data
+ * @param { Object } props.toastData - Current toast notification data
+ * @param { Function } props.setToastData - Updates toast notification data
+ * @param { Function } props.setShowApploader - Controls the global app loader visibility
+ * @param { Function } props.signOut - Function used to sign out the current user
+ * 
+ * @returns { JSX.Element } Item magamenet page UI
+ */
 export default function ItemManagementPage({ user, toastData, setToastData, setShowAppLoader, signOut }) {
 
+    /**
+     * @typedef { Object } ItemFormData
+     * @property { string } [itemID] - Existing item  ID, used when modifying an item
+     * @property { string } name - Item name
+     * @property { string } type - Item type, for example Weapon or Armor
+     * @property { string } description - Item description
+     * @property { string } imageUrl - Uploaded item image URL
+     * @property { string } [imageName] - Uploaded image filename
+     * @property { string } knockback - Item knockback value
+     * @property { ItemStats } stats - Item stat values
+     */
+
+    /**
+     * @typedef { Object } ItemStats
+     * @property { number } circleDamage - Damage value against circle enemies
+     * @property { number } squareDamage - Damage value against square enemies
+     * @property { number } triangleDamage - Damage value against triangle enemies
+     * @property { number } critChance - Critical hit chance percentage
+     * @property { string } critDamage - Critical damage multipier
+     * @property { Array<string> } metadata - List of selected metadata IDs
+     */
     const [itemData, setItemData] = useState({
         name: "",
         type: "",
@@ -55,6 +94,14 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
         getMetadata();
     }, []);
 
+    /**
+     * Fetches all available metadata records from the backend.
+     * 
+     * Stores the result both as the full metadata list and
+     * as the initially filtered metadata list.
+     * 
+     * @returns { void }
+     */
     function getMetadata() {
         setLoading(true);
         fetch('https://squirkle-backend.vercel.app/api/get-all-metadatas')
@@ -95,6 +142,15 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
 
     }, [segmentedControlValue]);
 
+    /**
+     * Uploads an item image to the backend.
+     * 
+     * On successful upload, stores the returned image URL and image filename
+     * in the item form state.
+     * 
+     * @param { File } file - Image file selected by the user
+     * @returns { void }
+     */
     function uploadImage(file) {
 
         if (userID) {
@@ -126,6 +182,13 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
         }
     }
 
+    /**
+     * Deletes the currently selected item image from the backend.
+     * 
+     * Clears the image URL from the item form state after successful deletion.
+     * 
+     * @returns { void }
+     */
     function deleteImage() {
 
         if (userID) {
@@ -155,6 +218,14 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
         } else return;
     }
 
+    /**
+     * Creates a new item using the current item form data.
+     * 
+     * Converts numeric string fields to numbers before sending the request
+     * and reset the form after a successful creation.
+     * 
+     * @returns { void }
+     */
     function handleNewItem() {
 
         if (userID) {
@@ -212,6 +283,14 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
         } else return;
     }
 
+    /**
+     * Handles image file selection from the dropzone.
+     * 
+     * Stores the selected file and starts the upload process.
+     * 
+     * @param { File[] } acceptedFiles - Files accepted by the dropzone
+     * @returns { void }
+     */
     const onDrop = useCallback((acceptedFiles) => {
         const file = acceptedFiles?.[0];
         if (!file) return;
@@ -229,6 +308,13 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
         maxFiles: 1,
     });
 
+    /**
+     * Updates a top-level field in the item form data.
+     * 
+     * @param { keyof ItemFormData | string } field - Name of the filed to update 
+     * @param { * } value - New field value
+     * @returns { void } 
+     */
     function updateItemField(field, value) {
         setItemData(prev => ({
             ...prev,
@@ -236,6 +322,16 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
         }));
     }
 
+    /**
+     * Loads the selected item data for modification.
+     * 
+     * Fetches the full item data from the backend, converts editable numeric
+     * fields to strings, and fills the form with the selected item values.
+     * 
+     * @param { Object } item - Selected item summary
+     * @param { string } item.id - ID of the selected item
+     * @returns { void } 
+     */
     function handleSelectedModify(item) {
 
         setLoading(true);
@@ -271,6 +367,18 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
             .finally(() => setLoading(false));
     }
 
+    /**
+     * Updates a numeric field after validating its value and boundaries.
+     * 
+     * Can update either a root-level item field or a field inside 'stats'.
+     * 
+     * @param { "root" | "stats" } section - Section of the item data to update 
+     * @param { string } field - Field name to update 
+     * @param { string | number } rawValue - Raw input value 
+     * @param { number } min - Minimum allowed value 
+     * @param { number } max - Maximum allowed value 
+     * @returns { void }
+     */
     function updateNumberField(section, field, rawValue, min, max) {
 
         const value = Number(rawValue);
@@ -288,6 +396,13 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
         }
     }
 
+    /**
+     * Update a field inside the item stats object. 
+     * 
+     * @param { string } field - Stats field name to update 
+     * @param { * } value - New field value
+     * @returns { void } 
+     */
     function updateStatsField(field, value) {
 
         setItemData(prev => ({
@@ -299,6 +414,18 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
         }));
     }
 
+    /**
+     * Handles decimal input changes for knokback and critical damage fields.
+     * 
+     * Allows empty values while editing, validates decimal format,
+     * and ensures the values remains within the provided range.
+     * 
+     * @param { "critDamage" | "knockback" } field - Decimal field to update 
+     * @param { string } value - Raw input value 
+     * @param { number } min - Minimum allowed value
+     * @param { number } max - Maximum allowed value
+     * @returns { void }
+     */
     function handleDecimalChange(field, value, min, max) {
 
         if (value === '' && field === 'critDamage') {
@@ -331,6 +458,12 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
         }
     }
 
+    /**
+     * Adds a mateadata ID to the selected item metadata list.
+     * 
+     * @param { string } value - Metadata ID to add
+     * @returns { void } 
+     */
     function addMetadata(value) {
         setItemData(prev => ({
             ...prev,
@@ -344,6 +477,12 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
         }));
     }
 
+    /**
+     * Removes a metadata ID from the selected item metadata list.
+     * 
+     * @param { string } value - Metadata ID to remove
+     * @returns { void }
+     */
     function removeMetadata(value) {
         setItemData(prev => ({
             ...prev,
@@ -354,6 +493,14 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
         }));
     }
 
+    /**
+     * Deletes the currently selected item.
+     * 
+     * Sends a delete request to the backend and resets the form
+     * after successful deletion.
+     * 
+     * @returns { void }
+     */
     function handleDeleteItem() {
 
         if (userID) {
@@ -397,13 +544,21 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                     }
                 })
                 .catch((error) => {
-                    console.warn(errorJSON);
+                    console.warn(error);
                     setToastData({ open: true, title: 'Deletion status', description: 'An error occurred during the request. Please try again.', isError: true });
                 })
                 .finally(() => setLoading(false));
         } else return;
     }
 
+    /**
+     * Updates the curretnly selected item.
+     * 
+     * Converts editable numeric string fields to numbers before sending
+     * the update request to the backend.
+     * 
+     * @returns { void }
+     */
     function handleModifyItem() {
 
         if (userID) {
@@ -436,7 +591,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                     if (resJSON.status === 200) setSegmentedControlValue('newItem');
                 })
                 .catch((error) => {
-                    console.warn(errorJSON);
+                    console.warn(error);
                     setToastData({ open: true, title: 'Status of the amendment', description: 'An error occurred during the request. Please try again.', isError: true });
                 })
                 .finally(() => setLoading(false));
@@ -444,6 +599,14 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
 
     }
 
+    /**
+     * Filters available metadata records by search text.
+     * 
+     * Searches metadata by ID, title, background color, or text color.
+     * 
+     * @param { string } value - Seacrh text 
+     * @returns { void }
+     */
     function searchForMetadata(value) {
 
         if (value.length === 0) return setFilteredMetadata(allMetadata);

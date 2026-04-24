@@ -9,11 +9,55 @@ import AuctionHouseDialog from '../components/Dialogs/AuctionHouseDialog';
 import { GameContext } from '../components/GameComponents/GameContext';
 import GameLoader from '../components/GameComponents/GameLoader'
 
+/**
+ * Default game creen state.
+ * 
+ * @constant { number }
+ */
 export const GAME_STATE = 0
+
+/**
+ * Dialog state for the are selector
+ * 
+ * @constant { number }
+ */
 export const AREA_SELECTOR_STATE = 1
+
+/**
+ * Dialog state for the inventory.
+ * 
+ * @constant { number }
+ */
 export const INVENTORY_STATE = 2
+
+/**
+ * Dialog state for the auction house.
+ * 
+ * @constant { number }
+ */
 export const AUCTION_HOUSE_STATE = 3
 
+/**
+ * Game page component.
+ * 
+ * Displays the main game page, initializes player coin data, 
+ * provides game-related state through 'GameContext', and handles
+ * opening game dialogs such as area selector, inventory, and auction house.
+ * 
+ * Redirect unauthenticated users to the home page.
+ * 
+ * @component
+ * 
+ * @param { Object } props - Component props
+ * @param { Object | null } props.user - Currently authenticated user data
+ * @param { Function } props.signOut - Function used to sign out the current user
+ * @param { Function } props.setShowApploader - Controls the global app loader visibility
+ * @param { Object } props.toastData - Current toast notification data
+ * @param { Function } props.setToastData - Updates toast notification data
+ * @param { Function } props.refreshUser - Reloads the current user's application data
+ * 
+ * @returns { JSX.Element } Game page UI 
+ */
 export default function GamePage({ user, signOut, setShowAppLoader, toastData, setToastData, refreshUser }) {
 
     const [dialogState, setDialogState] = useState(GAME_STATE);
@@ -32,6 +76,14 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
         ResetPlayerCoins(user.coinCount)
     }, [user])
 
+    /**
+     * Renders the currently selected game dialog.
+     * 
+     * Uses 'dialogState' to decide whether to render the area selector,
+     * inventory, auction house, or no dialog.
+     * 
+     * @returns { JSX.Element | null } Current dialog component, or null if no dialog is selected
+     */
     function RenderCurrentDialog() {
         switch (dialogState) {
             case AREA_SELECTOR_STATE:

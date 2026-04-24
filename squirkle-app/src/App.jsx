@@ -14,6 +14,12 @@ import GamePage from './Pages/GamePage';
 import MetadataManagementPage from './Pages/MetadataManagementPage';
 import AppLoader from './components/Spinners/AppLoader';
 
+/**
+ * Extracts the Firebase user object from different possible authentication result structures.
+ * 
+ * @param { Object | null } userObject - Firebase user object or nested authentication result object
+ * @returns { Object | null } Firebase user object if found, otherwise null
+ */
 function getFirebaseUser(userObject) {
   if (userObject?.uid) return userObject;
   if (userObject?.user?.uid) return userObject.user;
@@ -21,10 +27,25 @@ function getFirebaseUser(userObject) {
   return null;
 }
 
+/**
+ * Gets the Firebase user ID from a user or authentication result object
+ * 
+ * @param { Object | null } userObject - Firebase user object or nested authentication result object
+ * @returns { Object | null } Firebase user ID, or null if it cannot be found
+ */
 function getUserIdFromUserObject(userObject) {
   return getFirebaseUser(userObject)?.uid ?? null;
 }
 
+/**
+ * Fetches the coin count of a user from the backend.
+ * 
+ * Returns 0 if the user ID is missing, the request fails,
+ * or the response does not contain a valid coun coint.
+ * 
+ * @param { string } userId - Fireabse user ID
+ * @returns { Promise<number> } User coin count
+ */
 async function getCoinCount(userId) {
   if (!userId) return 0;
 
@@ -39,6 +60,12 @@ async function getCoinCount(userId) {
   }
 }
 
+/**
+ * Fetches the admin permission status of a user from the backend.
+ * 
+ * @param { string } userId - Firebase user ID 
+ * @returns { Promise<boolean> } True if the user is an admin, otherwise false
+ */
 async function getPermissions(userId) {
   if (!userId) return false;
 
@@ -52,12 +79,28 @@ async function getPermissions(userId) {
   }
 }
 
+/**
+ * Fetches the username assigned to a Firebase user ID.
+ * 
+ * @param { string } userId - Firebase user ID 
+ * @returns { Promise<boolean | undefined> } USername if found
+ */
 async function getUsername(userId) {
   const resultJSON = await fetch(`https://squirkle-backend.vercel.app/api/get-username/${userId}`);
   const result = await resultJSON.json();
   return result?.username;
 }
 
+/**
+ * Main application component.
+ * 
+ * Initalizes Firebase, manages global authentication state,
+ * loads current user data, handles login, registration, logout,
+ * routing, toast messages, username dialog state, and global loadin screen visibility.
+ * 
+ * @component
+ * @returns { JSX.Element } Application root component
+ */
 function App() {
   const firebaseApp = initializeApp({
     apiKey: import.meta.env.VITE_FIREBASE_apiKey,
@@ -76,6 +119,18 @@ function App() {
   const [showAppLoader, setShowAppLoader] = useState(true);
   let navigate = useNavigate();
 
+  /**
+   * Loads the currently authenticated user's application data.
+   * 
+   * Extracts the Firebase user ID, retrieves the username, coin count,
+   * and permission status from the backend, then stores the combined user data
+   * int the application state.
+   * 
+   * @param { Object } userObject - Firabase user object or authentication result object
+   * @param { Object } [options={}] - Optional loading configuration
+   * @param { string } [options.username] - Username to user instead of fetching it from the backend
+   * @return { Promise<Object | null> } Loaded user data, or null if loading fails
+   */
   const loadCurrentUserData = useCallback(async (userObject, options = {}) => {
     const firebaseUser = getFirebaseUser(userObject);
     const userId = getUserIdFromUserObject(firebaseUser);
@@ -122,6 +177,17 @@ function App() {
     return unsubscribe
   }, [auth, navigate, loadCurrentUserData]);
 
+  /**
+   * Handles user login with emai and password.
+   * 
+   * Signs in the user with Firebase Authentication,
+   * loads the user's application data, and navigates to the game page.
+   * 
+   * @param { Object } data - Login form data
+   * @param { string } data.email - User email address
+   * @param { string } data.password - User password 
+   * @returns { Promise<void> }
+   */
   async function handleLoginWithEmailAndPW(data) {
     setLoading(true);
     const email = data?.email;
@@ -145,6 +211,15 @@ function App() {
     }
   }
 
+  /**
+   * Handles user login with Google.
+   * 
+   * Sings in the user using a Google popup. If the user already has
+   * a username, their application data is loaded and they are redirected
+   * to the game page. Otherwise, the username dialog is opened.
+   * 
+   * @returns { PRomise<void> }
+   */
   async function handleLoginWithGoogle() {
     const result = await signInWithPopup(auth, new GoogleAuthProvider());
     const userId = result?.user?.uid;
@@ -159,12 +234,25 @@ function App() {
     }
   }
 
+  /**
+   * Signs out the current user.
+   * 
+   * Clears the current user staet and redirects the user to the home page.
+   * 
+   * @returns { void }
+   */
   function signOut() {
     auth.signOut();
     setUser(null);
     navigate('/');
   }
 
+  /**
+   * Checks wether a username already exists.
+   * 
+   * @param { string } username - Username to check 
+   * @returns { Promise<boolean> } True if the username already exists, otherwise false
+   */
   async function existingUsername(username) {
 
     const resultJSON = await fetch(`https://squirkle-backend.vercel.app/api/get-username-exists/${username}`);
@@ -173,6 +261,19 @@ function App() {
     return exists;
   }
 
+  /**
+   * Handles user registration with email, password, and username.
+   * 
+   * Checks wether the username already exists, creates a Firebase user,
+   * strores the username in the backend, loads the new user data,
+   * and redirects the user to the game page.
+   * 
+   * @param { Object } data - Registration form data 
+   * @param { string } data.email - User email address
+   * @param { string } data.password - User password
+   * @param { string } data.username - Chosen username
+   * @returns { Promise<void> }
+   */
   async function handleRegistration(data) {
     setLoading(true);
     const email = data?.email;

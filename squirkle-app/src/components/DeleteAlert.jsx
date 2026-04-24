@@ -2,6 +2,27 @@ import { AlertDialog, Button, Flex, DataList, Code } from "@radix-ui/themes";
 import { FaTrash } from "react-icons/fa";
 import { TbCancel } from "react-icons/tb";
 
+/**
+ * Confirmation dialog for deleting an entity.
+ * 
+ * Displays a modal dialog with basic information about the item
+ * (ID and name/title) and asks the user to confirm deletion.
+ * 
+ * Used across admin pages for deleting items, metadata, etc.
+ * 
+ * @component
+ * 
+ * @param { Object } props - Component props
+ * @param { boolean } props.open - Controls whether the dialog is visible
+ * @param { Function } props.setOpen - Function to update dialog visibility
+ * @param { Object } props.data - Data object containing item details
+ * @param { string } props.itemID - Identifier of the item details
+ * @param { Function } props.handleDelete - Function executed when deletion is confirmed
+ * @param { string } props.description - Description text shown in the dialog
+ * @param { string } props.title - Title of the dialog
+ *   
+ * @returns { JSX.Element } Delete confirmation dialog
+ */
 export default function DeleteAlert({ open, setOpen, data, itemID, handleDelete, description, title }) {
 
     return (
@@ -20,7 +41,7 @@ export default function DeleteAlert({ open, setOpen, data, itemID, handleDelete,
             >
                 <AlertDialog.Title>{title}</AlertDialog.Title>
                 <AlertDialog.Description size="3">
-                    Are you sure you want to delete the following item?
+                    {description}
                 </AlertDialog.Description>
 
                 <Flex

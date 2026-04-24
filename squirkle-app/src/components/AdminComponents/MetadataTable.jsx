@@ -1,13 +1,33 @@
-import { Table, Avatar, Code, Flex, IconButton } from '@radix-ui/themes';
+import { Table, Avatar, Code, Flex, IconButton, ScrollArea } from '@radix-ui/themes';
 import { FaEdit } from "react-icons/fa";
-import { useNavigate } from 'react-router-dom';
+
+/**
+ * @typedef { Object } MetadataTableData
+ * @property { string } id - Unique identifier of the metadata
+ * @property { string } title - Display title of the metadata
+ */
+
+/**
+ * Table component for displaying metadata entries in the admin panel.
+ * 
+ * Renders a list of metadata items with their ID and title,
+ * and allows selecting an entry for modification.
+ * 
+ * @component
+ * 
+ * @param { Object } props - Component props
+ * @param { MetadataTableData[] } - props.metadata - List of metadata entries
+ * @param { Function } props.handleSelectedModify - Function called when a metadata entry is selected
+ * 
+ * @returns { JSX.Element } Metadata table UI
+ */
 
 export default function MetadataTable( { metadata, handleSelectedModify } ) {
 
     return (
-        <Flex
+        <ScrollArea
+            type='auto'
             style={{
-                overflow: 'auto',
                 width: '75vw',
                 padding: '20px',
                 margin: '0 auto'
@@ -100,6 +120,6 @@ export default function MetadataTable( { metadata, handleSelectedModify } ) {
                     }
                 </Table.Body>
             </Table.Root>
-        </Flex>
+        </ScrollArea>
     )
 }

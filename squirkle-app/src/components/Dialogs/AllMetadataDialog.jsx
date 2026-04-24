@@ -1,23 +1,45 @@
 import { Flex, Box, Text, Dialog, IconButton, TextField } from "@radix-ui/themes"
-import { useState } from "react";
-import { useEffect } from "react";
-import ItemsTable from '../AdminComponents/ItemsTable';
+import { useState, useEffect } from "react";
 import { HiXMark } from "react-icons/hi2";
 import DialogSpinner from '../Spinners/DialogSpinner';
 import MetadataTable from "../AdminComponents/MetadataTable";
+
+/**
+ * @typedef { import('../Cards/MetadataBlock').Metadata } Metadata
+ */
+
+/**
+ * Dialog for displaying and selecting metadata entries.
+ * 
+ * Fetches all metadata from the backend, allows searching,
+ * and lets the user select one for modification.
+ * 
+ * @param { Object } props
+ * @param { boolean } props.open - Controls whether the dialog is visible
+ * @param { Function } props.setOpen - Function to update dialog visibility
+ * @param { Function } props.handleSelectedModify - Function called when a metadata entry is selected
+ * 
+ * @returns { JSX.Element } Metadata selection dialog
+ */
 
 export default function AllMetadataDialog({ open, setOpen, handleSelectedModify }) {
 
     const [metadata, setMetadata] = useState([]);
     const [filteredMetadata, setFilteredMetadata] = useState([]);
     const [filterValue, setFilterValue] = useState('');
-    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         getMetadata();
     }, []);
 
+    /**
+     * Fetches all metadata entries from the backend.
+     * 
+     * Initializes both full and filtered metadata lists. 
+     * 
+     * @returns { void }
+     */
     function getMetadata() {
         setLoading(true);
         fetch('https://squirkle-backend.vercel.app/api/get-all-metadatas')
@@ -32,14 +54,21 @@ export default function AllMetadataDialog({ open, setOpen, handleSelectedModify 
             .finally(() => setLoading(false));
     }
 
-    function searchForItem(value) {
+    /**
+     * Filteres metadata based on search input.
+     * 
+     * Matches by id, title, or description (case-insensitive).
+     * 
+     * @param { string } value - Search text
+     * @returns { void }
+     */
+    function searchForMetadata(value) {
         if (value.trim().length === 0) {
             setFilteredMetadata(metadata);
             return;
         }
 
-        setFilteredMetadata(metadata.filter((data) => data.id.toLowerCase().includes(value) || data.title.toLowerCase().includes(value) || data.description.toLowerCase().includes(value)));
-        return;
+        setFilteredMetadata(metadata.filter((data) => (data?.id?.toLowerCase() ?? "").includes(value) || data.title.toLowerCase().includes(value) || data.description.toLowerCase().includes(value)));
     }
 
     return (
@@ -96,7 +125,7 @@ export default function AllMetadataDialog({ open, setOpen, handleSelectedModify 
                                 onChange={(e) => {
                                     const value = e.target.value;
                                     setFilterValue(value);
-                                    searchForItem(value.toLowerCase());
+                                    searchForMetadata(value.toLowerCase());
                                 }}
                                 style={{ marginBottom: '12px' }}
                             />

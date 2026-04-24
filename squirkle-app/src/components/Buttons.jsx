@@ -2,6 +2,16 @@ import { Spinner, Button, DropdownMenu } from "@radix-ui/themes";
 import { EnterIcon, PersonIcon } from "@radix-ui/react-icons";
 import { FaGoogle } from 'react-icons/fa'
 
+/**
+ * Collection of ceusable button components.
+ * 
+ * Provides styled button variants used across the application,
+ * including login, registration, navbar, and admin actions.
+ * 
+ * These components wrap Radix UI Button with predefined styles
+ * and icons for consistent UI behavior.
+ */
+
 export function DisabledLoadingButton({ text }) {
     return (
         <Button
@@ -21,6 +31,15 @@ export function DisabledLoadingButton({ text }) {
     )
 }
 
+/**
+ * Primary action button with enter icon
+ * 
+ * Used for actions like login and registration.
+ * 
+ * @param { Object } props 
+ * @param { string } props.text - Button label
+ * @param { Function } props.onClick - Click handler
+ */
 export function EnterButton({ text, onClick }) {
     return (
         <Button
@@ -76,6 +95,15 @@ export function OrButton({ text, onClick }) {
     )
 }
 
+/**
+ * Google login button
+ * 
+ * Triggers authentication via google provider.
+ * 
+ * @param { Object } props
+ * @param { string } props.text - Button label
+ * @param { Function } props.onClick - Click handler 
+ */
 export function GoogleLoginButton({ text, onClick }) {
     return (
         <Button
@@ -149,6 +177,15 @@ export function UsernameConfirmButton({ text, onClick }) {
     )
 }
 
+/**
+ * Button used in the navigation bar.
+ * 
+ * Displays an icon and triggers navigation or actions.
+ * 
+ * @param { Object } props
+ * @param { JSX.ELement } props.icon - Icon element
+ * @param { Function } [props.onClick] - Click handler 
+ */
 export function NavbarButton( { icon, onClick = null } ) {
     return (
         <Button
@@ -194,6 +231,13 @@ export function DropdownNavbarButton({icon}) {
     )
 }
 
+/**
+ * Logout button displayed in the navigation UI.
+ * 
+ * @param { Object } props
+ * @param { string } props.text - Button label
+ * @param { Function } props.onClick - Logout handler 
+ */
 export function LogoutButton({ text, onClick }) {
     return (
         <Button

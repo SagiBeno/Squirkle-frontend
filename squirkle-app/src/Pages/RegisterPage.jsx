@@ -6,15 +6,45 @@ import Separator from '../components/Separator';
 import { useNavigate } from "react-router-dom";
 import { InfoCircledIcon, ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
+/**
+ * Registration page component.
+ * 
+ * Displays the registration form, handles local from state,
+ * validates email and password fields, and redirects authenticated users
+ * to the game page.
+ * 
+ * The component allows users to register with eamil and password
+ * or continue with Google login.
+ * 
+ * @component
+ * 
+ * @param { Object } props - Component props
+ * @param { boolean } props.loading - Indicates wether the registration process is currently loading
+ * @param { Function } props.handleRegistration - Function called when the user submits the registration form
+ * @param { Function } props.handleLoginWithGoogle - Function called when the user chooses Google login
+ * @param { Function } props.setShowAppLoader - Function used to contol the global app loader visibility
+ * @param { Object | null } props.user - Currently authenticated user object, or null if no user is logged in
+ *  
+ * @returns { JSX.Element } Registration page UI
+ */
+
 export default function RegisterPage({ loading, handleRegistration, handleLoginWithGoogle, setShowAppLoader, user }) {
 
     let navigate = useNavigate();
+
+    /**
+     * @typedef { Object } RegistrationFormData
+     * @property { string } email - User email address
+     * @property { string } username - User chosen username
+     * @property { string } password - User password
+     * @property { string } confirmPassword - Password confirmation value
+     * @property { string } type - User role/type, defaults to "user"
+     */
     const [formData, setFormData] = useState({
         email: "",
         username: "",
         password: "",
         confirmPassword: "",
-        fullName: "",
         type: "user"
     });
     const [validEmailFormat, setValidEmailFormat] = useState(true);
@@ -30,6 +60,15 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
         setShowAppLoader(false);
     }, []);
 
+    /**
+     * Validates the format of an email address.
+     * 
+     * Checks wether the email contains no spaces, includes exactly one "@",
+     * has a domain part, and contains a valid dot-separated domain suffix.
+     * 
+     * @param { string } email - Email address to validate
+     * @returns { boolean } True if the email format is valid, otherwise false
+     */
     function isValidEmailFormat(email) {
         if (!email) return false;
         if (email.includes(' ') || !email.includes('@')) return false;

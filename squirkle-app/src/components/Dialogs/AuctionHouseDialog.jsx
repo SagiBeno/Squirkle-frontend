@@ -8,11 +8,36 @@ import ListingsComponentsForUser from '../ListingsComponents/ListingsContainerFo
 import ListingsContainerForGlobalActive from '../ListingsComponents/ListingsContainerForGlobalActive';
 import ListingsContainerForGlobalInactive from '../ListingsComponents/ListingsContainerForGlobalInactive';
 import { ResetPlayerCoins } from '../../GameEvents';
+import '../../Modal.css';
+
+/**
+ * @typedef { Object } Listing
+ * @property { string } id
+ * @property { string } itemId
+ * @property { string } itemName
+ * @property { string } itemImageUrl
+ * @property { number } price
+ * @property { string } userId
+ * @property { boolean } active
+ */
+
+/**
+ * @typedef { Object } CreateListingForm
+ * @property { string } itemId
+ * @property { string } userItemId
+ * @property { string } price
+ */
 
 const API_BASE_URL = 'https://squirkle-backend.vercel.app/api'
 
-import '../../Modal.css';
-
+/**
+ * Fetch wrapper that parses JSON and throws on error response.
+ *
+ * @param { string } url
+ * @param { RequestInit } [options]
+ * @returns { Promise<any> }
+ * @throws { Error } When response is not OK
+ */
 async function fetchJsonOrThrow(url, options) {
     console.log(`Fetching: ${url}`, options || {});
     const response = await fetch(url, options);
@@ -24,6 +49,30 @@ async function fetchJsonOrThrow(url, options) {
 
     return data;
 }
+
+/**
+ * Auction house dialog component.
+ *
+ * Handles:
+ * - Displaying global and user listings
+ * - Creating new listings
+ * - Buying listings
+ * - Viewing item details
+ *
+ * Acts as the central controller for auction-related UI and logic.
+ *
+ * @component
+ *
+ * @param { Object } props
+ * @param { Object } props.user - Current authenticated user
+ * @param { Object } props.toastData - Current toast notification data
+ * @param { Function } props.setToastData - Updates toast notification data
+ * @param { Function } props.setOpen - Controls dialog visibility
+ * @param { Function } props.setDialogState - Controls parent dialog state
+ * @param { Function } props.refreshUser - Refreshes user data
+ *
+ * @returns {JSX.Element}
+ */
 
 export default function AuctionHouseDialog({ user, toastData, setToastData, setOpen, setDialogState, refreshUser }) {
     const [buttonsValue, setButtonsValue] = useState([
@@ -69,23 +118,40 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
     const [buyLoading, setBuyLoading] = useState(false);
     const [isLow, setIsLow] = useState(false);
     const userIdentifier = user?.username || user?.name || user?.email || 'You';
-    const userId = user?.user?.uid || user?.uid || user?.user?.user?.uid || null;
+    const userId = user?.user?.uid || null;
     const selectedCreateItem = createCandidates.find((item) => item.userItemId === createListingForm.userItemId) || null;
 
-
+    /**
+     * Updates the mobile layout state based on window width.
+     * 
+     * Sets 'isLow' to true if the screen height is below 500px.
+     * 
+     * @returns { void }
+     */
     function handleResize () {
         if (window.innerHeight < 500) {
             setIsLow(true);
         }
         else setIsLow(false);
     }
-    window.addEventListener('resize', handleResize);
+    
+    useEffect(() => {
+        handleResize();
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         handleResize();
         handleSelectButton('userListings');
     }, []);
 
+    /**
+    * Fetches listings created by the current user.
+    *
+    * Separates active and inactive listings.
+    */
     function getUserListings() {
         if (!userId) return;
 
@@ -105,6 +171,9 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
             .finally(() => setLoading(false));
     }
 
+    /**
+     * Fetches all active listings except the user's own.
+     */
     function getGlobalActiveListings() {
 
         setLoading(true);
@@ -121,6 +190,9 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
             .finally(() => setLoading(false));
     }
 
+    /**
+     * Fetches all inactive listings except the user's own.
+     */
     function getPreviousListings() {
 
         setLoading(true);
@@ -137,6 +209,11 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
             .finally(() => setLoading(false));
     }
 
+    /**
+     * Handles tab selection and triggers corresponding data fetch.
+     *
+     * @param { string } value - Selected tab value
+     */
     function handleSelectButton(value) {
         setActiveTab(value);
 
@@ -146,6 +223,11 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
         if (value === 'globalListings') getGlobalActiveListings();
     }
 
+    /**
+    * Opens a listing and loads its item details.
+    *
+    * @param { Listing } listing
+    */
     function handleOpenListing(listing) {
 
         if (!listing?.itemId) return;
@@ -177,6 +259,15 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
             .finally(() => setSelectedListingLoading(false));
     }
 
+    /**
+     * Handles changes in the create listing form fields.
+     *
+     * Special case: when `userItemId` changes, it also updates the related `itemId`
+     * based on the selected candidate item.
+     *
+     * @param { string } fieldName - Name of the form field
+     * @param { string } fieldValue - New value of the field
+     */
     function handleCreateFieldChange(fieldName, fieldValue) {
         if (fieldName === 'userItemId') {
             const selectedItem = createCandidates.find((candidate) => candidate.userItemId === fieldValue);
@@ -191,6 +282,11 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
         setCreateListingForm(prev => ({ ...prev, [fieldName]: fieldValue }));
     }
 
+    /**
+     * Prepares data for creating a new listing.
+     *
+     * Fetches inventory and filters available items.
+     */
     async function handleCreateListing() {
         if (!userId) {
             return;
@@ -230,6 +326,9 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
         }
     }
 
+    /**
+    * Submits a new listing to the backend.
+    */
     function handleCreateListingSubmit() {
 
         if (!userId || !createListingForm.itemId || !createListingForm.userItemId || !createListingForm.price) {
@@ -264,6 +363,9 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
             .finally(() => setCreateLoading(false));
     }
 
+    /**
+    * Purchases the selected listing.
+    */
     function handleBuySelectedListing() {
         if (!selectedListing || !userId) return;
 

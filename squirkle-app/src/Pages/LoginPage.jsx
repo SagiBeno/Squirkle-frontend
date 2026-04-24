@@ -5,6 +5,27 @@ import { DisabledLoadingButton, EnterButton, DisabledButton, OrButton, GoogleLog
 import Separator from '../components/Separator';
 import { useNavigate } from "react-router-dom";
 
+/**
+ * Login page component.
+ * 
+ * Displays a login form that allows users to authenticate
+ * using email and password via Google login.
+ * 
+ * Handles local form state, input validation, and redirects
+ * authenticated users to the game page.
+ * 
+ * @component
+ * 
+ * @param { Object } props - Component props
+ * @param { Function } props.handleLoginWithEmailAndPW - Function called when the login form is submitted
+ * @param { Function } props.handleLoginWithGoogle - Function called when the Google login button is clicked
+ * @param { boolean } props.loading - Indicates whether the login process is currently loading
+ * @param { Function } props.setShowAppLoader - Function used to contol the global app loader visibility
+ * @param { Object | null } props.user - Currently authenticated user object, or null if no user is logged in
+ *  
+ * @returns { JSX.Element } Login page UI
+ */
+
 export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGoogle, loading, setShowAppLoader, user }) {
 
     let navigate = useNavigate();
@@ -20,6 +41,11 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
         }
     }, [user]);
 
+    /**
+     * @typedef { Object } LoginFormData
+     * @property { string } email - User email address
+     * @property { string } password - User password
+     */
     const [formData, setFormData] = useState({
         email: '',
         password: ''

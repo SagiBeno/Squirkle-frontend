@@ -3,29 +3,73 @@ import UserListingCard from "./UserListingsCard";
 import { useState, useEffect } from "react";
 import DeleteListingAlert from "./DeleteListingAlert";
 
-export default function ListingsComponentsForUser({ isLow, getUserListings, baseUrl, userId, setToastData, activeListings, inactiveListings, handleOpenListing, handleConfirmDeleteListing }) {
+/**
+ * Displays user's marketplace listings (active and inactive).
+ *
+ * Handles:
+ * - listing display (responsive)
+ * - delete flow with confirmation dialog
+ * - refreshing user listings
+ *
+ * Layout adapts based on screen height (isLow, isMobile).
+ *
+ * @component
+ *
+ * @param { Object } props
+ * @param { boolean } props.isLow - Indicates low screen height
+ * @param { boolean } props.isMobile - Indicates mobile layout
+ * @param { Function } props.getUserListings - Refresh listings callback
+ * @param { string } props.baseUrl - API base URL
+ * @param { string } props.userId - Current user ID
+ * @param { Function } props.setToastData - Toast setter
+ * @param { Array<Object> } props.activeListings - Active listings
+ * @param { Array<Object> } props.inactiveListings - Inactive listings
+ * @param { Function } props.handleOpenListing - Open listing callback
+ *
+ * @returns { JSX.Element }
+ */
+
+export default function ListingsComponentsForUser({ isLow, getUserListings, baseUrl, userId, setToastData, activeListings, inactiveListings, handleOpenListing }) {
 
     const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
     const [selectedListing, setSelectedListing] = useState({});
     const [loading, setLoading] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
 
+    /**
+     * Updates mobile layout state based on window height.
+     *
+     * The breakpoint values are intentionally based on tested dialog behavior.
+     */
     function handleResize() {
         if (window.innerHeight < 700 && window.innerHeight > 500) setIsMobile(true);
         else setIsMobile(false);
     }
 
-    window.addEventListener('resize', handleResize);
-
     useEffect(() => {
         handleResize();
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    /**
+     * Opens the delete confirmation dialog for a selected listing.
+     *
+     * @param { Object } listing - Listing selected for deletion
+     */
     function handleDeleteListing(listing) {
         setSelectedListing(listing);
         setOpenDeleteAlert(true);
     }
 
+    /**
+     * Confirms and sends a delete request for the selected listing.
+     *
+     * Refreshes user listings after successful deletion.
+     *
+     * @param { Object } listing - Listing to delete
+     */
     function handleConfirmDeleteListing(listing) {
         if (!userId || !listing.id) return;
         setLoading(true);
@@ -55,10 +99,47 @@ export default function ListingsComponentsForUser({ isLow, getUserListings, base
             });
     }
 
+    const HeaderForActiveListings = (
+        <Flex
+            direction="row"
+            style={{
+                backgroundColor: '#646465',
+                color: 'white',
+                borderRadius: '10px',
+                justifyContent: 'start',
+                padding: '10px',
+                fontFamily: `"Fredoka", sans-serif`,
+                borderBottom: '8px solid #494949',
+                marginBottom: '5px'
+            }}
+        >
+            <Text size='4' style={{ fontWeight: '550', letterSpacing: '1px' }}>Active listing(s)</Text>
+        </Flex>
+    );
+
+    const HeaderForInactiveListings = (
+        <Flex
+            direction="row"
+            style={{
+                backgroundColor: '#646465',
+                color: 'white',
+                borderRadius: '10px',
+                justifyContent: 'start',
+                padding: '10px',
+                fontFamily: `"Fredoka", sans-serif`,
+                borderBottom: '8px solid #494949',
+                marginTop: '10px',
+                marginBottom: '5px'
+            }}
+        >
+            <Text size='4' style={{ fontWeight: '550', letterSpacing: '1px' }}>Previous listing(s)</Text>
+        </Flex>
+    );
+
     return (
         <>
             {
-                activeListings.length === 0
+                (!activeListings || activeListings.length === 0)
                     ?
                     <Flex>
                         <Text size="5" style={{ color: 'white', margin: '10px auto 20px auto', textAlign: 'center' }}>You have no active listing yet.</Text>
@@ -66,25 +147,11 @@ export default function ListingsComponentsForUser({ isLow, getUserListings, base
                     :
                     (!isLow && !isMobile) ?
                         <>
-                            <Flex
-                                direction="row"
-                                style={{
-                                    backgroundColor: '#646465',
-                                    color: 'yellow',
-                                    borderRadius: '10px',
-                                    justifyContent: 'start',
-                                    padding: '10px',
-                                    fontFamily: `"Fredoka", sans-serif`,
-                                    borderBottom: '8px solid #494949',
-                                    marginBottom: '5px'
-                                }}
-                            >
-                                <Text size='4' style={{ fontWeight: '550', letterSpacing: '1px' }}>Active listing(s)</Text>
-                            </Flex>
-                            <ScrollArea type="auto" style={{ padding: '0px 15px' }}>
+                            {HeaderForActiveListings}
+                            <ScrollArea type="auto" style={{ padding: '0px 15px 5px 15px' }}>
                                 <Flex style={{ flexDirection: 'column', gap: 4 }}>
                                     {
-                                        activeListings.map((listing, index) => <UserListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
+                                        activeListings.map((listing, index) => <UserListingCard key={listing.id || index} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
                                     }
                                 </Flex>
                             </ScrollArea>
@@ -92,23 +159,10 @@ export default function ListingsComponentsForUser({ isLow, getUserListings, base
                         :
                         !isMobile &&
                         <>
-                            <Flex
-                                direction="row"
-                                style={{
-                                    backgroundColor: '#646465',
-                                    color: 'white',
-                                    borderRadius: '10px',
-                                    justifyContent: 'start',
-                                    padding: '10px',
-                                    fontFamily: `"Fredoka", sans-serif`,
-                                    borderBottom: '8px solid #494949'
-                                }}
-                            >
-                                <Text size='4' style={{ fontWeight: '550', letterSpacing: '1px' }}>Active listing(s)</Text>
-                            </Flex>
-                            <Flex style={{ flexDirection: 'column', gap: 4, padding: '5px' }}>
+                            {HeaderForActiveListings}
+                            <Flex style={{ flexDirection: 'column', gap: 4, padding: '0 5px' }}>
                                 {
-                                    activeListings.map((listing, index) => <UserListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
+                                    activeListings.map((listing, index) => <UserListingCard key={listing.id || index} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
                                 }
                             </Flex>
                         </>
@@ -116,29 +170,14 @@ export default function ListingsComponentsForUser({ isLow, getUserListings, base
             }
 
             {
-                inactiveListings.length !== 0 && !isLow && !isMobile
+                !inactiveListings && inactiveListings.length !== 0 && !isLow && !isMobile
                     ?
                     <>
-                        <Flex
-                            direction="row"
-                            style={{
-                                backgroundColor: '#646465',
-                                color: 'white',
-                                borderRadius: '10px',
-                                justifyContent: 'start',
-                                padding: '10px',
-                                fontFamily: `"Fredoka", sans-serif`,
-                                borderBottom: '8px solid #494949',
-                                marginTop: '10px',
-                                marginBottom: '5px'
-                            }}
-                        >
-                            <Text size='4' style={{ fontWeight: '550', letterSpacing: '1px' }}>Previous listing(s)</Text>
-                        </Flex>
-                        <ScrollArea type="auto" style={{ padding: '0px 15px' }}>
+                        {HeaderForInactiveListings}
+                        <ScrollArea type="auto" style={{ padding: '0px 15px 5px 15px' }}>
                             <Flex style={{ flexDirection: 'column', gap: 4 }}>
                                 {
-                                    inactiveListings.map((listing, index) => <UserListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
+                                    inactiveListings.map((listing, index) => <UserListingCard key={listing.id || index} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
                                 }
                             </Flex>
                         </ScrollArea>
@@ -146,25 +185,11 @@ export default function ListingsComponentsForUser({ isLow, getUserListings, base
                     :
                     (!isMobile && inactiveListings.length !== 0) &&
                     <>
-                        <Flex
-                            direction="row"
-                            style={{
-                                backgroundColor: '#646465',
-                                color: 'white',
-                                borderRadius: '10px',
-                                justifyContent: 'start',
-                                padding: '10px',
-                                fontFamily: `"Fredoka", sans-serif`,
-                                borderBottom: '8px solid #494949',
-                                marginTop: '15px'
-                            }}
-                        >
-                            <Text size='4' style={{ fontWeight: '550', letterSpacing: '1px' }}>Previous listing(s)</Text>
-                        </Flex>
+                        {HeaderForInactiveListings}
 
-                        <Flex style={{ flexDirection: 'column', gap: 4, padding: '5px' }}>
+                        <Flex style={{ flexDirection: 'column', gap: 4, padding: '0 5px' }}>
                             {
-                                inactiveListings.map((listing, index) => <UserListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
+                                inactiveListings.map((listing, index) => <UserListingCard key={listing.id || index} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
                             }
                         </Flex>
                     </>
@@ -172,28 +197,15 @@ export default function ListingsComponentsForUser({ isLow, getUserListings, base
 
             {
                 isMobile &&
-                <ScrollArea type="auto" style={{ padding: '15px' }}>
+                <ScrollArea type="auto" style={{ padding: '0px 15px 5px 15px' }}>
                     {
                         activeListings.length !== 0 &&
 
                         <>
-                            <Flex
-                                direction="row"
-                                style={{
-                                    backgroundColor: '#646465',
-                                    color: 'white',
-                                    borderRadius: '10px',
-                                    justifyContent: 'start',
-                                    padding: '10px',
-                                    fontFamily: `"Fredoka", sans-serif`,
-                                    borderBottom: '8px solid #494949'
-                                }}
-                            >
-                                <Text size='4' style={{ fontWeight: '550', letterSpacing: '1px' }}>Active listing(s)</Text>
-                            </Flex>
-                            <Flex style={{ flexDirection: 'column', gap: 4, padding: '5px' }}>
+                            {HeaderForActiveListings}
+                            <Flex style={{ flexDirection: 'column', gap: 4, padding: '0 5px' }}>
                                 {
-                                    activeListings.map((listing, index) => <UserListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
+                                    activeListings.map((listing, index) => <UserListingCard key={listing.id || index} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
                                 }
                             </Flex>
                         </>
@@ -201,25 +213,11 @@ export default function ListingsComponentsForUser({ isLow, getUserListings, base
                     {
                         inactiveListings.length !== 0 &&
                         <>
-                            <Flex
-                                direction="row"
-                                style={{
-                                    backgroundColor: '#646465',
-                                    color: 'white',
-                                    borderRadius: '10px',
-                                    justifyContent: 'start',
-                                    padding: '10px',
-                                    fontFamily: `"Fredoka", sans-serif`,
-                                    borderBottom: '8px solid #494949',
-                                    marginTop: '10px'
-                                }}
-                            >
-                                <Text size='4' style={{ fontWeight: '550', letterSpacing: '1px' }}>Previous listing(s)</Text>
-                            </Flex>
+                            {HeaderForInactiveListings}
 
-                            <Flex style={{ flexDirection: 'column', gap: 4, padding: '5px' }}>
+                            <Flex style={{ flexDirection: 'column', gap: 4, padding: '0 5px' }}>
                                 {
-                                    inactiveListings.map((listing, index) => <UserListingCard key={listing.id} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
+                                    inactiveListings.map((listing, index) => <UserListingCard key={listing.id || index} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
                                 }
                             </Flex>
                         </>
