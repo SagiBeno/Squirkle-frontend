@@ -31,6 +31,7 @@ export default function ItemsTable( { items, handleSelectedModify } ) {
             style={{
                 width: '75vw',
                 padding: '20px',
+                margin: '0 auto'
             }}
         >
             <Table.Root
