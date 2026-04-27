@@ -54,11 +54,38 @@ A játék során:
 4. Inventory frissül
 5. Itemek eladhatók az aukciós rendszerben
 
+#### Játékmenet folyamata
+
+![Játékmenet ábra](Screenshots/GamePlay_Flow_Diagram.png)
+
 ---
 
 ## Reszponzivitás
 
 Az alkalmazás reszponzív kialakítású, különböző eszközökön is megfelelően működik.
+
+```
+Főoldal megjelenése nagy kijelzőn
+```
+![Főoldal megjelenése nagy kijelzőn #1](Screenshots/HomePage.png)
+![Főoldal megjelenése nagy kijelzőn #2](Screenshots/HomePage_02.png)
+
+```
+Főoldal megjelnése kis kijelzőn
+```
+
+| ![Főoldal megjelnése kis kijelzőn #1](Screenshots/HomePage_Mobile_01.png) | ![Főoldal megjelnése kis kijelzőn #2](Screenshots/HomePage_Mobile_02.png) |
+
+```
+Navigációs sáv megjelenése nagy kijelzőn
+```
+![Navigációs sáv megjelenése nagy kijelzőn #1](Screenshots/GamePage_01.png)
+
+```
+Navigációs sáv megjelenése kis kijelzőn
+```
+
+![Navigációs sáv megjelenése kis kijelzőn #1](Screenshots/GamePage_Mobile_01.png)
 
 ### Desktop
 - teljes layout
@@ -78,6 +105,14 @@ Az alkalmazás reszponzív kialakítású, különböző eszközökön is megfel
 - breakpoint alapú megjelenítés (pl. max-width: 640px)
 - magasság alapú optimalizálás (dialogoknál)
 - Radix UI komponensek használata
+
+---
+
+## Rendszer architektúra
+
+Az alábbi ábra bemutatja az alkalmazás fő komponenseit és azok kapcsolatát.
+
+![Rendszer architektúra](Screenshots/Architecture.png)
 
 ---
 

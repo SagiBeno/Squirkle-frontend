@@ -12,6 +12,7 @@ import AdminSpinner from '../components/Spinners/AdminSpinner';
 import CheckboxCardsForItemPage from '../components/Cards/CheckboxCardsForItemPage';
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import NavbarForAdmin from '../components/Navbars/NavbarForAdmin';
+import { FaTrash } from "react-icons/fa";
 
 /**
  * Item management admin page
@@ -961,7 +962,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                                     </Button>
 
                                     <Button
-                                        className={`button ${isValid ? 'activeButton' : 'inactiveButton'}`}
+                                        className={`deleteButton ${isValid ? 'deleteActiveButton' : 'inactiveButton'}`}
                                         radius='none'
                                         size='3'
                                         style={{
@@ -970,7 +971,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                                         }}
                                         onClick={() => setShowDeleteAlert(true)}
                                     >
-                                        Delete
+                                        <FaTrash/> Delete
                                     </Button>
                                 </Flex>
                         }
