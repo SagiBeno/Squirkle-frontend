@@ -4,13 +4,13 @@
 
 ## Application Purpose
 
-Squirkle is a browser-based gaming platform that integrates a Unity WebGL game into a modern web interface.
+Squirkle is a browser-based gaming platform that integrates a Unity WebGL game into a web interface.
 
 Users can:
 - defeat enemies
-- collect items and in-game currency
+- collect items and coins
 - unlock new areas
-- trade items through an auction system
+- trade items through an auction system (auction house)
 
 The goal of the application is to provide an interactive and engaging gameplay experience within a web environment.
 
@@ -22,24 +22,24 @@ The goal of the application is to provide an interactive and engaging gameplay e
 
 - **User Management (Authentication)**
   - Google-based login
-  - username creation
+  - unique username creation
 
 - **Game (Unity WebGL)**
   - continuous enemy spawning
   - different shapes (circle, square, triangle)
-  - periodic boss encounters
+  - periodic boss system
 
 - **Inventory System**
-  - item management
+  - management of collected items
   - equip / unequip functionality
 
 - **Auction House**
   - listing items
-  - buying items
+  - purchasing items
   - deleting listings
 
 - **Areas**
-  - unlockable using in-game currency
+  - unlockable using coins
 
 - **Admin Interface**
   - item creation
@@ -48,25 +48,51 @@ The goal of the application is to provide an interactive and engaging gameplay e
 ### System Flow
 
 During gameplay:
-1. Enemies appear continuously
+1. Enemies appear
 2. The player defeats them
 3. Drops include items or currency
 4. The inventory is updated
-5. Items can be traded through the auction system
+5. Items can be sold through the auction system
+
+#### Gameplay Flow Diagram
+
+![Gameplay Flow](Screenshots/Gameplay_Flow_Diagram.png)
 
 ---
 
 ## Responsiveness
 
-The application is responsive and works across different devices.
+The application is responsive and works properly across different devices.
+
+```
+Homepage layout on large screens
+```
+![Homepage layout on large screens #1](Screenshots/HomePage.png)
+![Homepage layout on large screens #2](Screenshots/HomePage_02.png)
+
+```
+Homepage layout on small screens
+```
+| ![Homepage layout on small screens #1](Screenshots/HomePage_Mobile_01.png) | ![Homepage layout on small screens #2](Screenshots/HomePage_Mobile_02.png) |
+
+
+```
+Navigation bar on large screens
+```
+![Navigation bar on large screens #1](Screenshots/GamePage_01.png)
+
+```
+Navigation bar on small screens
+```
+![Navigation bar on small screens #1](Screenshots/GamePage_Mobile_01.png)
 
 ### Desktop
 - full layout
-- separate navigation buttons
-- wider tables and panels
+- separate navbar buttons
+- wider tables
 
 ### Mobile
-- hamburger menu (dropdown)
+- hamburger menu (Dropdown)
 - smaller UI elements
 - usage of ScrollArea
 - vertical layout
@@ -74,16 +100,24 @@ The application is responsive and works across different devices.
 ### Tablet
 - intermediate layout
 
-### Technical Implementation
+### Technical Solutions
 - breakpoint-based rendering (e.g. max-width: 640px)
-- height-based optimizations for dialogs
-- Radix UI components
+- height-based optimization (for dialogs)
+- usage of Radix UI components
+
+---
+
+## System Architecture
+
+The following diagram shows the overall structure of the application and how different components interact with each other.
+
+![System Architecture](Screenshots/Architecture.png)
 
 ---
 
 ## Data Handling (Frontend Perspective)
 
-The frontend communicates with the backend via REST API.
+The frontend communicates with the backend through a REST API.
 
 ### Managed Data:
 - users
@@ -104,7 +138,7 @@ Communication is performed over HTTPS.
 
 ## Backend Communication
 
-The frontend interacts with multiple REST API endpoints.
+The frontend uses multiple REST API endpoints.
 
 ### Examples:
 
@@ -125,12 +159,12 @@ The frontend interacts with multiple REST API endpoints.
 
 ## Code
 
-The frontend codebase:
+The frontend code:
 
 - is component-based (React)
-- uses reusable UI elements
+- uses reusable elements
 - is well-structured
-- includes documentation (JSDoc)
+- is documented (JSDoc)
 
 ### Technologies Used:
 - React

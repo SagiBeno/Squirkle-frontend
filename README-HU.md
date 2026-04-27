@@ -54,6 +54,10 @@ A játék során:
 4. Inventory frissül
 5. Itemek eladhatók az aukciós rendszerben
 
+#### Játékmenet folyamata
+
+![Játékmenet ábra](Screenshots/GamePlay_Flow_Diagram.png)
+
 ---
 
 ## Reszponzivitás
@@ -101,6 +105,14 @@ Navigációs sáv megjelenése kis kijelzőn
 - breakpoint alapú megjelenítés (pl. max-width: 640px)
 - magasság alapú optimalizálás (dialogoknál)
 - Radix UI komponensek használata
+
+---
+
+## Rendszer architektúra
+
+Az alábbi ábra bemutatja az alkalmazás fő komponenseit és azok kapcsolatát.
+
+![Rendszer architektúra](Screenshots/Architecture.png)
 
 ---
 
