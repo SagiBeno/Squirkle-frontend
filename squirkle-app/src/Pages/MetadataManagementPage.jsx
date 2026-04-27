@@ -8,6 +8,7 @@ import AdminSpinner from '../components/Spinners/AdminSpinner';
 import AllMetadataDialog from "../components/Dialogs/AllMetadataDialog";
 import DeleteAlert from "../components/DeleteAlert";
 import NavbarForAdmin from "../components/Navbars/NavbarForAdmin";
+import { FaTrash } from "react-icons/fa";
 
 /**
  * Metadata management admin page.
@@ -495,7 +496,7 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
                                     </Button>
 
                                     <Button
-                                        className={`button ${isValid ? 'activeButton' : 'inactiveButton'}`}
+                                        className={`deleteButton ${isValid ? 'deleteActiveButton' : 'inactiveButton'}`}
                                         radius='none'
                                         size='3'
                                         style={{
@@ -504,7 +505,7 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
                                         }}
                                         onClick={() => setShowDeleteAlert(true)}
                                     >
-                                        Delete
+                                        <FaTrash/> Delete
                                     </Button>
                                 </Flex>
                         }

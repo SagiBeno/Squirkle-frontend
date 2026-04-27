@@ -67,7 +67,7 @@ export default function ItemsTable( { items, handleSelectedModify } ) {
                                 width: '70px'
                             }}
                         >
-                            Modify/Delete
+                            Modify
                         </Table.ColumnHeaderCell>
                     </Table.Row>
                 </Table.Header>
