@@ -60,6 +60,29 @@ A játék során:
 
 Az alkalmazás reszponzív kialakítású, különböző eszközökön is megfelelően működik.
 
+```
+Főoldal megjelenése nagy kijelzőn
+```
+![Főoldal megjelenése nagy kijelzőn #1](Screenshots/HomePage.png)
+![Főoldal megjelenése nagy kijelzőn #2](Screenshots/HomePage_02.png)
+
+```
+Főoldal megjelnése kis kijelzőn
+```
+
+| ![Főoldal megjelnése kis kijelzőn #1](Screenshots/HomePage_Mobile_01.png) | ![Főoldal megjelnése kis kijelzőn #2](Screenshots/HomePage_Mobile_02.png) |
+
+```
+Navigációs sáv megjelenése nagy kijelzőn
+```
+![Navigációs sáv megjelenése nagy kijelzőn #1](Screenshots/GamePage_01.png)
+
+```
+Navigációs sáv megjelenése kis kijelzőn
+```
+
+![Navigációs sáv megjelenése kis kijelzőn #1](Screenshots/GamePage_Mobile_01.png)
+
 ### Desktop
 - teljes layout
 - külön navbar gombok
