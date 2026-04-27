@@ -86,6 +86,16 @@ Navigation bar on small screens
 ```
 ![Navigation bar on small screens #1](Screenshots/GamePage_Mobile_01.png)
 
+```
+Item details dialog on large screens
+```
+![Item details dialog on large screens #1](Screenshots/ItemDetails_01.png)
+
+```
+Item details dialog on small screens
+```
+| ![Item details dialog on small screens #1](Screenshots/ItemDetails_Mobile_01.png) | ![Item details dialog on small screens #2](Screenshots/ItemDetails_Mobile_02.png) |
+
 ### Desktop
 - full layout
 - separate navbar buttons
@@ -171,6 +181,28 @@ The frontend code:
 - React Router
 - Radix UI
 - Unity WebGL integration
+
+---
+
+## Testing
+
+### Item Details Dialog Component
+
+An automated test has been created for the `ItemDetailsDialog.jsx` component.
+
+The test verifies:
+- item stats are displayed correctly
+- the item title, description, and image are rendered properly
+- metadata title, description, background color, and text color are displayed correctly
+- the equip / unequip button appears correctly in inventory context
+- seller, price, and buy button are displayed in buying context
+- inactive listings cannot be purchased
+- the selected listing price is displayed correctly in create inspection context
+
+The test run was successful: 1 test file and 11 test cases passed.
+
+#### Item Details Dialog Component Test Results
+![Item Details Dialog Component Test Results](Screenshots/ItemDetailsTest.png)
 
 ---
 

@@ -1,4 +1,4 @@
-# Squirkle – Frontend Documentation
+# Squirkle – Frontend Dokumentáció
 
 ---
 
@@ -87,6 +87,16 @@ Navigációs sáv megjelenése kis kijelzőn
 
 ![Navigációs sáv megjelenése kis kijelzőn #1](Screenshots/GamePage_Mobile_01.png)
 
+```
+Tárgy részletező ablak nagy kijelzőn
+```
+![Tárgy részletező ablak nagy kijelzőn #1](Screenshots/ItemDetails_01.png)
+
+```
+Tárgy részletező ablak kis kijelzőn
+```
+| ![Tárgy részletező ablak kis kijelzőn #1](Screenshots/ItemDetails_Mobile_01.png) | ![Tárgy részletező ablak kis kijelzőn #2](Screenshots/ItemDetails_Mobile_02.png) |
+
 ### Desktop
 - teljes layout
 - külön navbar gombok
@@ -172,6 +182,28 @@ A frontend kód:
 - React Router
 - Radix UI
 - Unity WebGL integráció
+
+---
+
+## Tesztelés
+
+### Item Details Dialog komponens
+
+Az `ItemDetailsDialog.jsx` komponenshez automatizált teszt készült.
+
+A teszt ellenőrzi:
+- a tárgy statisztikái megfelelően jelennek meg
+- a tárgy neve, leírása és képe helyesen renderelődik
+- a metadata címe, leírása és színei megfelelően jelennek meg
+- inventory nézetben megjelenik az equip / unequip gomb a tárgy állapotától függően
+- vásárlási nézetben megjelenik az eladó, az ár és a vásárlás gomb
+- inaktív listing esetén a tárgy nem vásárolható meg
+- listing létrehozási nézetben a megadott ár helyesen jelenik meg
+
+A teszt futtatása sikeres volt: 1 tesztfájl, 11 teszteset, mindegyik sikeresen lefutott.
+
+#### Item Details Dialog komponens teszteredményei
+![Item Details Dialog komponens teszteredményei](Screenshots/ItemDetailsTest.png)
 
 ---
 

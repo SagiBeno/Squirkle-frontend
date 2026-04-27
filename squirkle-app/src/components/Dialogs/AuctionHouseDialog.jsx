@@ -383,8 +383,9 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
                     setToastData({ open: true, title: 'The puchase was successful', description: res.message, isError: false });
                     handleSelectButton('globalListings');
 
-                    const refreshedUser = await refreshUser(user)
-                    ResetPlayerCoins(refreshedUser?.coinCount)
+                    const refreshedUser = await refreshUser(user);
+                    ResetPlayerCoins(refreshedUser?.coinCount);
+                    setIsBuyListingOpen(false);
                 }
 
                 else setToastData({ open: true, title: 'The puchase was failed', description: res.error, isError: true });
