@@ -87,11 +87,11 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
     function RenderCurrentDialog() {
         switch (dialogState) {
             case AREA_SELECTOR_STATE:
-                return <AreaSelectorDialog user={user} setDialogState={setDialogState} setOpen={setOpenDialog} refreshUser={refreshUser}/>
+                return <AreaSelectorDialog user={user} setDialogState={setDialogState} setOpen={setOpenDialog} refreshUser={refreshUser} />
             case INVENTORY_STATE:
                 return <InventoryDialog user={user} setDialogState={setDialogState} setOpen={setOpenDialog} />
             case AUCTION_HOUSE_STATE:
-                return <AuctionHouseDialog user={user} toastData={toastData} setToastData={setToastData} setOpen={setOpenDialog} setDialogState={setDialogState} refreshUser={refreshUser}/>
+                return <AuctionHouseDialog user={user} toastData={toastData} setToastData={setToastData} setOpen={setOpenDialog} setDialogState={setDialogState} refreshUser={refreshUser} />
         }
 
         return null;
@@ -102,29 +102,45 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
     const [filePaths, setFilePaths] = useState({})
     const [coins, setCoins] = useState(() => user?.coinCount ?? 0)
 
+    function showNewItemToast(itemName) {
+        const trimmedName = (itemName ?? '').toString().trim()
+        const displayName = trimmedName.length > 0 ? trimmedName : 'Unknown Item'
+
+        setToastData({
+            open: true,
+            title: `You got a new item:`,
+            description: `${displayName}`,
+            isError: false
+        })
+    }
+
     const gameContext = {
         isGameLoaded, setIsGameLoaded,
         isLoading, setIsLoading,
         filePaths, setFilePaths,
         coins: coins,
         setCoins,
+        showNewItemToast,
     }
 
     return (
-        <Dialog.Root open={openDialog} onOpenChange={setOpenDialog}>
-            <GameContext.Provider value={gameContext}>
-                <Navbar user={user} signOut={signOut} setDialogState={setDialogState} setOpenDialog={setOpenDialog} />
-                <Flex className='mainContainer'>
+        <>
+            <Dialog.Root open={openDialog} onOpenChange={setOpenDialog}>
+                <GameContext.Provider value={gameContext}>
+                    <Navbar user={user} signOut={signOut} setDialogState={setDialogState} setOpenDialog={setOpenDialog} />
+                    <Flex className='mainContainer'>
 
-                    <Box className='navbarSpacer' />
+                        <Box className='navbarSpacer' />
 
-                    <Flex className='contentContainer'>
-                        <GameLoader user={user} />
+                        <Flex className='contentContainer'>
+                            <GameLoader user={user} />
+                        </Flex>
                     </Flex>
-                </Flex>
-                
-            </GameContext.Provider>
-            {RenderCurrentDialog()}
-        </Dialog.Root>
+
+                </GameContext.Provider>
+                {RenderCurrentDialog()}
+            </Dialog.Root>
+
+        </>
     )
 }
