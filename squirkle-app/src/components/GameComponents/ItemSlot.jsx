@@ -54,7 +54,7 @@ export default function ItemSlot({ itemData, onClick, state }) {
                         <Flex align="center" justify="center" className={
                             state === 'listed' ? 'itemSlot itemSlotListed' :
                                 state === 'equipped' ? 'itemSlot itemSlotEquipped' : 'itemSlot'}>
-                            <img className='itemIcon' src={itemData?.imageUrl} />
+                            <img className='itemIcon' src={itemData?.imageUrl} style={{ cursor: 'pointer' }} />
                         </Flex>
                     </Dialog.Trigger>
 
