@@ -47,6 +47,36 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
     const [loading, setLoading] = useState(false);
     const [openItemDetailsDialog, setOpenItemDetailsDialog] = useState(false);
 
+    const listedIdSet = new Set(listedIds);
+    const equippedIdSet = new Set(equippedItems);
+
+    const equippedSlots = inventory.reduce(
+        (acc, item) => {
+            if (!equippedIdSet.has(item.userItemId)) {
+                return acc;
+            }
+
+            const typeKey = (item.type || '').toLowerCase();
+
+            if (typeKey === 'weapon') {
+                acc.weapon = item;
+            }
+
+            if (typeKey === 'armor') {
+                acc.armor = item;
+            }
+
+            return acc;
+        },
+        {
+            weapon: null,
+            armor: null
+        }
+    );
+
+    const filteredInventory = inventory.filter((item) => !equippedIdSet.has(item.userItemId));
+    const emptyMessage = inventory.length === 0 ? "Your inventory is empty." : "All items are equipped.";
+
     /**
      * Fetches player inventory data:
      * - Inventory items
@@ -105,52 +135,78 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
             {loading && <DialogSpinner />}
 
             <Dialog.Root open={openItemDetailsDialog} onOpenChange={setOpenItemDetailsDialog}>
-                <ScrollArea type="auto" style={{ padding: "0px 15px", maxHeight: '80%' }}>
-                    <Flex wrap="wrap" justify="start" gap="2">
-                        {
-                            inventory.length === 0 && !loading ? (
-                                <Box style={{ width: '100%', textAlign: 'center', marginTop: 20 }}>
-                                    <Text size="5" style={{ color: 'white', margin: '10px auto 20px auto', textAlign: 'center' }}>Your inventory is empty.</Text>
-                                </Box>
-                            ) :
-                                inventory?.map((x, i) => {
-                                    const isListed = listedIds.includes(x.userItemId);
-                                    const isEquipped = equippedItems.includes(x.userItemId);
+                <Flex className="inventoryDialogBody">
+                    <ScrollArea type="auto" className="inventoryDialogList" style={{ maxHeight: '80%' }}>
+                        <Flex wrap="wrap" justify="start" gap="2">
+                            {
+                                filteredInventory.length === 0 && !loading ? (
+                                    <Box style={{ width: '100%', textAlign: 'center', marginTop: 20 }}>
+                                        <Text size="5" style={{ color: 'white', margin: '10px auto 20px auto', textAlign: 'center' }}>{emptyMessage}</Text>
+                                    </Box>
+                                ) :
+                                    filteredInventory?.map((x, i) => {
+                                        const isListed = listedIdSet.has(x.userItemId);
 
-                                    if (isListed) {
+                                        if (isListed) {
+                                            return (
+                                                <ItemSlot
+                                                    key={x.userItemId ?? x.itemId + i}
+                                                    itemData={x}
+                                                    onClick={setSelectedItem}
+                                                    state="listed"
+                                                />
+                                            );
+                                        }
+
                                         return (
                                             <ItemSlot
                                                 key={x.userItemId ?? x.itemId + i}
                                                 itemData={x}
                                                 onClick={setSelectedItem}
-                                                state="listed"
+                                                state=""
                                             />
                                         );
-                                    }
+                                    })
+                            }
+                        </Flex>
+                    </ScrollArea>
 
-                                    if (isEquipped) {
-                                        return (
-                                            <ItemSlot
-                                                key={x.userItemId ?? x.itemId + i}
-                                                itemData={x}
-                                                onClick={setSelectedItem}
-                                                state="equipped"
-                                            />
-                                        );
-                                    }
-
-                                    return (
+                    <Flex direction="column" className="inventoryDialogEquipPanel">
+                        <Text size="4" className="inventoryDialogEquipTitle">Equipped</Text>
+                        <Flex direction="column" gap="3" className="inventoryDialogEquipSlots">
+                            <Flex direction="column" gap="1" className="inventoryDialogEquipSlot">
+                                <Text size="2" className="inventoryDialogEquipLabel">Weapon</Text>
+                                {
+                                    equippedSlots.weapon ? (
                                         <ItemSlot
-                                            key={x.userItemId ?? x.itemId + i}
-                                            itemData={x}
+                                            itemData={equippedSlots.weapon}
                                             onClick={setSelectedItem}
-                                            state=""
+                                            state="equipped"
                                         />
-                                    );
-                                })
-                        }
+                                    ) : (
+                                        <div className="inventoryDialogEquipPlaceholder">Empty</div>
+                                    )
+                                }
+                            </Flex>
+
+                            <Flex direction="column" gap="1" className="inventoryDialogEquipSlot">
+                                <Text size="2" className="inventoryDialogEquipLabel">Armor</Text>
+                                {
+                                    equippedSlots.armor ? (
+                                        <ItemSlot
+                                            itemData={equippedSlots.armor}
+                                            onClick={setSelectedItem}
+                                            state="equipped"
+                                        />
+                                    ) : (
+                                        <div className="inventoryDialogEquipPlaceholder">Empty</div>
+                                    )
+                                }
+                            </Flex>
+                        </Flex>
                     </Flex>
-                </ScrollArea>
+                </Flex>
+
                 <ItemDetailsDialog itemData={selectedItem} parentDialog="Inventory" setOpen={setOpenItemDetailsDialog} GetPlayerInventory={GetPlayerInventory} />
             </Dialog.Root>
         </Dialog.Content >
