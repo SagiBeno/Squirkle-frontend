@@ -136,40 +136,42 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
 
             <Dialog.Root open={openItemDetailsDialog} onOpenChange={setOpenItemDetailsDialog}>
                 <Flex className="inventoryDialogBody">
-                    <ScrollArea type="auto" className="inventoryDialogList" style={{ maxHeight: '80%' }}>
-                        <Flex wrap="wrap" justify="start" gap="2">
-                            {
-                                filteredInventory.length === 0 && !loading ? (
-                                    <Box style={{ width: '100%', textAlign: 'center', marginTop: 20 }}>
-                                        <Text size="5" style={{ color: 'white', margin: '10px auto 20px auto', textAlign: 'center' }}>{emptyMessage}</Text>
-                                    </Box>
-                                ) :
-                                    filteredInventory?.map((x, i) => {
-                                        const isListed = listedIdSet.has(x.userItemId);
+                    {
+                        filteredInventory.length === 0 && !loading ?
+                            <Box style={{ width: '100%', textAlign: 'center', marginTop: 20 }}>
+                                <Text size="5" style={{ color: 'white', margin: '10px auto 20px auto', textAlign: 'center' }}>{emptyMessage}</Text>
+                            </Box>
+                            :
+                            <ScrollArea type="auto" className="inventoryDialogList" style={{ maxHeight: '80%' }}>
+                                <Flex wrap="wrap" justify="start" gap="2">
+                                    {
+                                        filteredInventory?.map((x, i) => {
+                                            const isListed = listedIdSet.has(x.userItemId);
 
-                                        if (isListed) {
+                                            if (isListed) {
+                                                return (
+                                                    <ItemSlot
+                                                        key={x.userItemId ?? x.itemId + i}
+                                                        itemData={x}
+                                                        onClick={setSelectedItem}
+                                                        state="listed"
+                                                    />
+                                                );
+                                            }
+
                                             return (
                                                 <ItemSlot
                                                     key={x.userItemId ?? x.itemId + i}
                                                     itemData={x}
                                                     onClick={setSelectedItem}
-                                                    state="listed"
+                                                    state=""
                                                 />
                                             );
-                                        }
-
-                                        return (
-                                            <ItemSlot
-                                                key={x.userItemId ?? x.itemId + i}
-                                                itemData={x}
-                                                onClick={setSelectedItem}
-                                                state=""
-                                            />
-                                        );
-                                    })
-                            }
-                        </Flex>
-                    </ScrollArea>
+                                        })
+                                    }
+                                </Flex>
+                            </ScrollArea>
+                    }
 
                     <Flex direction="column" className="inventoryDialogEquipPanel">
                         <Text size="4" className="inventoryDialogEquipTitle">Equipped</Text>

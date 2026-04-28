@@ -37,7 +37,8 @@ export default function ItemsTable( { items, handleSelectedModify } ) {
             <Table.Root
                 className='adminTable'
                 style={{
-                    width: '920px',
+                    maxWidth: '920px',
+                    minWidth: '600px',
                     margin: '10px auto',
                     boxShadow: '0px 0px 2px 1px #777777'
                 }}
@@ -56,7 +57,7 @@ export default function ItemsTable( { items, handleSelectedModify } ) {
                         <Table.ColumnHeaderCell
                             style={{
                                 textAlign: 'center',
-                                width: '100%'
+                                width: '80%'
                             }}
                         >
                             Item's name
