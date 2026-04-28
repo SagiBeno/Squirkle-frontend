@@ -76,16 +76,7 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
         }
     );
 
-    const filteredInventory = []
-
-    for (let i = 0; i < 100; i++) {
-        const array = inventory.filter((item) => !equippedIdSet.has(item.userItemId));
-
-        array.forEach(element => {
-            filteredInventory.push(element)
-        });
-    }
-
+    const filteredInventory = inventory.filter((item) => !equippedIdSet.has(item.userItemId));
     const emptyMessage = inventory.length === 0 ? "Your inventory is empty." : "All items are equipped.";
 
     /**
