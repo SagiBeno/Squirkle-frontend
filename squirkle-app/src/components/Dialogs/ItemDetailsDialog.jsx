@@ -244,7 +244,7 @@ export default function ItemDetailsDialog({
                                             size='3'
                                             onClick={TryUnequipItem}
                                         >
-                                            Unequip Item {JSON.stringify(itemData)}
+                                            Unequip Item
                                         </Button>
                                         :
                                         itemData?.state === 'listed' ?

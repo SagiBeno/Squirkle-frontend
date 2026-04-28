@@ -46,6 +46,8 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
     const [selectedItem, setSelectedItem] = useState(null)
     const [loading, setLoading] = useState(false);
     const [openItemDetailsDialog, setOpenItemDetailsDialog] = useState(false);
+    const userID = user?.user?.uid;
+    const [isMobile, setIsMobile] = useState(false);
 
     const listedIdSet = new Set(listedIds);
     const equippedIdSet = new Set(equippedItems);
@@ -74,7 +76,16 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
         }
     );
 
-    const filteredInventory = inventory.filter((item) => !equippedIdSet.has(item.userItemId));
+    const filteredInventory = []
+
+    for (let i = 0; i < 100; i++) {
+        const array = inventory.filter((item) => !equippedIdSet.has(item.userItemId));
+
+        array.forEach(element => {
+            filteredInventory.push(element)
+        });
+    }
+
     const emptyMessage = inventory.length === 0 ? "Your inventory is empty." : "All items are equipped.";
 
     /**
@@ -87,9 +98,9 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
         setInventory([]);
         async function getData() {
             setLoading(true);
-            const getInventory = await fetch(`https://squirkle-backend.vercel.app/api/get-inventory/${user.user.uid}`)
-            const getListedIds = await fetch(`https://squirkle-backend.vercel.app/api/get-listed-user-item-ids/${user.user.uid}`)
-            const getEquippedItems = await fetch(`https://squirkle-backend.vercel.app/api/get-equipped-items/${user.user.uid}`)
+            const getInventory = await fetch(`https://squirkle-backend.vercel.app/api/get-inventory/${userID}`)
+            const getListedIds = await fetch(`https://squirkle-backend.vercel.app/api/get-listed-user-item-ids/${userID}`)
+            const getEquippedItems = await fetch(`https://squirkle-backend.vercel.app/api/get-equipped-items/${userID}`)
 
             const [inventoryResponse, listedIdsResponse, equippedItemsResponse] = await Promise.all([getInventory, getListedIds, getEquippedItems])
 
@@ -102,13 +113,31 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
             setEquippedItems(equippedItems.items.map(i => i.userItemId))
             setLoading(false);
         }
-
         getData();
     }
 
     useEffect(() => {
-        GetPlayerInventory()
-    }, [])
+        if (userID) GetPlayerInventory();
+    }, [userID])
+
+    /**
+     * Updates the mobile layout state based on window width.
+     * 
+     * Sets 'isMobile' to true if the screen width is below 770px.
+     * 
+     * @returns { void }
+     */
+    function handleResize() {
+        if (window.innerWidth < 770) setIsMobile(true);
+        else setIsMobile(false);
+    }
+
+    useEffect(() => {
+        handleResize();
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     return (
         <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: 'hidden' }}>
@@ -142,8 +171,8 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
                                 <Text size="5" style={{ color: 'white', margin: '10px auto 20px auto', textAlign: 'center' }}>{emptyMessage}</Text>
                             </Box>
                             :
-                            <ScrollArea type="auto" className="inventoryDialogList" style={{ maxHeight: '80%' }}>
-                                <Flex wrap="wrap" justify="start" gap="2">
+                            <ScrollArea type="auto" className="inventoryDialogList" style={{ maxHeight: isMobile ? '20vh' : '50vh', minHeight: '50px', marginBottom: '20px' }}>
+                                <Flex wrap="wrap" justify="start" gap="2" style={{ marginRight: '15px' }}>
                                     {
                                         filteredInventory?.map((x, i) => {
                                             const isListed = listedIdSet.has(x.userItemId);
