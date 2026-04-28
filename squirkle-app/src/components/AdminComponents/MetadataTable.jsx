@@ -36,7 +36,8 @@ export default function MetadataTable( { metadata, handleSelectedModify } ) {
             <Table.Root
             className='adminTable'
                 style={{
-                    width: '920px',
+                    maxWidth: '920px',
+                    minWidth: '600px',
                     margin: '0 auto',
                     boxShadow: '0px 0px 2px 1px #777777'
                 }}
@@ -55,7 +56,7 @@ export default function MetadataTable( { metadata, handleSelectedModify } ) {
                         <Table.ColumnHeaderCell
                             style={{
                                 textAlign: 'center',
-                                width: '100%'
+                                width: '80%'
                             }}
                         >
                             Metadata's title
