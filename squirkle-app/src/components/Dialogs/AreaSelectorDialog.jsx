@@ -71,7 +71,7 @@ export default function AreaSelectorDialog({ user, setDialogState, setOpen, refr
     }, [refresh])
 
     return (
-        <Dialog.Content maxWidth="450px" style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: "hidden", minHeight: '200px', maxHeight: '500px' }}>
+        <Dialog.Content maxWidth="450px" style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: "hidden", minHeight: '50vh' }}>
             <Dialog.Title style={{ marginTop: 15, color: 'white', textTransform: 'uppercase' }}>
                 <Flex
                     style={{
@@ -93,7 +93,7 @@ export default function AreaSelectorDialog({ user, setDialogState, setOpen, refr
 
             {loading && <DialogSpinner />}
 
-            <ScrollArea type='auto' scrollbars="vertical" style={{ paddingRight: '12px', minHeight: '100px', maxHeight: '190px' }}>
+            <ScrollArea type='auto' scrollbars="vertical" style={{ paddingRight: '12px', minHeight: '100px', maxHeight: '400px' }}>
                 <Flex direction="column">
                     {
                         areas.map(x => <GameAreaPanel key={x.id} areaData={x} user={user} purchasedAreas={purchasedAreas} refresh={Refresh} />)
