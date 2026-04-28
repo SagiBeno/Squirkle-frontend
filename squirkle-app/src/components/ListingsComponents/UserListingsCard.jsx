@@ -44,6 +44,7 @@ export default function UserListingCard({ listing, idx, handleOpenListing, handl
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     gap: 5,
+                    flexWrap: 'wrap'
                 }}
             >
                 <Flex

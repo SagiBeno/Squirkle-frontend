@@ -44,7 +44,8 @@ export default function InactiveGlobalListingCard({ listing, idx, handleOpenList
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    gap: 5
+                    gap: 5,
+                    flexWrap: 'wrap'
                 }}
             >
                 <Flex
