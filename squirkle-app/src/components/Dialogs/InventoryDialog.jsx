@@ -108,41 +108,46 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
                 <ScrollArea type="auto" style={{ padding: "0px 15px", maxHeight: '80%' }}>
                     <Flex wrap="wrap" justify="start" gap="2">
                         {
-                            inventory?.map((x, i) => {
-                                const isListed = listedIds.includes(x.userItemId);
-                                const isEquipped = equippedItems.includes(x.userItemId);
+                            inventory.length === 0 && !loading ? (
+                                <Box style={{ width: '100%', textAlign: 'center', marginTop: 20 }}>
+                                    <Text size="5" style={{ color: 'white', margin: '10px auto 20px auto', textAlign: 'center' }}>Your inventory is empty.</Text>
+                                </Box>
+                            ) :
+                                inventory?.map((x, i) => {
+                                    const isListed = listedIds.includes(x.userItemId);
+                                    const isEquipped = equippedItems.includes(x.userItemId);
 
-                                if (isListed) {
+                                    if (isListed) {
+                                        return (
+                                            <ItemSlot
+                                                key={x.userItemId ?? x.itemId + i}
+                                                itemData={x}
+                                                onClick={setSelectedItem}
+                                                state="listed"
+                                            />
+                                        );
+                                    }
+
+                                    if (isEquipped) {
+                                        return (
+                                            <ItemSlot
+                                                key={x.userItemId ?? x.itemId + i}
+                                                itemData={x}
+                                                onClick={setSelectedItem}
+                                                state="equipped"
+                                            />
+                                        );
+                                    }
+
                                     return (
                                         <ItemSlot
                                             key={x.userItemId ?? x.itemId + i}
                                             itemData={x}
                                             onClick={setSelectedItem}
-                                            state="listed"
+                                            state=""
                                         />
                                     );
-                                }
-                            
-                                if (isEquipped) {
-                                    return (
-                                        <ItemSlot
-                                            key={x.userItemId ?? x.itemId + i}
-                                            itemData={x}
-                                            onClick={setSelectedItem}
-                                            state="equipped"
-                                        />
-                                    );
-                                }
-                            
-                                return (
-                                    <ItemSlot
-                                        key={x.userItemId ?? x.itemId + i}
-                                        itemData={x}
-                                        onClick={setSelectedItem}
-                                        state=""
-                                    />
-                                );
-                            })
+                                })
                         }
                     </Flex>
                 </ScrollArea>
