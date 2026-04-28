@@ -29,7 +29,7 @@ export default function ListingsContainerForGlobalActive({ activeListings, handl
                 padding: '10px',
                 fontFamily: `"Fredoka", sans-serif`,
                 borderBottom: '8px solid #494949',
-                marginBottom: '5px'
+                marginBottom: '5px',
             }}
         >
             <Text size='4' style={{ fontWeight: '550', letterSpacing: '1px' }}>

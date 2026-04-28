@@ -51,10 +51,18 @@ export default function ItemSlot({ itemData, onClick, state }) {
                     <Dialog.Trigger onClick={() => onClick({
                         ...itemData, state
                     })}>
-                        <Flex align="center" justify="center" className={
-                            state === 'listed' ? 'itemSlot itemSlotListed' :
-                                state === 'equipped' ? 'itemSlot itemSlotEquipped' : 'itemSlot'}>
-                            <img className='itemIcon' src={itemData?.imageUrl} />
+                        <Flex 
+                            align="center" 
+                            justify="center" 
+                            className={
+                                state === 'listed' ? 'itemSlot itemSlotListed' :
+                                state === 'equipped' ? 'itemSlot itemSlotEquipped' : 'itemSlot'
+                            }
+                            style={{
+                                border: '1px solid rgba(255, 255, 255, 0.25)'
+                            }}
+                        >
+                            <img className='itemIcon' src={itemData?.imageUrl} style={{ cursor: 'pointer' }} />
                         </Flex>
                     </Dialog.Trigger>
 

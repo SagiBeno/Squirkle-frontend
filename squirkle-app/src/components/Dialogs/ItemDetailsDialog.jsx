@@ -224,7 +224,7 @@ export default function ItemDetailsDialog({
 
                     </Flex>
 
-                    <Flex direction="column" gap="3" flexGrow="1" style={{ padding: 20 }}>
+                    <Flex direction="column" gap="3" flexGrow="1" style={{ padding: 20, width: '50%' }}>
 
                         <Blockquote style={{ marginTop: 10 }}>
                             {itemData == null ? "Lorem ipsum, dolor sit amet consectetur adipisicing elit as da sda. Lorem ipsum, dolor sit amet consectetur adipisicing elit as da sda." : itemData.description}

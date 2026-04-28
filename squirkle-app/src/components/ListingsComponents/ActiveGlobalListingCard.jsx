@@ -34,7 +34,7 @@ export default function ActiveGlobalListingCard({ listing, idx, handleOpenListin
                 padding: '10px',
                 borderRadius: '10px',
                 fontFamily: `"Fredoka", sans-serif`,
-                cursor: 'pointer'
+                cursor: 'pointer',
             }}
             onClick={() => handleOpenListing(listing)}
         >
@@ -44,7 +44,8 @@ export default function ActiveGlobalListingCard({ listing, idx, handleOpenListin
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    gap: 5
+                    gap: 5,
+                    flexWrap: 'wrap'
                 }}
             >
                 <Flex
@@ -59,7 +60,7 @@ export default function ActiveGlobalListingCard({ listing, idx, handleOpenListin
                         src={listing.itemImageUrl}
                         alt={listing?.itemName || "item image"}
                         title={listing?.itemName || "item image"}
-                        style={{ width: 64, height: 48, objectFit: 'cover', flexShrink: 0, }}
+                        style={{ width: 48, height: 48, objectFit: 'cover', flexShrink: 0, }}
                     />
 
                     <Flex direction="column" style={{ gap: 4 }}>

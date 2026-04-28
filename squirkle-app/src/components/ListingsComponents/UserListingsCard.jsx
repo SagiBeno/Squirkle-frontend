@@ -44,6 +44,7 @@ export default function UserListingCard({ listing, idx, handleOpenListing, handl
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     gap: 5,
+                    flexWrap: 'wrap'
                 }}
             >
                 <Flex
@@ -58,7 +59,7 @@ export default function UserListingCard({ listing, idx, handleOpenListing, handl
                         src={listing?.itemImageUrl}
                         alt={listing?.itemName || "item image"}
                         title={listing?.itemName || "item image"}
-                        style={{ cursor: 'pointer', width: 64, height: 48, objectFit: 'cover', flexShrink: 0, }}
+                        style={{ cursor: 'pointer', width: 48, height: 48, objectFit: 'cover', flexShrink: 0, }}
                         onClick={() => handleOpenListing(listing)}
                     />
 
