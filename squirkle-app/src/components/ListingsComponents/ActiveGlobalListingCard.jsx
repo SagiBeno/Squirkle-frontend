@@ -59,7 +59,7 @@ export default function ActiveGlobalListingCard({ listing, idx, handleOpenListin
                         src={listing.itemImageUrl}
                         alt={listing?.itemName || "item image"}
                         title={listing?.itemName || "item image"}
-                        style={{ width: 64, height: 48, objectFit: 'cover', flexShrink: 0, }}
+                        style={{ width: 48, height: 48, objectFit: 'cover', flexShrink: 0, }}
                     />
 
                     <Flex direction="column" style={{ gap: 4 }}>
