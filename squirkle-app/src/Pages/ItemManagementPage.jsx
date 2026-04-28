@@ -230,7 +230,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
 
         if (userID) {
             setLoading(true);
-            const itemId = itemData.name.toUpperCase().replace(' ', '_');
+            const itemId = itemData.name.toUpperCase().replaceAll(' ', '_');
             const reqBody = {
                 userId: userID,
                 id: itemId,
