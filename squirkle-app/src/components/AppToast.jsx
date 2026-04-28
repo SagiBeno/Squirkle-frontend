@@ -24,10 +24,10 @@ import { Cross2Icon } from "@radix-ui/react-icons";
  * @property { string } [description] - Optional detailed message
  * @property { boolean } isError - Determines if the toast is an error (red) or success (green)
  */
-export default function AppToast( { toastData, setToastData } ) {
+export default function AppToast({ toastData, setToastData }) {
 
     return (
-        <Toast.Provider swipeDirection="up" style={{zIndex: 9999, padding: 0}}>
+        <Toast.Provider swipeDirection="up" duration={5000} style={{ zIndex: 9999, padding: 0 }}>
             <Toast.Root open={toastData.open} onOpenChange={(open) => setToastData({ ...toastData, open })} className="toastStyle">
                 <Flex
                     style={{
@@ -63,9 +63,9 @@ export default function AppToast( { toastData, setToastData } ) {
                 </Flex>
             </Toast.Root>
             <Portal>
-                <Toast.Viewport style={{ zIndex: 99999, position: 'fixed', inset: 'auto 20px 20px auto' }}/>
+                <Toast.Viewport style={{ zIndex: 99999, position: 'fixed', inset: 'auto 20px 20px auto' }} />
             </Portal>
-            
+
         </Toast.Provider>
     );
 }
