@@ -162,8 +162,8 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
                                 <Text size="5" style={{ color: 'white', margin: '10px auto 20px auto', textAlign: 'center' }}>{emptyMessage}</Text>
                             </Box>
                             :
-                            <ScrollArea type="auto" className="inventoryDialogList" style={{ maxHeight: isMobile ? '20vh' : '50vh', minHeight: '50px', marginBottom: '20px' }}>
-                                <Flex wrap="wrap" justify="start" gap="2" style={{ marginRight: '15px' }}>
+                            <ScrollArea type="auto" className="inventoryDialogList" style={{ maxHeight: isMobile ? '20vh' : '50vh', minHeight: '50px', marginBottom: '20px', }}>
+                                <Flex wrap="wrap" justify="start" gap="2" style={{ margin: '10px' }}>
                                     {
                                         filteredInventory?.map((x, i) => {
                                             const isListed = listedIdSet.has(x.userItemId);

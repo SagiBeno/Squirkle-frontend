@@ -33,11 +33,12 @@
 }
 
 .itemSlot {
-    min-width: 64px;
-    height: 64px;
+    min-width: 64px !important;
+    height: 64px !important;
 
-    background-color: white;
     transition: all 0.1s;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    border-radius: 12px;
 }
 
 .itemSlot:hover {
@@ -47,19 +48,13 @@
 }
 
 .itemSlotListed {
-    background-color: lightblue;
+    border: 2px solid rgb(0, 169, 225) !important;
+    box-shadow: 0px 0px 10px 0px rgba(0, 191, 255, 0.549)  !important;
 }
 
 .itemSlotEquipped {
-    background-color: yellow;
-}
-
-.itemSlotListed {
-    background-color: lightblue;
-}
-
-.itemSlotEquipped {
-    background-color: yellow;
+    border: 2px solid rgb(255, 234, 0) !important;
+    box-shadow: 0px 0px 10px 0px rgba(255, 157, 0, 0.549)  !important;
 }
 
 .itemIcon {
