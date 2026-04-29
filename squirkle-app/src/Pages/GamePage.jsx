@@ -87,7 +87,7 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
     function RenderCurrentDialog() {
         switch (dialogState) {
             case AREA_SELECTOR_STATE:
-                return <AreaSelectorDialog user={user} setDialogState={setDialogState} setOpen={setOpenDialog} refreshUser={refreshUser} />
+                return <AreaSelectorDialog user={user} setDialogState={setDialogState} setOpen={setOpenDialog} refreshUser={refreshUser} toastData={toastData} setToastData={setToastData} />
             case INVENTORY_STATE:
                 return <InventoryDialog user={user} setDialogState={setDialogState} setOpen={setOpenDialog} />
             case AUCTION_HOUSE_STATE:
@@ -103,6 +103,7 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
     const [coins, setCoins] = useState(() => user?.coinCount ?? 0)
 
     function showNewItemToast(itemName) {
+        console.log(itemName)
         const trimmedName = (itemName ?? '').toString().trim()
         const displayName = trimmedName.length > 0 ? trimmedName : 'Unknown Item'
 

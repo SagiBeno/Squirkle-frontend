@@ -32,7 +32,7 @@ import { ResetPlayerCoins } from '../../GameEvents';
  * @returns { JSX.Element } Area selector dialog UI
  */
 
-export default function AreaSelectorDialog({ user, setDialogState, setOpen, refreshUser }) {
+export default function AreaSelectorDialog({ user, setDialogState, setOpen, refreshUser, toastData, setToastData }) {
 
     const [areas, setAreas] = useState([])
     const [purchasedAreas, setPurchasedAreas] = useState([])
@@ -96,7 +96,7 @@ export default function AreaSelectorDialog({ user, setDialogState, setOpen, refr
             <ScrollArea type='auto' scrollbars="vertical" style={{ paddingRight: '12px', minHeight: '100px', maxHeight: '50vh' }}>
                 <Flex direction="column">
                     {
-                        areas.map(x => <GameAreaPanel key={x.id} areaData={x} user={user} purchasedAreas={purchasedAreas} refresh={Refresh} />)
+                        areas.map(x => <GameAreaPanel key={x.id} areaData={x} user={user} purchasedAreas={purchasedAreas} refresh={Refresh} toastData={toastData} setToastData={setToastData} />)
                     }
                 </Flex>
             </ScrollArea>

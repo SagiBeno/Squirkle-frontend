@@ -34,7 +34,7 @@ import { GameContext } from "./GameContext.jsx"
  * @returns { JSX.Element } Game area panel UI
  */
 
-export default function GameAreaPanel({ areaData, purchasedAreas, user, refresh }) {
+export default function GameAreaPanel({ areaData, purchasedAreas, user, refresh, toastData, setToastData }) {
 
     const gameContext = useContext(GameContext)
     const [hover, setHover] = useState(false)
@@ -47,7 +47,12 @@ export default function GameAreaPanel({ areaData, purchasedAreas, user, refresh 
      * If the purchase succeeds, refreshes user data and loads the area.
      */
     async function TryPurchase() {
-        if (purchased || !canBuy) return
+        if (purchased) return;
+
+        if (!canBuy) {
+            setToastData({ open: true, title: 'Failed to purchase area', description: "You don't have enough coins!", isError: true });
+            return;
+        }
 
         let res = await fetch(`https://squirkle-backend.vercel.app/api/purchase-area/${areaData.id}`, {
             method: "POST",
@@ -56,9 +61,10 @@ export default function GameAreaPanel({ areaData, purchasedAreas, user, refresh 
         })
 
         if (res.status === 200) {
+            setToastData({ open: true, title: 'Area purchased successfully', description: '', isError: false });
             refresh()
             LoadArea(areaData.id)
-        }
+        } else setToastData({ open: true, title: 'Failed to purchase area', description: res?.error ?? '', isError: true });
     }
 
     /**
@@ -67,7 +73,10 @@ export default function GameAreaPanel({ areaData, purchasedAreas, user, refresh 
      * Loads the area if already purchased, otherwise attempts to purchase it.
      */
     function OnClick() {
-        if (purchased) LoadArea(areaData.id)
+        if (purchased) {
+            LoadArea(areaData.id);
+            setToastData({ open: true, title: 'Area selected', description: '', isError: false });
+        }
         else TryPurchase()
     }
 
