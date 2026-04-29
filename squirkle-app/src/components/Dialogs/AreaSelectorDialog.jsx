@@ -93,7 +93,7 @@ export default function AreaSelectorDialog({ user, setDialogState, setOpen, refr
 
             {loading && <DialogSpinner />}
 
-            <ScrollArea type='auto' scrollbars="vertical" style={{ paddingRight: '12px', minHeight: '100px', maxHeight: '400px' }}>
+            <ScrollArea type='auto' scrollbars="vertical" style={{ paddingRight: '12px', minHeight: '100px', maxHeight: '50vh' }}>
                 <Flex direction="column">
                     {
                         areas.map(x => <GameAreaPanel key={x.id} areaData={x} user={user} purchasedAreas={purchasedAreas} refresh={Refresh} />)
