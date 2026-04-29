@@ -167,7 +167,7 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
     function RenderCurrentDialog() {
         switch (dialogState) {
             case AREA_SELECTOR_STATE:
-                return <AreaSelectorDialog user={user} setOpen={handleOpenDialogChange} refreshUser={refreshUser} toastData={toastData} setToastData={setToastData} onCloseAutoFocus={handleDialogCloseAutoFocus} />
+                return <AreaSelectorDialog user={user} setOpen={handleOpenDialogChange} refreshUser={refreshUser} setToastData={setToastData} onCloseAutoFocus={handleDialogCloseAutoFocus} />
             case INVENTORY_STATE:
                 return <InventoryDialog user={user} setOpen={handleOpenDialogChange} onCloseAutoFocus={handleDialogCloseAutoFocus} />
             case AUCTION_HOUSE_STATE:
@@ -211,9 +211,8 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
                             <GameLoader user={user} />
                         </Flex>
                     </Flex>
-
+                    {RenderCurrentDialog()}
                 </GameContext.Provider>
-                {RenderCurrentDialog()}
             </Dialog.Root>
 
         </>

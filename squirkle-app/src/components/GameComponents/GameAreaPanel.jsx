@@ -34,11 +34,13 @@ import { GameContext } from "./GameContext.jsx"
  * @returns { JSX.Element } Game area panel UI
  */
 
-export default function GameAreaPanel({ areaData, purchasedAreas, user, refresh, toastData, setToastData }) {
+export default function GameAreaPanel({ areaData, purchasedAreas, user, refresh, setToastData }) {
 
     const gameContext = useContext(GameContext)
     const [hover, setHover] = useState(false)
-    const canBuy = user.coinCount >= areaData?.price
+    const currentCoins = Number(gameContext?.coins ?? user?.coinCount ?? 0)
+    const areaCost = Number(areaData?.coinCost ?? areaData?.price ?? 0)
+    const canBuy = currentCoins >= areaCost
     const purchased = purchasedAreas.includes(areaData?.id)
 
     /**
@@ -99,7 +101,7 @@ export default function GameAreaPanel({ areaData, purchasedAreas, user, refresh,
                             }
                             <Flex align="center" gap="1">
                                 <GiTwoCoins size={24} color="#f2c94c" />
-                                <Text style={{ color: "#f2c94c", fontWeight: "bold", textShadow: "2px 2px 10px rgba(0, 0, 0, 0.5)" }} size="7">{areaData.price}</Text>
+                                <Text style={{ color: "#f2c94c", fontWeight: "bold", textShadow: "2px 2px 10px rgba(0, 0, 0, 0.5)" }} size="7">{areaCost}</Text>
                             </Flex>
                         </Flex>
                 }
