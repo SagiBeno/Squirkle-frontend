@@ -85,13 +85,13 @@ export default function ListingsComponentsForUser({ isLow, getUserListings, base
         <Flex
             direction="row"
             style={{
-                backgroundColor: '#646465',
+                backgroundColor: 'rgb(100, 100, 121)',
                 color: 'white',
                 borderRadius: '10px',
                 justifyContent: 'start',
                 padding: '10px',
                 fontFamily: `"Fredoka", sans-serif`,
-                borderBottom: '8px solid #494949',
+                borderBottom: '8px rgba(0, 0, 0, 0.2) solid',
                 marginBottom: '5px'
             }}
         >
@@ -103,13 +103,13 @@ export default function ListingsComponentsForUser({ isLow, getUserListings, base
         <Flex
             direction="row"
             style={{
-                backgroundColor: '#646465',
+                backgroundColor: 'rgb(100, 100, 121)',
                 color: 'white',
                 borderRadius: '10px',
                 justifyContent: 'start',
                 padding: '10px',
                 fontFamily: `"Fredoka", sans-serif`,
-                borderBottom: '8px solid #494949',
+                borderBottom: '8px rgba(0, 0, 0, 0.2) solid',
                 marginTop: '10px',
                 marginBottom: '5px'
             }}
