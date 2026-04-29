@@ -1,4 +1,4 @@
-import { Card, Flex, Box, Text, TextField, Button, ScrollArea } from "@radix-ui/themes";
+import { Card, Flex, Box, Text, TextField, Button, ScrollArea, Avatar } from "@radix-ui/themes";
 import { useState, useEffect } from "react";
 import PasswordInput from "../components/Inputs/PasswordInput";
 import { DisabledLoadingButton, EnterButton, DisabledButton, OrButton, GoogleLoginButton } from "../components/Buttons";
@@ -53,7 +53,7 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
 
     return (
         <Flex className="mainContainer">
-            
+
             <ScrollArea scrollbars="vertical" className='contentContainer' type='auto'>
                 <Box style={{ minHeight: '10px' }} />
                 <Flex
@@ -76,7 +76,24 @@ export default function LoginPage({ handleLoginWithEmailAndPW, handleLoginWithGo
                             color: 'white'
                         }}
                     >
-                        <Text size='8' style={{ fontWeight: 'bold' }}>Login</Text>
+                        <Flex
+                            style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                gap: 10,
+                                flexWrap: 'wrap'
+                            }}
+                        >
+                            <Avatar
+                                src="https://res.cloudinary.com/squirkle/image/upload/v1777451910/icon_yuf3ff.png"
+                                fallback='ICON'
+                                size='6'
+                            />
+                            <Text size='9' style={{ fontWeight: 'bold', letterSpacing: '2px' }}>Squirkle</Text>
+                        </Flex>
+
+                        <Text size='7' style={{ fontWeight: 'bold', marginTop: '10px', letterSpacing: '2px' }}>Login</Text>
+
 
                         <Flex style={{ flexDirection: 'column', justifyContent: "center", textAlign: 'left' }}>
                             <div>
