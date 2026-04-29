@@ -124,6 +124,44 @@ Az alábbi ábra bemutatja az alkalmazás fő komponenseit és azok kapcsolatát
 
 ![Rendszer architektúra](Screenshots/Architecture.png)
 
+### Játék betöltése és automatikus frissítése
+A Squirkle egy elég összetett rendszert használ a játék betöltésének kezelésére.
+
+A játékfájlok Netlify-on vannak tárolva, amely egy ingyenes CDN-ként működik, elég nagy tárhely- és sávszélesség-korlátokkal. Néhány további fájl is tárolva van az automatikusan tömörített (zipelt) játékfájlok mellett.
+
+A CORS korlátozás egy `_headers` fájlban van letiltva. Ez lehetővé teszi, hogy bárki, bárhonnan probléma nélkül letölthesse a játékfájlokat. A Netlify alapértelmezetten blokkolná ezt a folyamatot, de ez megkerüli a korlátozást.
+
+A játék verziója egy külön `version.json` fájlban van tárolva, amely a következő adatot tartalmazza:
+```json
+{
+	"buildDate": "dd/mm/yyyy hh:mm:ss"
+}
+```
+
+Ez a JSON automatikusan frissül a Unity projekt buildelésekor.
+
+A Netlify-on tárolt játékfájlok linkjei:
+- [game.zip](https://squirkle.netlify.app/game.zip)
+- [version.json](https://squirkle.netlify.app/version.json)
+
+A játék betöltésének lépései:
+1. A helyileg és külsőleg tárolt verzió build dátumának lekérése.
+2. A helyi és külső verziók összehasonlítása. Ha a helyi verzió nem létezik, vagy a külső verzió újabb, az új játékfájlok letöltődnek, és blobként eltárolódnak a böngésző IndexedDB-jében.
+3. A játék kicsomagolása futásidőben JS Zip használatával.
+4. Virtuális URL létrehozása az újonnan létrehozott fájlokhoz a memóriában.
+5. A `framework`, `loader`, `data` és `code` URL-ek megkeresése és eltárolása, hogy a Unity player be tudja tölteni őket.
+6. Jelzés a játék felé, hogy a betöltés befejeződött, és a játék készen áll a betöltésre.
+
+A [React Unity WebGL](https://react-unity-webgl.dev/) könyvtárat használjuk a Unity-ben készült böngészős játék beágyazására. Ez a keretrendszer lehetővé teszi, hogy a frontend közvetlenül kommunikáljon a Unity példánnyal, és fordítva.
+
+Miután a játék betöltődött, a frontend inicializációs üzenetet küld a játékpéldánynak.
+Ez az üzenet a következőket tartalmazza:
+1. A szerveroldali játékidőt, amely a bossfightok játékosok közötti szinkronizálásához szükséges
+2. A játékos aktuálisan felszerelt fegyverét és páncélját
+3. A felhasználó userID-ját
+
+Miután ez sikeresen megtörtént, a játék teljesen készen áll a játékra.
+
 ---
 
 ## Adatkezelés (frontend szempontból)
@@ -181,7 +219,10 @@ A frontend kód:
 - React
 - React Router
 - Radix UI
-- Unity WebGL integráció
+- Unity React WebGL
+- JSZip
+- IndexedDB
+- Localstorage
 
 ---
 

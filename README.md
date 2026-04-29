@@ -123,6 +123,44 @@ The following diagram shows the overall structure of the application and how dif
 
 ![System Architecture](Screenshots/Architecture.png)
 
+### Game Loading and Auto-Updating
+Squirkle uses a fairly complicated system for handling the game loading.
+
+The game files are hosted on Netlify which acts as a free CDN with pretty large storage and bandwith limits. A few additional files are also stored alongside the automatically compressed (zipped) game files.
+
+CORS is disabled in a `_headers` file. This allows anyone from anywhere to download the game files without any problems. Netlify would block this process by default, but this bypasses the limitation.
+
+The game's version is stored in a separate `version.json` file, which contains the following data:
+```json
+{
+	"buildDate": "dd/mm/yyyy hh:mm:ss"
+}
+```
+
+This json is automatically updated upon building the Unity project. 
+
+Links to the game files hosted on netlify:
+- [game.zip](https://squirkle.netlify.app/game.zip)
+- [version.json](https://squirkle.netlify.app/version.json)
+
+Here are the steps for loading in the game:
+1. Get the locally and externally stored version build date.
+2. Compare the local and external versions. If the local version doesn't exist, or the external version is newer, download the new game files and store them in the browser's IndexedDB as a blob.
+3. Unzip the game in runtime using JS Zip.
+4. Create a virtual URL for these newly created files in memory.
+5. Find the `framework`, `loader`, `data` and `code` URLs, and store them so that the Unity player can load them in.
+6. Indicate to the game that loading is done and the game is ready to load.  
+
+We use [React Unity WebGL](https://react-unity-webgl.dev/) to embed a browser game made with Unity. This framework allows us to communicate with the Unity instance directly from the frontend and vice-versa.
+
+Once the game is loaded, the frontend sends an initialization message to the game instance.
+This message contains:
+1. The server-side game time used to syncronize bossfights across all players
+2. The player's current equipped weapon and armor
+3. The user's userID
+
+After this happens successfully, the game is fully ready to be played.
+
 ---
 
 ## Data Handling (Frontend Perspective)
@@ -180,7 +218,10 @@ The frontend code:
 - React
 - React Router
 - Radix UI
-- Unity WebGL integration
+- Unity React WebGL
+- JSZip
+- IndexedDB
+- Localstorage
 
 ---
 
