@@ -125,7 +125,7 @@ Az alábbi ábra bemutatja az alkalmazás fő komponenseit és azok kapcsolatát
 ![Rendszer architektúra](Screenshots/Architecture.png)
 
 ### Játék betöltése és automatikus frissítése
-A Squirkle egy elég összetett rendszert használ a játék betöltésének kezelésére.
+Squirkle egy elég összetett rendszert használ a játék betöltésének kezelésére.
 
 A játékfájlok Netlify-on vannak tárolva, amely egy ingyenes CDN-ként működik, elég nagy tárhely- és sávszélesség-korlátokkal. Néhány további fájl is tárolva van az automatikusan tömörített (zipelt) játékfájlok mellett.
 
@@ -148,7 +148,7 @@ A játék betöltésének lépései:
 1. A helyileg és külsőleg tárolt verzió build dátumának lekérése.
 2. A helyi és külső verziók összehasonlítása. Ha a helyi verzió nem létezik, vagy a külső verzió újabb, az új játékfájlok letöltődnek, és blobként eltárolódnak a böngésző IndexedDB-jében.
 3. A játék kicsomagolása futásidőben JS Zip használatával.
-4. Virtuális URL létrehozása az újonnan létrehozott fájlokhoz a memóriában.
+4. Virtuális URL létrehozása a memóriában újonnan létrehozott fájlokhoz.
 5. A `framework`, `loader`, `data` és `code` URL-ek megkeresése és eltárolása, hogy a Unity player be tudja tölteni őket.
 6. Jelzés a játék felé, hogy a betöltés befejeződött, és a játék készen áll a betöltésre.
 
