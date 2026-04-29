@@ -7,7 +7,7 @@
 .inventoryDialogBody {
     display: flex !important;
     gap: 16px !important;
-    align-items: flex-end !important;
+
     padding: 0 15px !important;
 }
 
