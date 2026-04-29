@@ -68,13 +68,12 @@ async function fetchJsonOrThrow(url, options) {
  * @param { Object } props.toastData - Current toast notification data
  * @param { Function } props.setToastData - Updates toast notification data
  * @param { Function } props.setOpen - Controls dialog visibility
- * @param { Function } props.setDialogState - Controls parent dialog state
  * @param { Function } props.refreshUser - Refreshes user data
  *
  * @returns {JSX.Element}
  */
 
-export default function AuctionHouseDialog({ user, toastData, setToastData, setOpen, setDialogState, refreshUser }) {
+export default function AuctionHouseDialog({ user, toastData, setToastData, setOpen, refreshUser }) {
     const [buttonsValue, setButtonsValue] = useState([
         {
             name: 'All listings',
@@ -416,7 +415,6 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
                         <IconButton
                             className="button activeButton"
                             onClick={() => {
-                                setDialogState(null);
                                 setOpen(false);
                             }}
                         >

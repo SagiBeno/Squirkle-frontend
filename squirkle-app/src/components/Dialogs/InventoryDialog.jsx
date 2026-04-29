@@ -33,12 +33,11 @@ import '../../Modal.css';
  * @param { Object } props
  * @param { Object } props.user - Current authenticated user
  * @param { Function } props.setOpen - Controls dialog visibility
- * @param { Function } props.setDialogState - Controls parent dialog state
  *
  * @returns {JSX.Element}
  */
 
-export default function InventoryDialog({ user, setOpen, setDialogState }) {
+export default function InventoryDialog({ user, setOpen }) {
 
     const [inventory, setInventory] = useState([])
     const [listedIds, setListedIds] = useState([])
@@ -143,7 +142,6 @@ export default function InventoryDialog({ user, setOpen, setDialogState }) {
                     <IconButton
                         className="button activeButton"
                         onClick={() => {
-                            setDialogState(null);
                             setOpen(false);
                         }}
                     >

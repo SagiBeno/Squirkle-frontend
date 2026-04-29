@@ -25,14 +25,13 @@ import { ResetPlayerCoins } from '../../GameEvents';
  * 
  * @param { Object } props - Component props
  * @param { Object } props.user - Current authenticated user
- * @param { Function } props.setDialogState - Controls active dialog state
  * @param { Function } props.setOpen - Controls dialog visibility
  * @param { Function } props.refreshUser - Refresh user data from backend 
  * 
  * @returns { JSX.Element } Area selector dialog UI
  */
 
-export default function AreaSelectorDialog({ user, setDialogState, setOpen, refreshUser, toastData, setToastData }) {
+export default function AreaSelectorDialog({ user, setOpen, refreshUser, toastData, setToastData }) {
 
     const [areas, setAreas] = useState([])
     const [purchasedAreas, setPurchasedAreas] = useState([])
@@ -83,7 +82,6 @@ export default function AreaSelectorDialog({ user, setDialogState, setOpen, refr
                         className="button activeButton"
                         onClick={() => {
                             setOpen(false);
-                            setDialogState(null);
                         }}
                     >
                         <HiXMark />

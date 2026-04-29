@@ -1,6 +1,6 @@
 import { Box, Dialog, Flex } from '@radix-ui/themes';
 import Navbar from '../components/Navbars/Navbar';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ResetPlayerCoins } from '../GameEvents';
 import AreaSelectorDialog from '../components/Dialogs/AreaSelectorDialog';
@@ -37,6 +37,9 @@ export const INVENTORY_STATE = 2
  */
 export const AUCTION_HOUSE_STATE = 3
 
+const DIALOG_CLOSE_CLEANUP_DELAY_MS = 220;
+const UNITY_CANVAS_ID = 'squirkle-unity-canvas';
+
 /**
  * Game page component.
  * 
@@ -62,8 +65,52 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
 
     const [dialogState, setDialogState] = useState(GAME_STATE);
     const [openDialog, setOpenDialog] = useState(false);
+    const [isGameLoaded, setIsGameLoaded] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const [filePaths, setFilePaths] = useState({})
+    const [coins, setCoins] = useState(() => user?.coinCount ?? 0)
+    const dialogCleanupTimeoutRef = useRef(null);
 
     const navigate = useNavigate()
+
+    const clearDialogCleanupTimeout = useCallback(() => {
+        if (dialogCleanupTimeoutRef.current == null) return;
+
+        window.clearTimeout(dialogCleanupTimeoutRef.current);
+        dialogCleanupTimeoutRef.current = null;
+    }, []);
+
+    const restoreGameTouchInput = useCallback(() => {
+        // Radix modal layers disable outside pointer events while open; recover if a mobile close leaves the global style behind.
+        const hasOpenModalLayer = document.querySelector(
+            '.rt-BaseDialogOverlay[data-state="open"], [role="dialog"][data-state="open"], [data-radix-menu-content][data-state="open"]'
+        );
+
+        if (!hasOpenModalLayer && document.body.style.pointerEvents === 'none') {
+            document.body.style.pointerEvents = '';
+        }
+
+        const unityCanvas = document.getElementById(UNITY_CANVAS_ID);
+
+        try {
+            unityCanvas?.focus({ preventScroll: true });
+        } catch {
+            unityCanvas?.focus();
+        }
+    }, []);
+
+    const handleOpenDialogChange = useCallback((open) => {
+        clearDialogCleanupTimeout();
+        setOpenDialog(open);
+
+        if (!open) {
+            dialogCleanupTimeoutRef.current = window.setTimeout(() => {
+                setDialogState(GAME_STATE);
+                restoreGameTouchInput();
+                dialogCleanupTimeoutRef.current = null;
+            }, DIALOG_CLOSE_CLEANUP_DELAY_MS);
+        }
+    }, [clearDialogCleanupTimeout, restoreGameTouchInput]);
 
     useEffect(() => {
         setShowAppLoader(false);
@@ -74,7 +121,11 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
 
         setCoins(user.coinCount)
         ResetPlayerCoins(user.coinCount)
-    }, [user])
+    }, [user, navigate, setShowAppLoader])
+
+    useEffect(() => {
+        return () => clearDialogCleanupTimeout();
+    }, [clearDialogCleanupTimeout]);
 
     /**
      * Renders the currently selected game dialog.
@@ -87,20 +138,15 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
     function RenderCurrentDialog() {
         switch (dialogState) {
             case AREA_SELECTOR_STATE:
-                return <AreaSelectorDialog user={user} setDialogState={setDialogState} setOpen={setOpenDialog} refreshUser={refreshUser} toastData={toastData} setToastData={setToastData} />
+                return <AreaSelectorDialog user={user} setOpen={handleOpenDialogChange} refreshUser={refreshUser} toastData={toastData} setToastData={setToastData} />
             case INVENTORY_STATE:
-                return <InventoryDialog user={user} setDialogState={setDialogState} setOpen={setOpenDialog} />
+                return <InventoryDialog user={user} setOpen={handleOpenDialogChange} />
             case AUCTION_HOUSE_STATE:
-                return <AuctionHouseDialog user={user} toastData={toastData} setToastData={setToastData} setOpen={setOpenDialog} setDialogState={setDialogState} refreshUser={refreshUser} />
+                return <AuctionHouseDialog user={user} toastData={toastData} setToastData={setToastData} setOpen={handleOpenDialogChange} refreshUser={refreshUser} />
         }
 
         return null;
     }
-
-    const [isGameLoaded, setIsGameLoaded] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
-    const [filePaths, setFilePaths] = useState({})
-    const [coins, setCoins] = useState(() => user?.coinCount ?? 0)
 
     function showNewItemToast(itemName) {
         console.log(itemName)
@@ -126,9 +172,9 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
 
     return (
         <>
-            <Dialog.Root open={openDialog} onOpenChange={setOpenDialog}>
+            <Dialog.Root open={openDialog} onOpenChange={handleOpenDialogChange}>
                 <GameContext.Provider value={gameContext}>
-                    <Navbar user={user} signOut={signOut} setDialogState={setDialogState} setOpenDialog={setOpenDialog} />
+                    <Navbar user={user} signOut={signOut} setDialogState={setDialogState} setOpenDialog={handleOpenDialogChange} />
                     <Flex className='mainContainer'>
 
                         <Box className='navbarSpacer' />
