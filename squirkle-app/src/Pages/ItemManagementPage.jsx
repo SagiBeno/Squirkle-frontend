@@ -630,8 +630,9 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                             width: '95%',
                             textAlign: 'center',
                             flexDirection: 'column',
-                            background: 'linear-gradient(180deg, #1e1e28, #21212c)',
-                            boxShadow: '0px 0px 10px 0px #bababa',
+                            background: 'transparent',
+                            backdropFilter: 'blur(10px)',
+                            boxShadow: '0px 0px 6px 0px rgb(186, 186, 206)',
                             padding: '20px',
                             borderRadius: '20px',
                             color: 'white',
@@ -644,7 +645,7 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                             onValueChange={(value) => { setSegmentedControlValue(value) }}
                             value={segmentedControlValue}
                             style={{
-                                backgroundColor: '#bababa',
+                                backgroundColor: '#a9a9bd',
                                 padding: 0,
                                 marginBottom: '10px'
                             }}
@@ -716,8 +717,8 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                                             color='gold'
                                             style={{
                                                 borderRadius: 0,
-                                                background: '#bababa',
-                                                border: '3px solid #d5d5d5',
+                                                background: '#a9a9bd',
+                                                border: '3px solid rgb(213, 213, 233)',
                                             }}
                                         >
                                             <Select.Group>
@@ -817,8 +818,8 @@ export default function ItemManagementPage({ user, toastData, setToastData, setS
                                 <Box
                                     {...getRootProps({ className: 'dropzone' })}
                                     style={{
-                                        backgroundColor: '#bababa',
-                                        borderBottom: '6px solid #626262',
+                                        backgroundColor: '#a9a9bd',
+                                        borderBottom: '8px rgba(0, 0, 0, 0.2) solid',
                                         padding: '10px',
                                         textAlign: 'center',
                                         cursor: 'pointer',

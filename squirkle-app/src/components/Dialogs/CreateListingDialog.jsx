@@ -53,7 +53,6 @@ export default function CreateListingDialog({ open, setOpen, createCandidates, c
             onOpenChange={setOpen}
         >
             <Dialog.Content
-                minWidth="80vw"
                 style={{
                     padding: '20px',
                     borderRadius: '10px',
@@ -62,6 +61,9 @@ export default function CreateListingDialog({ open, setOpen, createCandidates, c
                     fontFamily: `"Fredoka", sans-serif`,
                     color: 'white',
                     boxShadow: '0px 0px 5px 1px gray',
+                    minWidth: '40vw',
+                    maxWidth: '500px',
+                    backdropFilter: 'blur(5px)'
                 }}
             >
                 <Dialog.Title>Create Listing</Dialog.Title>

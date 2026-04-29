@@ -34,7 +34,7 @@ export default function NavbarForAdmin({ user, signOut }) {
             style={{
                 height: 50,
                 width: '100%',
-                backgroundColor: 'gray',
+                backgroundColor: '#656582',
                 top: 0,
                 position: 'fixed',
                 fontFamily: "'Fredoka', sans-serif",
@@ -60,27 +60,28 @@ export default function NavbarForAdmin({ user, signOut }) {
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'end',
-                    gap: 15
+                    gap: 15,
+                    padding: 0
                 }}
             >
                 <Text size="4" style={{ color: "white" }}>{user.username}</Text>
 
                 <DropdownMenu.Root>
-                    <DropdownNavbarButton icon={<RiMenuFill size={20} />} />
+                    <DropdownNavbarButton icon={<RiMenuFill size={25} />} />
 
                     <DropdownMenu.Content className="squirkleDropdown" style={{ width: 160, marginTop: -12, marginRight: -20, backgroundColor: "transparent" }}>
 
-                        <Button className="squirkleButton" onClick={() => navigate('/admin/item-management')} style={{ padding: 10, height: '50px', backgroundColor: '#eba62a' }}>
-                            <MdManageAccounts size={18} /> <Text weight="bold">Item management</Text>
+                        <Button className="squirkleButton" onClick={() => navigate('/admin/item-management')} style={{ padding: 10, height: '50px', backgroundColor: '#565676' }}>
+                            <MdManageAccounts size={18} /> <Text>Item management</Text>
                         </Button>
-                        <Button className="squirkleButton" onClick={() => navigate('/admin/metadata-management')} style={{ padding: 10, height: '50px', backgroundColor: '#eba62a' }}>
-                            <MdManageAccounts size={18} /> <Text weight="bold">Metadata management</Text>
+                        <Button className="squirkleButton" onClick={() => navigate('/admin/metadata-management')} style={{ padding: 10, height: '50px', backgroundColor: '#565676' }}>
+                            <MdManageAccounts size={18} /> <Text>Metadata management</Text>
                         </Button>
-                        <Button className="squirkleButton" onClick={() => navigate('/game')} style={{ padding: 5, backgroundColor: '#eba62a' }}>
-                            <GrGamepad size={18} /> <Text weight="bold">Game</Text>
+                        <Button className="squirkleButton" onClick={() => navigate('/game')} style={{ padding: 5, backgroundColor: '#565676', }}>
+                            <GrGamepad size={18} /> <Text>Game</Text>
                         </Button>
-                        <Button className="squirkleButton" onClick={signOut} style={{ padding: 5, backgroundColor: "#ee3c3c", }}>
-                            <FiLogOut size={18} /> <Text weight="bold">Logout</Text>
+                        <Button className="squirkleButton" onClick={signOut} style={{ padding: 5, backgroundColor: "#ee3c3c" }}>
+                            <FiLogOut size={18} /> <Text>Logout</Text>
                         </Button>
 
                     </DropdownMenu.Content>

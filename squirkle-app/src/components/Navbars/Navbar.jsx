@@ -60,7 +60,7 @@ export default function Navbar({ user, signOut, setDialogState, setOpenDialog })
             style={{
                 height: 50,
                 width: '100%',
-                backgroundColor: 'gray',
+                backgroundColor: '#656582',
                 top: 0,
                 position: 'fixed',
                 fontFamily: "'Fredoka', sans-serif",
@@ -114,16 +114,16 @@ export default function Navbar({ user, signOut, setDialogState, setOpenDialog })
                                 {
                                     user?.isAdmin &&
                                     <>
-                                        <Button className="squirkleButton" onClick={() => navigate('/admin/item-management')} style={{ padding: 10, height: '50px', backgroundColor: '#eba62a' }}>
+                                        <Button className="squirkleButton" onClick={() => navigate('/admin/item-management')} style={{ padding: 10, height: '50px', backgroundColor: '#565676' }}>
                                             <MdManageAccounts size={18} /> <Text weight="bold">Item management</Text>
                                         </Button>
-                                        <Button className="squirkleButton" onClick={() => navigate('/admin/metadata-management')} style={{ padding: 10, height: '50px', backgroundColor: '#eba62a' }}>
+                                        <Button className="squirkleButton" onClick={() => navigate('/admin/metadata-management')} style={{ padding: 10, height: '50px', backgroundColor: '#565676' }}>
                                             <MdManageAccounts size={18} /> <Text weight="bold">Metadata management</Text>
                                         </Button>
                                     </>
                                 }
 
-                                <Button className="squirkleButton" onClick={signOut} style={{ padding: 5, backgroundColor: "#ee3c3c", }}>
+                                <Button className="squirkleButton" onClick={signOut} style={{ padding: 5, backgroundColor: "#ee3c3c", fontFamily: "'Fredoka', sans-serif", letterSpacing: '1px' }}>
                                     <FiLogOut size={18} /> <Text weight="bold">Logout</Text>
                                 </Button>
 

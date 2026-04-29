@@ -26,7 +26,7 @@ export default function InactiveGlobalListingCard({ listing, idx, handleOpenList
 
         <Flex
             style={{
-                background: idx % 2 === 0 ? '#aeaeae' : '#d8d8d8',
+                background: idx % 2 === 0 ? 'rgb(174, 174, 194)' : 'rgb(216, 216, 236)',
                 color: 'black',
                 boxShadow: 'none',
                 flexDirection: 'column',
