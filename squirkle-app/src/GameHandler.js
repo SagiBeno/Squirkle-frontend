@@ -31,7 +31,11 @@ export async function InitializeGame(user) {
 
     for (let i = 0; i < equippedItems.items.length; i++) {
         const item = await (await fetch(`https://squirkle-backend.vercel.app/api/get-item/${equippedItems.items[i].baseItemId}`)).json()
-        equippedItemData[item.item.type] = item.item
+        equippedItemData[item.item.type] = {
+            userItemId: equippedItems.items[i],
+            itemId: equippedItems.items[i].baseItemId,
+            ...item.item
+        }
     }
 
     const initData = JSON.stringify({
