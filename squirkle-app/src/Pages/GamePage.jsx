@@ -39,6 +39,7 @@ export const AUCTION_HOUSE_STATE = 3
 
 const DIALOG_CLOSE_CLEANUP_DELAY_MS = 220;
 const UNITY_CANVAS_ID = 'squirkle-unity-canvas';
+const RESTORE_GAME_TOUCH_INPUT_EVENT = 'squirkle:restore-game-touch-input';
 
 /**
  * Game page component.
@@ -86,7 +87,9 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
             '.rt-BaseDialogOverlay[data-state="open"], [role="dialog"][data-state="open"], [data-radix-menu-content][data-state="open"]'
         );
 
-        if (!hasOpenModalLayer && document.body.style.pointerEvents === 'none') {
+        if (hasOpenModalLayer) return;
+
+        if (document.body.style.pointerEvents === 'none') {
             document.body.style.pointerEvents = '';
         }
 
@@ -146,6 +149,12 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
     useEffect(() => {
         return () => clearDialogCleanupTimeout();
     }, [clearDialogCleanupTimeout]);
+
+    useEffect(() => {
+        window.addEventListener(RESTORE_GAME_TOUCH_INPUT_EVENT, restoreGameTouchInput);
+
+        return () => window.removeEventListener(RESTORE_GAME_TOUCH_INPUT_EVENT, restoreGameTouchInput);
+    }, [restoreGameTouchInput]);
 
     /**
      * Renders the currently selected game dialog.

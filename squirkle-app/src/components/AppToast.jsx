@@ -1,6 +1,9 @@
 import * as Toast from "@radix-ui/react-toast";
-import { Card, Text, Button, Flex, IconButton, Portal } from "@radix-ui/themes";
+import { Text, Flex, Portal } from "@radix-ui/themes";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import { useCallback, useEffect } from "react";
+
+const RESTORE_GAME_TOUCH_INPUT_EVENT = 'squirkle:restore-game-touch-input';
 
 /**
  * Global toast notification component.
@@ -25,10 +28,37 @@ import { Cross2Icon } from "@radix-ui/react-icons";
  * @property { boolean } isError - Determines if the toast is an error (red) or success (green)
  */
 export default function AppToast({ toastData, setToastData }) {
+    const restoreGameplayTouchInput = useCallback(() => {
+        window.setTimeout(() => {
+            window.dispatchEvent(new Event(RESTORE_GAME_TOUCH_INPUT_EVENT));
+        }, 0);
+        window.setTimeout(() => {
+            window.dispatchEvent(new Event(RESTORE_GAME_TOUCH_INPUT_EVENT));
+        }, 180);
+    }, []);
+
+    function handleOpenChange(open) {
+        setToastData({ ...toastData, open });
+        restoreGameplayTouchInput();
+    }
+
+    useEffect(() => {
+        if (toastData.open) restoreGameplayTouchInput();
+    }, [toastData.open, restoreGameplayTouchInput]);
 
     return (
         <Toast.Provider swipeDirection="up" duration={5000} style={{ zIndex: 9999, padding: 0 }}>
-            <Toast.Root open={toastData.open} onOpenChange={(open) => setToastData({ ...toastData, open })} className="toastStyle">
+            <Toast.Root
+                open={toastData.open}
+                onOpenChange={handleOpenChange}
+                onPointerUp={restoreGameplayTouchInput}
+                onPointerCancel={restoreGameplayTouchInput}
+                onTouchEnd={restoreGameplayTouchInput}
+                onTouchCancel={restoreGameplayTouchInput}
+                onSwipeEnd={restoreGameplayTouchInput}
+                onSwipeCancel={restoreGameplayTouchInput}
+                className="toastStyle"
+            >
                 <Flex
                     style={{
                         position: "fixed",

@@ -55,9 +55,19 @@ export default function Navbar({ user, signOut, setDialogState, setOpenDialog, r
     }, [])
 
     const iconSize = isMobile ? 24 : 32
+    const restoreNavbarTouchInput = () => {
+        if (!isMobile) return;
+
+        window.setTimeout(() => restoreGameTouchInput?.(), 0);
+        window.setTimeout(() => restoreGameTouchInput?.(), 180);
+    }
 
     return (
         <Flex
+            onPointerUp={restoreNavbarTouchInput}
+            onPointerCancel={restoreNavbarTouchInput}
+            onTouchEnd={restoreNavbarTouchInput}
+            onTouchCancel={restoreNavbarTouchInput}
             style={{
                 height: 50,
                 width: '100%',
