@@ -103,7 +103,6 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
     const [coins, setCoins] = useState(() => user?.coinCount ?? 0)
 
     function showNewItemToast(itemName) {
-        console.log(itemName)
         const trimmedName = (itemName ?? '').toString().trim()
         const displayName = trimmedName.length > 0 ? trimmedName : 'Unknown Item'
 

@@ -30,7 +30,7 @@ export default function UsernameInputDialog({ open, setOpen, setToastData, exist
     let navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState({ content: 'The username could not be saved. Please try again or enter a different one.', error: true });
+    const [message, setMessage] = useState({ content: '', error: false });
 
     /**
      * Validates and saves the selected username.
@@ -71,7 +71,7 @@ export default function UsernameInputDialog({ open, setOpen, setToastData, exist
     }
 
     return (
-        <Dialog.Root open={open} onOpenChange={setOpen}>
+        <Dialog.Root open={open} onOpenChange={() => {}}>
             <Dialog.Content 
                 style={{
                     color: 'white',
@@ -98,7 +98,7 @@ export default function UsernameInputDialog({ open, setOpen, setToastData, exist
                 />
 
                 {
-                    username.length > 0
+                    username?.length > 0
                         ?
                         loading
                             ?
@@ -110,7 +110,7 @@ export default function UsernameInputDialog({ open, setOpen, setToastData, exist
                 }
 
                 {
-                    message.content.length > 0 &&
+                    message?.content?.length > 0 &&
                     <Flex
                         style={{
                             width: '100%',
@@ -121,7 +121,7 @@ export default function UsernameInputDialog({ open, setOpen, setToastData, exist
                         }}
                     >
                         {
-                            message.error &&
+                            message?.error &&
                             <BiErrorAlt 
                                 style={{ 
                                     color: 'tomato',
@@ -135,10 +135,11 @@ export default function UsernameInputDialog({ open, setOpen, setToastData, exist
                         <Text
                             size='5'
                             style={{
-                                color: message.error ? 'tomato' : 'lightgreen',
+                                color: message?.error ? 'tomato' : 'lightgreen',
+                                textAlign: 'center'
                             }}
                         >
-                            {message.content}
+                            {message?.content}
                         </Text>
                     </Flex>
 
