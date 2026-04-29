@@ -81,10 +81,9 @@ export default function AllItemsDialog({ open, setOpen, handleSelectedModify }) 
                     padding: '20px',
                     borderRadius: '10px',
                     overflow: "auto",
-                    background: '#21212c',
                     fontFamily: `"Fredoka", sans-serif`,
                     color: 'white',
-                    boxShadow: '0px 0px 5px 2px gray'
+                    boxShadow: '0px 0px 6px 0px rgb(186, 186, 206)',
                 }}
             >
 

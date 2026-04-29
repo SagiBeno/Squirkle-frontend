@@ -31,7 +31,8 @@ export default function ItemsTable( { items, handleSelectedModify } ) {
             style={{
                 width: '75vw',
                 padding: '20px',
-                margin: '0 auto'
+                margin: '0 auto',
+                maxHeight: '50vh'
             }}
         >
             <Table.Root
@@ -40,7 +41,7 @@ export default function ItemsTable( { items, handleSelectedModify } ) {
                     maxWidth: '920px',
                     minWidth: '600px',
                     margin: '10px auto',
-                    boxShadow: '0px 0px 2px 1px #777777'
+                    boxShadow: '0px 0px 3px 0px rgb(186, 186, 206)',
                 }}
             >
                 <Table.Header>
@@ -57,7 +58,7 @@ export default function ItemsTable( { items, handleSelectedModify } ) {
                         <Table.ColumnHeaderCell
                             style={{
                                 textAlign: 'center',
-                                width: '80%'
+                                width: '70%'
                             }}
                         >
                             Item's name
