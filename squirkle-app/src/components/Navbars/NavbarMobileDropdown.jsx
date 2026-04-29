@@ -1,7 +1,6 @@
-import { Button, Dialog, DropdownMenu, Text } from '@radix-ui/themes'
-import React from 'react'
+import { Button, DropdownMenu, Text } from '@radix-ui/themes'
+import { useState } from 'react'
 import { FaMap } from 'react-icons/fa'
-import { IoGameController } from 'react-icons/io5'
 import { MdBackpack } from 'react-icons/md'
 import { RiAuctionFill, RiMenuFill } from 'react-icons/ri'
 import { AREA_SELECTOR_STATE, AUCTION_HOUSE_STATE, INVENTORY_STATE } from '../../Pages/GamePage'
@@ -34,9 +33,15 @@ import { MdManageAccounts } from "react-icons/md";
 export default function NavbarMobileDropdown({ setDialogState, user, signOut, iconSize, setOpenDialog }) {
 
     const navigate = useNavigate();
+    const [open, setOpen] = useState(false);
+
+    function handleMenuAction(action) {
+        setOpen(false);
+        action();
+    }
 
     return (
-        <DropdownMenu.Root>
+        <DropdownMenu.Root modal={false} open={open} onOpenChange={setOpen}>
             <DropdownNavbarButton icon={<RiMenuFill size={iconSize} />} />
 
             <DropdownMenu.Content className="squirkleDropdown" style={{ width: 200, marginTop: -12, marginLeft: -20, backgroundColor: "transparent", fontFamily: "'Fredoka', sans-serif", }}>
@@ -48,10 +53,10 @@ export default function NavbarMobileDropdown({ setDialogState, user, signOut, ic
                 <Button
                     className="squirkleButton"
                     style={{ padding: 5, backgroundColor: "#565676" }}
-                    onClick={() => {
+                    onClick={() => handleMenuAction(() => {
                         setDialogState(AREA_SELECTOR_STATE);
                         setOpenDialog(true);
-                    }}
+                    })}
                 >
                     <FaMap size={18} color='white' style={{ marginRight: 8 }} />
                     <Text style={{ color: "white", }}>Area</Text>
@@ -60,10 +65,10 @@ export default function NavbarMobileDropdown({ setDialogState, user, signOut, ic
                 <Button
                     className="squirkleButton"
                     style={{ padding: 5, backgroundColor: "#565676" }}
-                    onClick={() => {
+                    onClick={() => handleMenuAction(() => {
                         setDialogState(INVENTORY_STATE);
                         setOpenDialog(true);
-                    }}
+                    })}
                 >
                     <MdBackpack size={18} color='white' style={{ marginRight: 8 }} />
                     <Text style={{ color: "white" }}>Inventory</Text>
@@ -72,10 +77,10 @@ export default function NavbarMobileDropdown({ setDialogState, user, signOut, ic
                 <Button
                     className="squirkleButton"
                     style={{ padding: 5, backgroundColor: "#565676" }}
-                    onClick={() => {
+                    onClick={() => handleMenuAction(() => {
                         setDialogState(AUCTION_HOUSE_STATE);
                         setOpenDialog(true);
-                    }}
+                    })}
                 >
                     <RiAuctionFill size={18} color='white' style={{ marginRight: 8 }} />
                     <Text style={{ color: "white" }}>Auction House</Text>
@@ -87,18 +92,18 @@ export default function NavbarMobileDropdown({ setDialogState, user, signOut, ic
                         <Button
                             className="squirkleButton"
                             style={{ padding: 5, backgroundColor: "#565676", color: 'white' }}
-                            onClick={() => {
+                            onClick={() => handleMenuAction(() => {
                                 navigate('/admin/item-management');
-                            }}
+                            })}
                         >
                             <MdManageAccounts size={18} /> Item management
                         </Button>
                         <Button
                             className="squirkleButton"
                             style={{ padding: 5, backgroundColor: "#565676", height: '55px', color: 'white', textAlign: 'center' }}
-                            onClick={() => {
+                            onClick={() => handleMenuAction(() => {
                                 navigate('/admin/metadata-management');
-                            }}
+                            })}
                         >
                             <MdManageAccounts size={18} /> Metadata management
                         </Button>
@@ -108,7 +113,7 @@ export default function NavbarMobileDropdown({ setDialogState, user, signOut, ic
 
                 {user ? (
                     <>
-                        <Button className="squirkleButton" onClick={signOut} style={{ padding: 5, backgroundColor: "#ee3c3c" }}>
+                        <Button className="squirkleButton" onClick={() => handleMenuAction(signOut)} style={{ padding: 5, backgroundColor: "#ee3c3c" }}>
                             <FiLogOut size={18} /> <Text weight="bold">Logout</Text>
                         </Button>
                     </>
