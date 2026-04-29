@@ -62,7 +62,8 @@ export default function CreateListingDialog({ open, setOpen, createCandidates, c
                     color: 'white',
                     boxShadow: '0px 0px 5px 1px gray',
                     minWidth: '40vw',
-                    maxWidth: '500px'
+                    maxWidth: '500px',
+                    backdropFilter: 'blur(5px)'
                 }}
             >
                 <Dialog.Title>Create Listing</Dialog.Title>
