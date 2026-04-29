@@ -6,9 +6,18 @@
 }
 
 .inventoryDialogBody {
-    display: flex !important;
-    gap: 16px !important;
-    padding: 0 15px !important;
+  height: calc(80vh - 90px) !important;
+  min-height: 0 !important;
+  display: flex !important;
+  gap: 16px !important;
+  padding: 0 15px !important;
+  overflow: hidden !important;
+}
+
+.inventoryDialogList {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
 }
 
 .inventoryDialogEquipPanel {
