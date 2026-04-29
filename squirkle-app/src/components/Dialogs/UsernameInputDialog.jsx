@@ -71,7 +71,7 @@ export default function UsernameInputDialog({ open, setOpen, setToastData, exist
     }
 
     return (
-        <Dialog.Root open={open} onOpenChange={setOpen}>
+        <Dialog.Root open={open} onOpenChange={() => {}}>
             <Dialog.Content 
                 style={{
                     color: 'white',
