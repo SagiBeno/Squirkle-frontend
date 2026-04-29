@@ -60,7 +60,7 @@ export default function Navbar({ user, signOut, setDialogState, setOpenDialog })
             style={{
                 height: 50,
                 width: '100%',
-                backgroundColor: 'gray',
+                backgroundColor: '#656582',
                 top: 0,
                 position: 'fixed',
                 fontFamily: "'Fredoka', sans-serif",
@@ -123,7 +123,7 @@ export default function Navbar({ user, signOut, setDialogState, setOpenDialog })
                                     </>
                                 }
 
-                                <Button className="squirkleButton" onClick={signOut} style={{ padding: 5, backgroundColor: "#ee3c3c", }}>
+                                <Button className="squirkleButton" onClick={signOut} style={{ padding: 5, backgroundColor: "#ee3c3c", fontFamily: "'Fredoka', sans-serif", letterSpacing: '1px' }}>
                                     <FiLogOut size={18} /> <Text weight="bold">Logout</Text>
                                 </Button>
 
