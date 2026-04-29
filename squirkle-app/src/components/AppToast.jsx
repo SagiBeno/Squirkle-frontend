@@ -54,7 +54,7 @@ export default function AppToast({ toastData, setToastData }) {
                         </Flex>
 
 
-                        {toastData?.description?.lenght > 0 && (
+                        {toastData?.description?.length > 0 && (
                             <Text size="2" style={{ color: 'white' }}>
                                 {toastData.description}
                             </Text>
