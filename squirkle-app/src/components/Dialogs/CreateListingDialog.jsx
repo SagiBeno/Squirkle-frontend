@@ -57,13 +57,11 @@ export default function CreateListingDialog({ open, setOpen, createCandidates, c
                     padding: '20px',
                     borderRadius: '10px',
                     overflow: "auto",
-                    background: '#21212c',
                     fontFamily: `"Fredoka", sans-serif`,
                     color: 'white',
                     boxShadow: '0px 0px 5px 1px gray',
                     minWidth: '40vw',
                     maxWidth: '500px',
-                    backdropFilter: 'blur(5px)'
                 }}
             >
                 <Dialog.Title>Create Listing</Dialog.Title>
@@ -94,8 +92,8 @@ export default function CreateListingDialog({ open, setOpen, createCandidates, c
                                     color='gold'
                                     style={{
                                         borderRadius: 0,
-                                        background: '#bababa',
-                                        border: '3px solid #d5d5d5',
+                                        background: '#a9a9bd',
+                                        border: '3px solid rgb(213, 213, 233)',
                                     }}
                                 >
                                     {

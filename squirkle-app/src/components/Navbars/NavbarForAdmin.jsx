@@ -1,4 +1,4 @@
-import { Button, DropdownMenu, Flex, Text } from "@radix-ui/themes";
+import { Button, DropdownMenu, Flex, Text, Avatar } from "@radix-ui/themes";
 import { DropdownNavbarButton } from "../Buttons";
 import { RiMenuFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
@@ -52,6 +52,11 @@ export default function NavbarForAdmin({ user, signOut }) {
                     marginLeft: '15px'
                 }}
             >
+                <Avatar 
+                    src="https://res.cloudinary.com/squirkle/image/upload/v1777451910/icon_yuf3ff.png"
+                    fallback='ICON'
+                    size='2'
+                />
                 <Text size="4" style={{ color: "white", textTransform: 'uppercase', fontWeight: '500', letterSpacing: '2px' }}>Admin</Text>
             </Flex>
 
