@@ -85,7 +85,7 @@ The registration interface can be accessed from the login page using the “Regi
 
 ![Registration Button](Screenshots/Login_Registration_button.png)
 
-![Registration Page](Screenshots/registration.png)
+![Registration Page](Screenshots/Registration.png)
 
 ### Required Data
 
@@ -261,13 +261,13 @@ The item can be removed using the “Unequip Item” button.
 
 ---
 
-### Usage / Weapon Activation
+### Weapon Abilities
 
-Weapon usage depends on the platform:
+The controls to use a weapon's abilities depend on the platform:
 
 - **Desktop:**
-  - hold the right mouse button for about 1 second
-  - after activation, the weapon can be moved
+  - hold the left mouse button for about 1 second
+  - after activation, the weapon can be moved (moving the weapon cancels the charge)
 
 - **Mobile device:**
   - activated by double tapping
@@ -291,7 +291,7 @@ The Auction House allows players to buy and sell items with each other.
 
 ### Creating a New Listing
 
-![Create Listing](Screenshots/Auction_house_create_listings.png)
+![Create Listing](Screenshots/Auction_house_Create_listings.png)
 
 The user:
 - selects an inventory item
@@ -305,7 +305,7 @@ Important:
 
 ### My Listings
 
-![My Listings](Screenshots/Auction_house_my_listings.png)
+![My Listings](Screenshots/Auction_house_My_listings.png)
 
 The user can manage their own listings here.
 
@@ -315,7 +315,7 @@ Listings can be deleted using the trash icon.
 
 ### Previous Listings
 
-![Previous Listings](Screenshots/Auction_house_previous_listings.png)
+![Previous Listings](Screenshots/Auction_house_Previous_listings.png)
 
 This section displays previously sold or expired listings.
 

@@ -85,7 +85,7 @@ A regisztrációs felület a bejelentkezési oldalról érhető el a „Registra
 
 ![Regisztrációs gomb](Screenshots/Login_Registration_button.png)
 
-![Regisztrációs oldal](Screenshots/registration.png)
+![Regisztrációs oldal](Screenshots/Registration.png)
 
 ### Adatok megadása
 
@@ -268,8 +268,8 @@ A „Unequip Item” gombbal a tárgy eltávolítható.
 A fegyverek használata platformtól függően történik:
 
 - **Asztali gépen:**
-  - jobb egérgomb nyomva tartása körülbelül 1 másodpercig
-  - aktiválás után mozgatható
+  - bal egérgomb nyomva tartása körülbelül 1 másodpercig
+  - aktiválás után mozgatható (a fegyver mozgatása megszakítja a feltöltést)
 
 - **Mobil eszközön:**
   - dupla koppintással aktiválható
@@ -293,7 +293,7 @@ Az aukciós ház lehetővé teszi a játékosok közötti tárgyak adásvételé
 
 ### Új hirdetés létrehozása
 
-![Create listing](Screenshots/Auction_house_create_listings.png)
+![Create listing](Screenshots/Auction_house_Create_listings.png)
 
 A felhasználó:
 - kiválaszt egy inventory itemet
@@ -307,7 +307,7 @@ Fontos:
 
 ### Saját hirdetések
 
-![My listings](Screenshots/Auction_house_my_listings.png)
+![My listings](Screenshots/Auction_house_My_listings.png)
 
 A felhasználó itt kezelheti saját hirdetéseit.
 
@@ -317,7 +317,7 @@ A hirdetések törölhetők a kuka ikon segítségével.
 
 ### Korábbi hirdetések
 
-![Previous listings](Screenshots/Auction_house_previous_listings.png)
+![Previous listings](Screenshots/Auction_house_Previous_listings.png)
 
 Itt láthatók a korábban eladott vagy lejárt hirdetések.
 
