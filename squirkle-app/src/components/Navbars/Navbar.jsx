@@ -114,10 +114,10 @@ export default function Navbar({ user, signOut, setDialogState, setOpenDialog })
                                 {
                                     user?.isAdmin &&
                                     <>
-                                        <Button className="squirkleButton" onClick={() => navigate('/admin/item-management')} style={{ padding: 10, height: '50px', backgroundColor: '#eba62a' }}>
+                                        <Button className="squirkleButton" onClick={() => navigate('/admin/item-management')} style={{ padding: 10, height: '50px', backgroundColor: '#565676' }}>
                                             <MdManageAccounts size={18} /> <Text weight="bold">Item management</Text>
                                         </Button>
-                                        <Button className="squirkleButton" onClick={() => navigate('/admin/metadata-management')} style={{ padding: 10, height: '50px', backgroundColor: '#eba62a' }}>
+                                        <Button className="squirkleButton" onClick={() => navigate('/admin/metadata-management')} style={{ padding: 10, height: '50px', backgroundColor: '#565676' }}>
                                             <MdManageAccounts size={18} /> <Text weight="bold">Metadata management</Text>
                                         </Button>
                                     </>
