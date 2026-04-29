@@ -32,12 +32,12 @@ export default function HomePage({user, setShowAppLoader}) {
     }, [])
 
     const [isBig, setIsBig] = useState(
-        window.matchMedia("(min-width: 780px)").matches
+        window.matchMedia("(min-width: 800px)").matches
     )
 
     useEffect(() => {
         window
-        .matchMedia("(min-width: 780px)")
+        .matchMedia("(min-width: 800px)")
         .addEventListener('change', e => setIsBig( e.matches ));
     }, []);
 
