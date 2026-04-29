@@ -41,7 +41,7 @@ export default function NavbarMobileDropdown({ setDialogState, user, signOut, ic
 
             <DropdownMenu.Content className="squirkleDropdown" style={{ width: 200, marginTop: -12, marginLeft: -20, backgroundColor: "transparent", fontFamily: "'Fredoka', sans-serif", }}>
                 {user == null ? null :
-                    <Text style={{ backgroundColor: "#7373b5", textAlign: "center", paddingBottom: 5, paddingTop: 5, color: 'white', fontWeight: '500', letterSpacing: '1px' }}>{user.username}</Text>
+                    <Text style={{ backgroundColor: "#7373b5", textAlign: "center", paddingBottom: 5, paddingTop: 5, color: 'white', fontWeight: 'bold', letterSpacing: '1px' }}>{user.username}</Text>
                 }
 
 
@@ -54,7 +54,7 @@ export default function NavbarMobileDropdown({ setDialogState, user, signOut, ic
                     }}
                 >
                     <FaMap size={18} color='white' style={{ marginRight: 8 }} />
-                    <Text style={{ color: "white", fontFamily: "'Fredoka', sans-serif", letterSpacing: '1px' }}>Area</Text>
+                    <Text style={{ color: "white", }}>Area</Text>
                 </Button>
 
                 <Button
@@ -66,7 +66,7 @@ export default function NavbarMobileDropdown({ setDialogState, user, signOut, ic
                     }}
                 >
                     <MdBackpack size={18} color='white' style={{ marginRight: 8 }} />
-                    <Text style={{ color: "white", fontFamily: "'Fredoka', sans-serif", letterSpacing: '1px' }}>Inventory</Text>
+                    <Text style={{ color: "white" }}>Inventory</Text>
                 </Button>
 
                 <Button
@@ -78,7 +78,7 @@ export default function NavbarMobileDropdown({ setDialogState, user, signOut, ic
                     }}
                 >
                     <RiAuctionFill size={18} color='white' style={{ marginRight: 8 }} />
-                    <Text style={{ color: "white", fontFamily: "'Fredoka', sans-serif" }}>Auction House</Text>
+                    <Text style={{ color: "white" }}>Auction House</Text>
                 </Button>
 
                 {
@@ -86,7 +86,7 @@ export default function NavbarMobileDropdown({ setDialogState, user, signOut, ic
                     <>
                         <Button
                             className="squirkleButton"
-                            style={{ padding: 5, backgroundColor: "#565676", color: 'white', fontFamily: "'Fredoka', sans-serif", letterSpacing: '1px' }}
+                            style={{ padding: 5, backgroundColor: "#565676", color: 'white' }}
                             onClick={() => {
                                 navigate('/admin/item-management');
                             }}
@@ -95,7 +95,7 @@ export default function NavbarMobileDropdown({ setDialogState, user, signOut, ic
                         </Button>
                         <Button
                             className="squirkleButton"
-                            style={{ padding: 5, backgroundColor: "#565676", height: '55px', color: 'white', textAlign: 'center', fontFamily: "'Fredoka', sans-serif", letterSpacing: '1px' }}
+                            style={{ padding: 5, backgroundColor: "#565676", height: '55px', color: 'white', textAlign: 'center' }}
                             onClick={() => {
                                 navigate('/admin/metadata-management');
                             }}
@@ -108,7 +108,7 @@ export default function NavbarMobileDropdown({ setDialogState, user, signOut, ic
 
                 {user ? (
                     <>
-                        <Button className="squirkleButton" onClick={signOut} style={{ padding: 5, backgroundColor: "#ee3c3c", fontFamily: "'Fredoka', sans-serif", letterSpacing: '1px' }}>
+                        <Button className="squirkleButton" onClick={signOut} style={{ padding: 5, backgroundColor: "#ee3c3c" }}>
                             <FiLogOut size={18} /> <Text weight="bold">Logout</Text>
                         </Button>
                     </>

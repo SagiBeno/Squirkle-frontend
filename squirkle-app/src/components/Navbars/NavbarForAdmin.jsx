@@ -71,16 +71,16 @@ export default function NavbarForAdmin({ user, signOut }) {
 
                     <DropdownMenu.Content className="squirkleDropdown" style={{ width: 160, marginTop: -12, marginRight: -20, backgroundColor: "transparent" }}>
 
-                        <Button className="squirkleButton" onClick={() => navigate('/admin/item-management')} style={{ padding: 10, height: '50px', backgroundColor: '#565676', fontFamily: "'Fredoka', sans-serif", letterSpacing: '1px' }}>
+                        <Button className="squirkleButton" onClick={() => navigate('/admin/item-management')} style={{ padding: 10, height: '50px', backgroundColor: '#565676' }}>
                             <MdManageAccounts size={18} /> <Text>Item management</Text>
                         </Button>
-                        <Button className="squirkleButton" onClick={() => navigate('/admin/metadata-management')} style={{ padding: 10, height: '50px', backgroundColor: '#565676', fontFamily: "'Fredoka', sans-serif", letterSpacing: '1px' }}>
+                        <Button className="squirkleButton" onClick={() => navigate('/admin/metadata-management')} style={{ padding: 10, height: '50px', backgroundColor: '#565676' }}>
                             <MdManageAccounts size={18} /> <Text>Metadata management</Text>
                         </Button>
-                        <Button className="squirkleButton" onClick={() => navigate('/game')} style={{ padding: 5, backgroundColor: '#565676', fontFamily: "'Fredoka', sans-serif", letterSpacing: '1px' }}>
+                        <Button className="squirkleButton" onClick={() => navigate('/game')} style={{ padding: 5, backgroundColor: '#565676', }}>
                             <GrGamepad size={18} /> <Text>Game</Text>
                         </Button>
-                        <Button className="squirkleButton" onClick={signOut} style={{ padding: 5, backgroundColor: "#ee3c3c", fontFamily: "'Fredoka', sans-serif", letterSpacing: '1px' }}>
+                        <Button className="squirkleButton" onClick={signOut} style={{ padding: 5, backgroundColor: "#ee3c3c" }}>
                             <FiLogOut size={18} /> <Text>Logout</Text>
                         </Button>
 

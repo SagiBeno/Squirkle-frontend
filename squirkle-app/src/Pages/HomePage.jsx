@@ -68,7 +68,7 @@ export default function HomePage({user, setShowAppLoader}) {
                                 style={{
                                     padding: '30px',
                                     fontSize: "30px",
-                                    backgroundColor: 'darkgray',
+                                    backgroundColor: '#a9a9bd',
                                     borderBottom: '8px rgba(0, 0, 0, 0.2) solid',
                                     color: 'black',
                                     fontFamily: '"Fredoka", sans-serif',

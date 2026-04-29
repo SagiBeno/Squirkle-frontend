@@ -317,7 +317,7 @@ export default function MetadataManagementPage({ user, setShowAppLoader, toastDa
                             onValueChange={(value) => { setSegmentedControlValue(value) }}
                             value={segmentedControlValue}
                             style={{
-                                backgroundColor: '#bababa',
+                                backgroundColor: '#a9a9bd',
                                 padding: 0,
                                 marginBottom: '10px',
                             }}
