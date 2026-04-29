@@ -1,10 +1,11 @@
-import { Card, Flex, Box, Text, TextField, Button, ScrollArea, Avatar } from "@radix-ui/themes";
+import { Flex, Box, Text, TextField, ScrollArea } from "@radix-ui/themes";
 import { useState, useEffect } from "react";
 import PasswordInput from "../components/Inputs/PasswordInput";
 import { DisabledLoadingButton, EnterButton, DisabledButton, OrButton, GoogleLoginButton } from "../components/Buttons";
 import Separator from '../components/Separator';
 import { useNavigate } from "react-router-dom";
 import { InfoCircledIcon, ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import GameLogo from "../components/GameLogo";
 
 /**
  * Registration page component.
@@ -114,16 +115,10 @@ export default function RegisterPage({ loading, handleRegistration, handleLoginW
                             style={{
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                gap: 10,
                                 flexWrap: 'wrap'
                             }}
                         >
-                            <Avatar
-                                src="https://res.cloudinary.com/squirkle/image/upload/v1777451910/icon_yuf3ff.png"
-                                fallback='ICON'
-                                size='6'
-                            />
-                            <Text size='9' style={{ fontWeight: 'bold', letterSpacing: '2px' }}>Squirkle</Text>
+                            <GameLogo width="300px" />
                         </Flex>
 
                         <Text

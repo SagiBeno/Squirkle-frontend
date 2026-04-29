@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { cardData } from '../HomePageCardData';
 import HomePageCard from '../components/Cards/HomePageCard';
+import GameLogo from '../components/GameLogo';
 import { FaPlay } from "react-icons/fa";
 import { BiSolidDownArrow } from "react-icons/bi";
 
@@ -47,7 +48,7 @@ export default function HomePage({user, setShowAppLoader}) {
                 
                 <Flex direction="row" gap="5" justify="center" wrap={isBig ? "wrap" : "wrap-reverse"} style={isBig ? {width: "100%", marginTop: 100, minHeight: "calc(100vh - 100px)", position: "relative"} : {width: "100%", minHeight: "100vh", position: "relative"}}>
                     <Flex direction="column" gap="5" style={{ textAlign: 'right', marginTop: 20, padding: 20 }}>
-                        <Text size="9" style={{color: 'white', fontWeight: '500'}}>Squirkle</Text>
+                        <GameLogo width={isBig ? 360 : "100%"} style={{ marginLeft: "auto", maxWidth: 400 }} />
                         <Text size="5" style={{color: 'white', opacity: '0.6'}}>Slice enemies. Collect loot. Become stronger.</Text>
                         <Flex
                             style={{
