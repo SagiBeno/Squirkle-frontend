@@ -85,7 +85,7 @@ The registration interface can be accessed from the login page using the “Regi
 
 ![Registration Button](Screenshots/Login_Registration_button.png)
 
-![Registration Page](Screenshots/registration.png)
+![Registration Page](Screenshots/Registration.png)
 
 ### Required Data
 

@@ -85,7 +85,7 @@ A regisztrációs felület a bejelentkezési oldalról érhető el a „Registra
 
 ![Regisztrációs gomb](Screenshots/Login_Registration_button.png)
 
-![Regisztrációs oldal](Screenshots/registration.png)
+![Regisztrációs oldal](Screenshots/Registration.png)
 
 ### Adatok megadása
 
