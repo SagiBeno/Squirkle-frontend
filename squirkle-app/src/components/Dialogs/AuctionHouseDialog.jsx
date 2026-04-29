@@ -69,11 +69,12 @@ async function fetchJsonOrThrow(url, options) {
  * @param { Function } props.setToastData - Updates toast notification data
  * @param { Function } props.setOpen - Controls dialog visibility
  * @param { Function } props.refreshUser - Refreshes user data
+ * @param { Function } props.onCloseAutoFocus - Handles focus restoration after close
  *
  * @returns {JSX.Element}
  */
 
-export default function AuctionHouseDialog({ user, toastData, setToastData, setOpen, refreshUser }) {
+export default function AuctionHouseDialog({ user, toastData, setToastData, setOpen, refreshUser, onCloseAutoFocus }) {
     const [buttonsValue, setButtonsValue] = useState([
         {
             name: 'All listings',
@@ -403,7 +404,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
     return (
 
         <>
-            <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 10, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: 'hidden' }}>
+            <Dialog.Content width="90vw" maxWidth="920px" height="80vh" onCloseAutoFocus={onCloseAutoFocus} style={{ padding: 10, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: 'hidden' }}>
 
                 <Dialog.Title style={{ marginTop: 15, color: 'white', textTransform: 'uppercase' }}>
                     <Flex
