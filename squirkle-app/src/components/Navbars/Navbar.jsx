@@ -32,11 +32,12 @@ import { MdManageAccounts } from "react-icons/md";
  * @param { Function } props.signOut - Signs out the current user
  * @param { Function } props.setDialogState - Sets the active game dialog state
  * @param { Function } props.setOpenDialog - Controls game dialog visibility
+ * @param { Function } props.restoreGameTouchInput - Restores Unity input after mobile menu closes
  *
  * @returns { JSX.Element }
  */
 
-export default function Navbar({ user, signOut, setDialogState, setOpenDialog }) {
+export default function Navbar({ user, signOut, setDialogState, setOpenDialog, restoreGameTouchInput }) {
     const [isMobile, setIsMobile] = useState(false);
     const navigate = useNavigate();
 
@@ -67,7 +68,7 @@ export default function Navbar({ user, signOut, setDialogState, setOpenDialog })
             }}
         >
             <Flex align="center">
-                {isMobile ? <NavbarMobileDropdown setDialogState={setDialogState} user={user} signOut={signOut} iconSize={iconSize} setOpenDialog={setOpenDialog} /> : (
+                {isMobile ? <NavbarMobileDropdown setDialogState={setDialogState} user={user} signOut={signOut} iconSize={iconSize} setOpenDialog={setOpenDialog} restoreGameTouchInput={restoreGameTouchInput} /> : (
                     <>
                         {/* area chooser */}
                         <NavbarButton
