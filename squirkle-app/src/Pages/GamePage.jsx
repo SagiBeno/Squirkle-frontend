@@ -92,11 +92,26 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
 
         const unityCanvas = document.getElementById(UNITY_CANVAS_ID);
 
+        if (window.PointerEvent) {
+            ['pointercancel', 'pointerup'].forEach((eventName) => {
+                unityCanvas?.dispatchEvent(new PointerEvent(eventName, {
+                    bubbles: true,
+                    cancelable: true,
+                    pointerType: 'touch',
+                    isPrimary: true,
+                }));
+            });
+        }
+
         try {
             unityCanvas?.focus({ preventScroll: true });
         } catch {
             unityCanvas?.focus();
         }
+
+        window.dispatchEvent(new Event('blur'));
+        window.dispatchEvent(new Event('focus'));
+        window.dispatchEvent(new Event('resize'));
     }, []);
 
     const handleOpenDialogChange = useCallback((open) => {
@@ -111,6 +126,11 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
             }, DIALOG_CLOSE_CLEANUP_DELAY_MS);
         }
     }, [clearDialogCleanupTimeout, restoreGameTouchInput]);
+
+    const handleDialogCloseAutoFocus = useCallback((event) => {
+        event.preventDefault();
+        restoreGameTouchInput();
+    }, [restoreGameTouchInput]);
 
     useEffect(() => {
         setShowAppLoader(false);
@@ -138,11 +158,11 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
     function RenderCurrentDialog() {
         switch (dialogState) {
             case AREA_SELECTOR_STATE:
-                return <AreaSelectorDialog user={user} setOpen={handleOpenDialogChange} refreshUser={refreshUser} toastData={toastData} setToastData={setToastData} />
+                return <AreaSelectorDialog user={user} setOpen={handleOpenDialogChange} refreshUser={refreshUser} toastData={toastData} setToastData={setToastData} onCloseAutoFocus={handleDialogCloseAutoFocus} />
             case INVENTORY_STATE:
-                return <InventoryDialog user={user} setOpen={handleOpenDialogChange} />
+                return <InventoryDialog user={user} setOpen={handleOpenDialogChange} onCloseAutoFocus={handleDialogCloseAutoFocus} />
             case AUCTION_HOUSE_STATE:
-                return <AuctionHouseDialog user={user} toastData={toastData} setToastData={setToastData} setOpen={handleOpenDialogChange} refreshUser={refreshUser} />
+                return <AuctionHouseDialog user={user} toastData={toastData} setToastData={setToastData} setOpen={handleOpenDialogChange} refreshUser={refreshUser} onCloseAutoFocus={handleDialogCloseAutoFocus} />
         }
 
         return null;

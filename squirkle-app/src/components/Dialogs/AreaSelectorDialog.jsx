@@ -27,11 +27,12 @@ import { ResetPlayerCoins } from '../../GameEvents';
  * @param { Object } props.user - Current authenticated user
  * @param { Function } props.setOpen - Controls dialog visibility
  * @param { Function } props.refreshUser - Refresh user data from backend 
+ * @param { Function } props.onCloseAutoFocus - Handles focus restoration after close
  * 
  * @returns { JSX.Element } Area selector dialog UI
  */
 
-export default function AreaSelectorDialog({ user, setOpen, refreshUser, toastData, setToastData }) {
+export default function AreaSelectorDialog({ user, setOpen, refreshUser, toastData, setToastData, onCloseAutoFocus }) {
 
     const [areas, setAreas] = useState([])
     const [purchasedAreas, setPurchasedAreas] = useState([])
@@ -70,7 +71,7 @@ export default function AreaSelectorDialog({ user, setOpen, refreshUser, toastDa
     }, [refresh])
 
     return (
-        <Dialog.Content maxWidth="450px" style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: "hidden", minHeight: '50vh' }}>
+        <Dialog.Content maxWidth="450px" onCloseAutoFocus={onCloseAutoFocus} style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: "hidden", minHeight: '50vh' }}>
             <Dialog.Title style={{ marginTop: 15, color: 'white', textTransform: 'uppercase' }}>
                 <Flex
                     style={{

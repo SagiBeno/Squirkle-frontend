@@ -33,11 +33,12 @@ import '../../Modal.css';
  * @param { Object } props
  * @param { Object } props.user - Current authenticated user
  * @param { Function } props.setOpen - Controls dialog visibility
+ * @param { Function } props.onCloseAutoFocus - Handles focus restoration after close
  *
  * @returns {JSX.Element}
  */
 
-export default function InventoryDialog({ user, setOpen }) {
+export default function InventoryDialog({ user, setOpen, onCloseAutoFocus }) {
 
     const [inventory, setInventory] = useState([])
     const [listedIds, setListedIds] = useState([])
@@ -130,7 +131,7 @@ export default function InventoryDialog({ user, setOpen }) {
     }, []);
 
     return (
-        <Dialog.Content width="90vw" maxWidth="920px" height="80vh" style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: 'hidden' }}>
+        <Dialog.Content width="90vw" maxWidth="920px" height="80vh" onCloseAutoFocus={onCloseAutoFocus} style={{ padding: 0, borderRadius: 0, boxShadow: "none", backgroundColor: "transparent", overflow: 'hidden' }}>
 
             <Dialog.Title style={{ marginTop: 15, color: 'white', textTransform: 'uppercase' }}>
                 <Flex
