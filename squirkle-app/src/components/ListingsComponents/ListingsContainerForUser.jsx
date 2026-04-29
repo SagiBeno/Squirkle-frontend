@@ -34,24 +34,6 @@ export default function ListingsComponentsForUser({ isLow, getUserListings, base
     const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
     const [selectedListing, setSelectedListing] = useState({});
     const [loading, setLoading] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
-
-    /**
-     * Updates mobile layout state based on window height.
-     *
-     * The breakpoint values are intentionally based on tested dialog behavior.
-     */
-    function handleResize() {
-        if (window.innerHeight < 700 && window.innerHeight > 500) setIsMobile(true);
-        else setIsMobile(false);
-    }
-
-    useEffect(() => {
-        handleResize();
-
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
 
     /**
      * Opens the delete confirmation dialog for a selected listing.
@@ -145,7 +127,7 @@ export default function ListingsComponentsForUser({ isLow, getUserListings, base
                         <Text size="5" style={{ color: 'white', margin: '10px auto 20px auto', textAlign: 'center' }}>You have no active listing yet.</Text>
                     </Flex>
                     :
-                    (!isLow && !isMobile) ?
+                    !isLow && activeListings && activeListings.length !== 0 ?
                         <>
                             {HeaderForActiveListings}
                             <ScrollArea type="auto" style={{ padding: '0px 15px 5px 15px' }}>
@@ -157,7 +139,7 @@ export default function ListingsComponentsForUser({ isLow, getUserListings, base
                             </ScrollArea>
                         </>
                         :
-                        !isMobile &&
+                        activeListings && activeListings.length !== 0 &&
                         <>
                             {HeaderForActiveListings}
                             <Flex style={{ flexDirection: 'column', gap: 4, padding: '0 5px' }}>
@@ -170,7 +152,7 @@ export default function ListingsComponentsForUser({ isLow, getUserListings, base
             }
 
             {
-                !inactiveListings && inactiveListings.length !== 0 && !isLow && !isMobile
+                inactiveListings && inactiveListings.length !== 0 && !isLow
                     ?
                     <>
                         {HeaderForInactiveListings}
@@ -183,7 +165,8 @@ export default function ListingsComponentsForUser({ isLow, getUserListings, base
                         </ScrollArea>
                     </>
                     :
-                    (!isMobile && inactiveListings.length !== 0) &&
+                    
+                    inactiveListings && inactiveListings.length !== 0 &&
                     <>
                         {HeaderForInactiveListings}
 
@@ -193,36 +176,6 @@ export default function ListingsComponentsForUser({ isLow, getUserListings, base
                             }
                         </Flex>
                     </>
-            }
-
-            {
-                isMobile &&
-                <ScrollArea type="auto" style={{ padding: '0px 15px 5px 15px' }}>
-                    {
-                        activeListings.length !== 0 &&
-
-                        <>
-                            {HeaderForActiveListings}
-                            <Flex style={{ flexDirection: 'column', gap: 4, padding: '0 5px' }}>
-                                {
-                                    activeListings.map((listing, index) => <UserListingCard key={listing.id || index} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
-                                }
-                            </Flex>
-                        </>
-                    }
-                    {
-                        inactiveListings.length !== 0 &&
-                        <>
-                            {HeaderForInactiveListings}
-
-                            <Flex style={{ flexDirection: 'column', gap: 4, padding: '0 5px' }}>
-                                {
-                                    inactiveListings.map((listing, index) => <UserListingCard key={listing.id || index} listing={listing} idx={index} handleOpenListing={handleOpenListing} handleDeleteListing={handleDeleteListing} />)
-                                }
-                            </Flex>
-                        </>
-                    }
-                </ScrollArea>
             }
 
             {

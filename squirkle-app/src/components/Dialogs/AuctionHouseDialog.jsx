@@ -129,7 +129,7 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
      * @returns { void }
      */
     function handleResize () {
-        if (window.innerHeight < 500) {
+        if (window.innerHeight < 600) {
             setIsLow(true);
         }
         else setIsLow(false);
