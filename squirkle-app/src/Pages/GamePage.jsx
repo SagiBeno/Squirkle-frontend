@@ -194,7 +194,7 @@ export default function GamePage({ user, signOut, setShowAppLoader, toastData, s
         <>
             <Dialog.Root open={openDialog} onOpenChange={handleOpenDialogChange}>
                 <GameContext.Provider value={gameContext}>
-                    <Navbar user={user} signOut={signOut} setDialogState={setDialogState} setOpenDialog={handleOpenDialogChange} />
+                    <Navbar user={user} signOut={signOut} setDialogState={setDialogState} setOpenDialog={handleOpenDialogChange} restoreGameTouchInput={restoreGameTouchInput} />
                     <Flex className='mainContainer'>
 
                         <Box className='navbarSpacer' />

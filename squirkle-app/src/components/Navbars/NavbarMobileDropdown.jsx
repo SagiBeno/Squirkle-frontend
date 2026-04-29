@@ -1,5 +1,5 @@
 import { Button, DropdownMenu, Text } from '@radix-ui/themes'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { FaMap } from 'react-icons/fa'
 import { MdBackpack } from 'react-icons/md'
 import { RiAuctionFill, RiMenuFill } from 'react-icons/ri'
@@ -26,22 +26,41 @@ import { MdManageAccounts } from "react-icons/md";
  * @param { Function } props.signOut - Logs out the current user
  * @param { number } props.iconSize - Size of the menu icon
  * @param { Function } props.setOpenDialog - Controls game dialog visibility
+ * @param { Function } props.restoreGameTouchInput - Restores Unity input after mobile menu closes
  *
  * @returns { JSX.Element }
  */
 
-export default function NavbarMobileDropdown({ setDialogState, user, signOut, iconSize, setOpenDialog }) {
+export default function NavbarMobileDropdown({ setDialogState, user, signOut, iconSize, setOpenDialog, restoreGameTouchInput }) {
 
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
+    const launchingActionRef = useRef(false);
+
+    function restoreAfterMenuClose() {
+        window.setTimeout(() => restoreGameTouchInput?.(), 0);
+        window.setTimeout(() => restoreGameTouchInput?.(), 180);
+    }
+
+    function handleOpenChange(nextOpen) {
+        setOpen(nextOpen);
+
+        if (!nextOpen && !launchingActionRef.current) {
+            restoreAfterMenuClose();
+        }
+    }
 
     function handleMenuAction(action) {
+        launchingActionRef.current = true;
         setOpen(false);
         action();
+        window.setTimeout(() => {
+            launchingActionRef.current = false;
+        }, 250);
     }
 
     return (
-        <DropdownMenu.Root modal={false} open={open} onOpenChange={setOpen}>
+        <DropdownMenu.Root modal={false} open={open} onOpenChange={handleOpenChange}>
             <DropdownNavbarButton icon={<RiMenuFill size={iconSize} />} />
 
             <DropdownMenu.Content className="squirkleDropdown" style={{ width: 200, marginTop: -12, marginLeft: -20, backgroundColor: "transparent", fontFamily: "'Fredoka', sans-serif", }}>
