@@ -2,12 +2,12 @@
     padding: 20px !important;
     background-color: rgba(40, 40, 42, 0.9) !important;
     border-radius: 12px !important;
+    backdrop-filter: blur(5px);
 }
 
 .inventoryDialogBody {
     display: flex !important;
     gap: 16px !important;
-
     padding: 0 15px !important;
 }
 
