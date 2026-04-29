@@ -1,0 +1,75 @@
+.gameAreaPanel {
+    min-height: 150px;
+    background-size: cover;
+    background-position: center;
+    padding: 5px;
+
+    filter: grayscale(1);
+    transition: all 0.1s;
+
+    scroll-snap-align: start;
+}
+
+.gameAreaPanel:hover {
+    filter: grayscale(0);
+    z-index: 1;
+}
+
+.gameAreaPanel.purchased {
+    filter: grayscale(0);
+}
+
+.gameAreaPanelTitle,
+.gameAreaLock {
+    transition: all 0.1s;
+}
+
+.gameAreaPanel:hover.purchased .gameAreaPanelTitle {
+    padding-left: 15px;
+}
+
+.gameAreaPanel:hover .gameAreaLock {
+    transform: rotateZ(2deg) scale(1.1);
+}
+
+.itemSlot {
+    min-width: 64px !important;
+    height: 64px !important;
+
+    transition: all 0.1s;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    border-radius: 12px;
+}
+
+.itemSlot:hover {
+    z-index: 1;
+    scale: 1.05;
+    box-shadow: 0px, 0px, 10px, 10px, black;
+}
+
+.itemSlotListed {
+    border: 2px solid rgb(0, 169, 225) !important;
+    box-shadow: 0px 0px 10px 0px rgba(0, 191, 255, 0.549)  !important;
+}
+
+.itemSlotEquipped {
+    border: 2px solid rgb(255, 234, 0) !important;
+    box-shadow: 0px 0px 10px 0px rgba(255, 157, 0, 0.549)  !important;
+}
+
+.itemIcon {
+    width: 48px;
+    height: 48px;
+    image-rendering: pixelated;
+}
+
+.itemTooltip {
+    background-color: white;
+    font-family: "Fredoka", sans-serif;
+    padding: 5px;
+
+    max-width: 90vw;
+    width: 300px;
+
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
