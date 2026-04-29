@@ -296,15 +296,19 @@ export default function AuctionHouseDialog({ user, toastData, setToastData, setO
         setCreateCandidatesLoading(true);
 
         try {
-            const [inventoryData, listedIdsData] = await Promise.all([
+            const [inventoryData, listedIdsData, equippedData] = await Promise.all([
                 fetchJsonOrThrow(`${API_BASE_URL}/get-inventory/${encodeURIComponent(userId)}`),
                 fetchJsonOrThrow(`${API_BASE_URL}/get-listed-user-item-ids/${encodeURIComponent(userId)}`),
+                fetchJsonOrThrow(`${API_BASE_URL}/get-equipped-items/${encodeURIComponent(userId)}`)
             ]);
 
-            const listedIds = new Set((listedIdsData?.userItemIds || []).map((id) => String(id).trim()));
+            const listedOrEquppedIds = new Set((listedIdsData?.userItemIds || []).map((id) => String(id).trim()));
+            const equippedItems = Array.isArray(equippedData?.items) ? equippedData.items : [];
+            equippedItems.forEach((item) => {
+                if (item?.userItemId) listedOrEquppedIds.add(item.userItemId);
+            });
             const inventoryItems = Array.isArray(inventoryData?.items) ? inventoryData.items : [];
-
-            const availableItems = inventoryItems.filter((item) => !listedIds.has(String(item?.userItemId || '').trim()));
+            const availableItems = inventoryItems.filter((item) => !listedOrEquppedIds.has(String(item?.userItemId || '').trim()));
             setCreateCandidates(availableItems);
 
             if (availableItems.length > 0) {
