@@ -1,0 +1,253 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
+
+.mainContainer {
+    width: 100%;
+    height: 100vh;
+
+    flex-direction: column;
+    justify-content: center;
+    background-color: #21212c;
+    background-image: url("/background.png");
+    background-size: 50vh;
+
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.contentContainer {
+    width: 100%;
+    height: 100%;
+    font-family: "Fredoka", sans-serif !important;
+    overflow-x: hidden !important;
+}
+
+.textField, .textArea {
+    background: #a9a9bd !important;
+    padding-top: 4px !important;
+    border-top: 4px rgba(0, 0, 0, 0.2) solid !important;
+    color: rgb(0, 0, 0) !important;
+    font-family: "Fredoka", sans-serif !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.textField:focus-within, .textArea:focus-within {
+    background-color: rgb(200, 200, 220) !important;
+}
+
+.button {
+    background-color: #a9a9bd !important;
+    border-bottom: 8px rgba(0, 0, 0, 0.2) solid !important;
+    color: black !important;
+    font-family: "Fredoka", sans-serif !important;
+    font-size: 1.1rem !important;
+}
+
+.deleteButton {
+    background-color: rgb(255, 0, 0) !important;
+    border-bottom: 8px rgba(0, 0, 0, 0.2) solid !important;
+    color: white !important;
+    font-family: "Fredoka", sans-serif !important;
+    font-size: 1.1rem !important;
+}
+
+.deleteActiveButton {
+    cursor: pointer !important;
+}
+
+.deleteActiveButton:hover {
+    border-bottom-width: 4px !important;
+    transform: scaleY(0.95);
+    background-color: #ff1414 !important;
+}
+
+.deleteActiveButton:active {
+    transform: translateY(1px) !important;
+}
+
+.inactiveButton {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+}
+
+.activeButton {
+    cursor: pointer !important;
+}
+
+.activeButton:hover {
+    border-bottom-width: 4px !important;
+    transform: scaleY(0.95);
+    background-color: rgb(200, 200, 220) !important;
+}
+
+.activeButton:active {
+    transform: translateY(1px) !important;
+}
+
+.squirkleButton
+{
+    margin: 0px !important;
+    border-radius: 0px !important;
+    border-bottom: 8px rgba(0, 0, 0, 0.1) solid !important;
+    cursor: pointer !important;
+}
+
+.squirkleDropdown
+{
+    border-radius: 0 !important;
+    box-shadow: none !important; 
+}
+
+.squirkleDropdownItem
+{
+    border-radius: 0 !important;
+}
+
+.navbarSpacer {
+    min-height: 50px;
+}
+
+.toastStyle[data-state="open"] {
+    animation: toastSlideDown 180ms ease-out;
+}
+
+.toastStyle[data-state="closed"] {
+    animation: toastFadeOut 180ms ease-in;
+}
+
+.adminTable tr:nth-child(odd) {
+    background-color: rgba(88, 88, 93, 0.5);
+}
+
+.adminTable tr:nth-child(even) {
+    background-color: rgba(40, 40, 42, 0.5);
+}
+
+.adminTable tr:hover {
+    background-color: rgba(91, 146, 121, 0.6);
+}
+
+.rt-ScrollAreaThumb {
+    background-color: rgb(169, 169, 189) !important;
+}
+
+.rt-ScrollAreaScrollbar {
+    background-color: black !important;
+}
+
+@keyframes toastSlideDown {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+@keyframes toastFadeOut {
+    from {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-10px);
+    }
+}
+
+@media screen and (max-width: 830px) {
+    .modifyWrapper {
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .modifyWrapper > .button {
+        margin-top: 10px;
+    }
+
+    .modifyWrapper > .text {
+        transform: none !important;
+        position: relative !important;
+        left: auto !important;
+    }
+}
+
+@media screen and (max-width: 390px) {
+    .googleLoginButton {
+        font-size: 0.9rem !important;
+        padding: 25px !important;
+    }
+}
+
+@media screen and (max-width: 860px) {
+    .statsContainer {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 10 !important;
+    }
+}
+
+@media screen and (max-width: 343px) {
+    .createListingButtonContainer {
+        justify-content: center !important;
+    }
+}
+
+.homePageGamePreview
+{
+    background-image: url("https://res.cloudinary.com/squirkle/image/upload/v1777490664/slicing_nqroa8.gif");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.gradientTitle1
+{
+    background: #c163ff;
+    background: linear-gradient(90deg, rgba(193, 99, 255, 1) 0%, rgba(255, 167, 43, 1) 50%, rgba(193, 99, 255, 1) 100%);
+    background-size: 200% 100%;
+    background-position: 0% 50%;
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientTitle1Scroll 4s linear infinite;
+}
+
+@keyframes gradientTitle1Scroll
+{
+    from {
+        background-position: 0% 50%;
+    }
+
+    to {
+        background-position: 200% 50%;
+    }
+}
+
+.homePageCard
+{
+    min-width: 250px;
+    max-width: 300px;
+    min-height: 250px;
+    max-height: 350px;
+    box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(10px);
+    flex-direction: column;
+    align-Items: center;
+    padding: 15px;
+    gap: 20;
+
+    transition: all 0.1s ease-out;
+}
+
+.homePageCard:hover
+{
+    transform: scale(1.05);
+    background-color: rgba(255, 255, 255, 0.02);
+}

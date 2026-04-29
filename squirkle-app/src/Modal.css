@@ -1,0 +1,105 @@
+.rt-DialogContent {
+    padding: 20px !important;
+    background-color: rgba(40, 40, 42, 0.9) !important;
+    border-radius: 12px !important;
+    backdrop-filter: blur(5px);
+}
+
+.inventoryDialogBody {
+  height: calc(80vh - 90px) !important;
+  min-height: 0 !important;
+  display: flex !important;
+  gap: 16px !important;
+  padding: 0 15px !important;
+  overflow: hidden !important;
+}
+
+.inventoryDialogList {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.inventoryDialogEquipPanel {
+    width: 160px !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    align-items: center !important;
+    padding: 12px !important;
+    border-radius: 14px !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+.inventoryDialogEquipTitle {
+    color: white !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    width: 100% !important;
+}
+
+.inventoryDialogEquipSlots {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    align-items: center !important;
+    width: 100% !important;
+}
+
+.inventoryDialogEquipSlot {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    align-items: center !important;
+    text-align: center !important;
+}
+
+.inventoryDialogEquipLabel {
+    color: rgba(255, 255, 255, 0.75) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+}
+
+.inventoryDialogEquipPlaceholder {
+    width: 64px !important;
+    height: 64px !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-radius: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 10px !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    font-weight: 600 !important;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06) !important;
+}
+
+@media (max-width: 768px) {
+    .inventoryDialogBody {
+        flex-direction: column !important;
+        gap: 20px !important;
+    }
+
+    .inventoryDialogEquipPanel {
+        width: 100% !important;
+        order: -1 !important;
+    }
+
+    .inventoryDialogEquipSlots {
+        flex-direction: row !important;
+        gap: 16px !important;
+        justify-content: center !important;
+    }
+
+    .inventoryDialogEquipSlot {
+        align-items: center !important;
+    }
+}
